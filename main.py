@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 
 # Change this to your secret key (can be anything, it's for extra protection)
-
+# TODO: is secret key needed for this project?
 app.secret_key = 'your secret key'
 
 
@@ -23,7 +23,7 @@ app.secret_key = 'your secret key'
 app.config['MYSQL_HOST'] = 'localhost'
 
 app.config['MYSQL_USER'] = 'root'
-
+# TODO: ask professor about proper passwords for website.
 app.config['MYSQL_PASSWORD'] = 'root'
 
 app.config['MYSQL_DB'] = 'assignment2'
