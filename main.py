@@ -42,6 +42,8 @@ mysql = MySQL(app)
 # index/home page of website
 @app.route('/')
 def index():
+    # TODO: pull generic video thumbnails to put in 'top viewed section'
+    # typically the thumbs would be pulled from AI... not active atm
     return render_template('index.html')
 
 # renamed from / to /login as it is no longer splash page
@@ -194,10 +196,7 @@ def register():
 
 # Profile Page - Implemented as part of Lab 2
 @app.route('/profile', methods = ['GET', 'POST'])
-def profile(account):
-    # Output message if something goes wrong...
-    msg = ''
-    
+def profile(account):    
     return render_template('profile.html', username = account['username'],
      password = account['password'], firstname=account['firstname'], lastname=account['lastname'],
      email=account['email'])
