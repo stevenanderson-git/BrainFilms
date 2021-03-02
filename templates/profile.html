@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <title>Profile</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+
+	</head>
+    <body>
+       <div class="profile">
+
+            <h1>Profile</h1>
+
+            <div class='profileinfo'>
+            
+                <h3>Your account details are below.</h3>
+
+                <div class = 'userinfo username'>
+                    <span class = 'profinfo1'> Username: </span>
+                    <span class = 'profinfo2'> {{username}} </span>
+                </div>
+
+                <div class = 'userinfo fname'>
+                    <span class = 'profinfo1'> First Name: </span>
+                    <span class = 'profinfo2'> {{firstname}} </span>
+                </div>
+
+                <div class = 'userinfo lname'>
+                    <span class = 'profinfo1'> Last Name: </span>
+                    <span class = 'profinfo2'> {{lastname}} </span>
+                </div>
+
+                <div class = 'userinfo password'>
+                    <span class = 'profinfo1'> Password: </span>
+                    <span class = 'profinfo2'> {{password}} </span>
+                </div>
+
+                <div class = 'userinfo email'>
+                    <span class = 'profinfo1'> Email: </span>
+                    <span class = 'profinfo2'> {{email}} </span>
+                </div>
+
+            </div>
+       </div>
+    </body>
+</html>
