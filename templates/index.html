@@ -1,31 +1,28 @@
 <!DOCTYPE html>
 
 <html>
-
 	<head>
-
-		<!-- meta charset="utf-8" -->
-
 		<title>Index</title>
-
 		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
-		<!-- link rel="stylesheet" href="style.css" -->
-
-		<!-- link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" -->
-
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-
 	</head>
-
-
-
 	<body>
 		<!-- TODO: add navbar with login/register button-->
-		this is the index page under construction
-		<!-- TODO: add searchbar-->
+		<div class='navbartop'>
+			<!--TODO: css Buttons for links-->
+			<a href="{{ url_for('login') }}">Login</a>
+			<a href="{{ url_for('add_new')}}">Add New</a>
+		</div>
 
-		<!-- TODO: display top rated video thumbnails-->
+		<div class='content'>
+			<!-- TODO: add searchbar-->
+			<div class = 'searchbar'>
+
+			</div>
+			<!-- TODO: display top rated video thumbnails-->
+			<div class='topthumbs'>
+				
+			</div>
+		</div>
 	</body>
-
 </html>
