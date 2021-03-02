@@ -202,7 +202,10 @@ def profile(account):
      password = account['password'], firstname=account['firstname'], lastname=account['lastname'],
      email=account['email'])
 
-
+# TODO: implement add_new fully as a page
+@app.route('/add_new')
+def add_new():
+    return render_template('add_new.html')
 
 if __name__ == '__main__':
 
