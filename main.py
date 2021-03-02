@@ -26,6 +26,7 @@ app.config['MYSQL_USER'] = 'root'
 # TODO: ask professor about proper passwords for website.
 app.config['MYSQL_PASSWORD'] = 'root'
 
+# TODO: change database name for uniforimity in project.
 app.config['MYSQL_DB'] = 'assignment2'
 
 
