@@ -8,10 +8,12 @@
 	</head>
 	<body>
 		<!-- TODO: add navbar with login/register button-->
-		<div class='navbartop'>
+		<div class='navbar'>
 			<!--TODO: css Buttons for links-->
-			<a href="{{ url_for('login') }}">Login</a>
-			<a href="{{ url_for('add_new')}}">Add New</a>
+			<div class='links'>
+				<a href="{{ url_for('login') }}" class='button'>Login</a>
+				<a href="{{ url_for('add_new')}}" class='button'>Add New</a>
+			</div>
 		</div>
 
 		<div class='content'>
