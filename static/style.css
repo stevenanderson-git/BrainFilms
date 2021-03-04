@@ -344,13 +344,17 @@ body.loggedin {
 
 .navbar .links{
 	display: flex;
-	padding: 0 15px;
+	padding: 15px;
+	margin: 10px;
 }
 .navbar a.button{
-	background-color: #5b6574;
+	background-color:#2868c7;
 	color:#c1c4c8;
-	padding: 1em 1.5em;
+	padding: 10px 10px;
 	text-decoration: none;
 	font-weight: bold;
 	text-transform: uppercase;
+	border-style: solid;
+	border-radius: 5px;
+	border-color: #364152;
 }
