@@ -17,9 +17,10 @@
 
 
 body {
-
-  	background-color: #435165;
-
+	background-color: #435165;
+	background: url('/static/images/projectbrainprojector.gif');
+	background-repeat: no-repeat;
+	background-size: cover;
   	margin: 0;
 
 }
