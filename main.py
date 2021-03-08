@@ -27,7 +27,7 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'root'
 
 # TODO: change database name for uniforimity in project.
-app.config['MYSQL_DB'] = 'assignment2'
+app.config['MYSQL_DB'] = 'braindb'
 
 
 
@@ -69,7 +69,7 @@ def login():
 
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        cursor.execute('SELECT * FROM MyGuests WHERE username = %s AND password = %s', (username, password,))
+        cursor.execute('SELECT * FROM UserInfo WHERE username = %s AND password = %s', (username, password,))
 
         # Fetch one record and return result
 
@@ -152,7 +152,7 @@ def register():
 
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        cursor.execute('SELECT * FROM MyGuests WHERE username = %s', (username,))
+        cursor.execute('SELECT * FROM UserInfo WHERE username = %s', (username,))
 
         account = cursor.fetchone()
 
@@ -178,7 +178,7 @@ def register():
 
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
 
-            cursor.execute('INSERT INTO MyGuests (firstname, lastname, username, password, email) VALUES (%s, %s, %s, %s, %s)', (firstname, lastname, username, password, email,))
+            cursor.execute('INSERT INTO UserInfo (firstname, lastname, username, password, email) VALUES (%s, %s, %s, %s, %s)', (firstname, lastname, username, password, email,))
 
             mysql.connection.commit()
 
