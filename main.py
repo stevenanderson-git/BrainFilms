@@ -24,7 +24,7 @@ app.config['MYSQL_HOST'] = 'localhost'
 
 app.config['MYSQL_USER'] = 'root'
 # TODO: ask professor about proper passwords for website.
-app.config['MYSQL_PASSWORD'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'root' # change this back to 'root' if changed
 
 # TODO: change database name for uniforimity in project.
 app.config['MYSQL_DB'] = 'braindb'
