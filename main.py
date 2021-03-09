@@ -207,11 +207,15 @@ def profile(account):
 def add_new():
     return render_template('add_new.html')
 
-if __name__ == '__main__':
-
-    app.run(debug=True)
-
 # TODO: implement search_result fully as page
 @app.route('/search_results')
 def search_results():
     return render_template('search_results.html')
+
+
+
+
+# Bottom method of code
+if __name__ == '__main__':
+    app.run(debug=True) #debug is currently enabled for stack traces
+# Do not add mmethods below this one.
