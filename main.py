@@ -81,6 +81,8 @@ def register():
         password = request.form['password']
         email = request.form['email']
 
+        # TODO: form input of creation date.
+
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM UserInfo WHERE username = %s', (username,))
