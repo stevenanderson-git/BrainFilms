@@ -19,7 +19,6 @@ app.config['MYSQL_DB'] = 'braindb'
 # Intialize MySQL
 mysql = MySQL(app)
 
-# http://localhost:5000/pythonlogin/ - this will be the login page, we need to use both GET and POST requests
 # TODO: Finish Index page 
 # index/home page of website
 @app.route('/')
@@ -67,7 +66,6 @@ def logout():
    # TODO: Redirect to homepage, not sure if this is correct syntax
    return redirect(url_for('index'))
 
-# http://localhost:5000/Falsk/register - this will be the registration page, we need to use both GET and POST requests
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     # Output message if something goes wrong...
