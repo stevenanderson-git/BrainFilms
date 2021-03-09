@@ -22,6 +22,7 @@ mysql = MySQL(app)
 # TODO: Finish Index page 
 # index/home page of website
 @app.route('/')
+@app.route('/home')
 def index():
     # TODO: pull generic video thumbnails to put in 'top viewed section'
     # typically the thumbs would be pulled from AI... not active atm
