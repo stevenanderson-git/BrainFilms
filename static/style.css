@@ -22,7 +22,6 @@ body {
 	background-repeat: no-repeat;
 	background-size: cover;
   	margin: 0;
-
 }
 
 
@@ -362,4 +361,39 @@ body.loggedin {
 	border-color: #364152;
 	*/
 	box-shadow: 5px 5px #49529b;
+}
+
+/*searchbar css*/
+.search {
+	width: 100%;
+	position: relative;
+	display: flex;
+}
+.search-term {
+	width: 100%;
+	border: 3px solid #2868c7;
+	border-right: none;
+	padding: 5px;
+	height: 40px;
+	border-radius: 5px 0 0 5px;
+	outline: none;
+	color: #c1c4c8;
+}
+.search-btn {
+	width: 40px;
+	height: 40px;
+	border: 1px solid #2868c7;
+	background: #2868c7;
+	text-align: center;
+	color: #fff;
+	border-radius: 0 5px 5px 0;
+	cursor: pointer;
+	font-size: 20px;
+}
+.search-wrap{
+	width: 60%;
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
