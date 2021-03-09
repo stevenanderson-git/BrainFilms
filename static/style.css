@@ -377,7 +377,7 @@ body.loggedin {
 	height: 40px;
 	border-radius: 5px 0 0 5px;
 	outline: none;
-	color: #c1c4c8;
+	color: black;
 }
 .search-btn {
 	width: 40px;
