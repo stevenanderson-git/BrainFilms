@@ -210,3 +210,8 @@ def add_new():
 if __name__ == '__main__':
 
     app.run(debug=True)
+
+# TODO: implement search_result fully as page
+@app.route('/search_results')
+def search_results():
+    return render_template('search_results.html')
