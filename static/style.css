@@ -1,9 +1,6 @@
 
 /* TODO: change to have elements styled specifically*/
 * {
-
-  	box-sizing: border-box;
-
   	font-family: -apple-system, BlinkMacSystemFont, "segoe ui", roboto, oxygen, ubuntu, cantarell, "fira sans", "droid sans", "helvetica neue", Arial, sans-serif;
 
   	font-size: 16px;
@@ -11,17 +8,39 @@
   	-webkit-font-smoothing: antialiased;
 
   	-moz-osx-font-smoothing: grayscale;
-
 }
 
 /*Applies to all body elements in the website*/
-body {
+.Site {
 	background: url('/static/images/BrainCamTransparent.gif');
 	background-position: center center;
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-color: #83baad;
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
+.Site-content{
+	flex: 1;
+}
+
+.Site-header .links{
+	display: flex;
+	justify-content: space-between;
+	padding: 15px;
+	margin: 10px;
+}
+
+.Site-header a.button{
+	background-color:#2868c7;
+	color:#c1c4c8;
+	padding: 10px;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 5px 5px #49529b;
 }
 
 /*TODO: update login/register elements to fit the website theme*/
@@ -105,10 +124,6 @@ body {
 }
 
 /*TODO: More descriptive css*/
-body.loggedin {
-  	background-color: #f3f4f7;
-}
-
 .content {
   	width: 1000px;
   	margin: 0 auto;
@@ -186,28 +201,6 @@ body.loggedin {
 	border-style: outset;
 }
 
-.navbar .links{
-	display: flex;
-	justify-content: space-between;
-	padding: 15px;
-	margin: 10px;
-}
-
-.navbar a.button{
-	background-color:#2868c7;
-	color:#c1c4c8;
-	padding: 10px;
-	text-decoration: none;
-	font-weight: bold;
-	text-transform: uppercase;
-	/*removed border in favor of shadow */
-	/*border-style: solid;
-	border-radius: 5px;
-	border-color: #364152;
-	*/
-	box-shadow: 5px 5px #49529b;
-}
-
 /*Searchbar css*/
 .search {
 	width: 100%;
@@ -219,7 +212,7 @@ body.loggedin {
 	border: 3px solid #2868c7;
 	border-right: none;
 	padding: 5px;
-	height: 40px;
+	height: 24px;
 	border-radius: 5px 0 0 5px;
 	outline: none;
 	color: black;

@@ -24,9 +24,11 @@ mysql = MySQL(app)
 @app.route('/')
 @app.route('/home')
 def index():
+    # Webpage Title
+    title = 'Brainfilms - Home'
     # TODO: pull generic video thumbnails to put in 'top viewed section'
     # typically the thumbs would be pulled from AI... not active atm
-    return render_template('index.html')
+    return render_template('index.html', title = title)
 
 # renamed from / to /login as it is no longer splash page
 @app.route('/login', methods=['GET', 'POST'])
@@ -125,7 +127,14 @@ def add_new():
 # TODO: implement search_result fully as page
 @app.route('/search_results')
 def search_results():
-    return render_template('search_results.html')
+    # dummy data for testing before implementing database
+    searchterm = 'DemoTestingDataDELETEME'
+    results = [
+        {'res-url': 'www.dumb.com', 'title': 'Dumb Video Website', 'rating': '4', 'date_posted': 'April 20, 2222', 'description': 'This is a dumb video website blah blah balah'},
+        {'res-url': 'www.IDKWHy.com', 'title': 'This is Bad', 'rating': '7', 'date_posted': 'April 1, 2011', 'description': 'Greatest bad information ever!'},
+        {'res-url': 'www.Study-Stuff.com', 'title': 'This is the best Worst you wille3ver know', 'rating': '0', 'date_posted': 'June 20, 1984', 'description': 'I will highly rate this 0 because of its quality awfulness'}
+    ]
+    return render_template('search_results.html', title = searchterm, results = results)
 
 
 

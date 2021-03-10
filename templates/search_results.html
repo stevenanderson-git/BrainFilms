@@ -1,25 +1,28 @@
+{% extends "layout.html" %}
 <!DOCTYPE html>
 
 <html>
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Search Results</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
+        {% if title %}
+            <title>{{title}}</title>
+        {% else %}
+            <title>Brainlabs</title>
+        {% endif %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     </head>
     <body>
-        <!-- TODO: Change navbar to flask html style that applies to all pages-->
-		<div class='navbar'>
-			<!--TODO: css Buttons for links-->
-			<div class='links'>
-				<a href="{{ url_for('login') }}" class='button'>Login</a>
-				<a href="{{ url_for('add_new')}}" class='button'>Add New</a>
-			</div>
-		</div>
-		
-        Search REsults Boilerplate, changeme!
-        <script src="" async defer></script>
+        {% block content %}
+        <!--Print results from search-->
+        {% for result in results %}
+            <h1>{{result.title}}</h1>
+            <h2>{{result.date_posted}}</h2>
+            <p>{{result.res_url}}</p>
+            <p>{{result.rating}}</p>
+            <p>{{result.description}}</p>
+        {% endfor %}
+
+        {% endblock content %}
     </body>
 </html>

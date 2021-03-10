@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        {% if title %}
+            <title>{{title}}</title>
+        {% else %}
+            <title>Brainlabs</title>
+        {% endif %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    </head>
+    <body class = 'Site page-container'>
+        <!--This navbar should show on all pages-->
+		<header class='Site-header'>
+			<div class='links'>
+				<a href="{{ url_for('login') }}" class='button'>Login</a>
+				<a href="{{ url_for('add_new')}}" class='button'>Add New</a>
+			</div>
+		</header>
+
+        <!--Content block for other pages-->
+        <main class = 'Site-content'>
+        {% block content %}{% endblock %}
+        </main>
+
+        <!--TODO: add footer for all pages-->
+        <footer class = 'Site-footer'>
+            <p>Steven Anderson - https://github.com/stevenanderson-git</p>
+            <p>James Andros - https://github.com/Oe-1</p>
+            <p>Santino Celebre - https://github.com/santino732</p>
+            <p>Daniel Dinnebeil - https://github.com/dinnebed</p>
+        </footer>
+    </body>
+</html>
