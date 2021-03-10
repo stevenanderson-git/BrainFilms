@@ -26,9 +26,29 @@ mysql = MySQL(app)
 def index():
     # Webpage Title
     title = 'Brainfilms - Home'
-    # TODO: pull generic video thumbnails to put in 'top viewed section'
+    selected_term = ''
+    # TODO: pull data from categories and subcategories to populate scrollboxes
     # typically the thumbs would be pulled from AI... not active atm
-    return render_template('index.html', title = title)
+    # Populated from MySQL
+    primary_terms =[
+        'Other', 'Agriculture', 'Animals & Wildlife', 'Anthropology', 'Archaeology', 'Architecture', 'Art',
+        'Biology', 'Chemistry', 'Computer Science', 'Development'
+    ]
+
+    # These results should be filtered based on selected_term
+    secondary_terms =[
+        'DIY & How-To', 'Economics', 'Education', 'Engineering', 'Environment', 'Film & Media', 'Food & Cooking',
+        'Geography', 'Geology & Earth', 'Health', 'History', 'Language', 'Law', 'Literature', 'Marketing'
+    ]
+
+    # List of filtered terms that will depend on what the selected term is from primary terms.
+    filtered_terms =[
+        n for n in secondary_terms
+            if selected_term in n
+    ]
+
+
+    return render_template('index.html', title = title, primary_terms = primary_terms, filtered_terms = filtered_terms)
 
 # renamed from / to /login as it is no longer splash page
 @app.route('/login', methods=['GET', 'POST'])
