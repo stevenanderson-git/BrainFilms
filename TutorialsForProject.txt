@@ -1,0 +1,36 @@
+**Flask**
+Pythonist Playlist
+	https://www.youtube.com/watch?v=F7AK-WzpYdY&list=PLMOobVGrchXN5tKYdyx-d2OwwgxJuqDVH&index=1
+
+TraversyMedia - Git
+	https://www.youtube.com/watch?v=SWYqp7iY_Tc&t=1s
+
+GitHub Personal Token
+	https://stackoverflow.com/questions/15381198/remove-credentials-from-git/39592537#39592537
+
+GitHub Login Issues & Update
+	https://stackoverflow.com/questions/55768926/logon-failed-use-ctrlc-to-cancel-basic-credential-prompt-to-git-in-azure-devop
+
+HTML/CSS Searchbar
+	https://codepen.io/huange/pen/rbqsD
+
+HTML/CSS/FLASK Search mySql
+	https://medium.com/@joseortizcosta/search-utility-with-flask-and-mysql-60bb8ee83dad
+
+Full Featured Flask WebApp
+	https://www.youtube.com/watch?v=MwZwr5Tvyxo
+
+Sticky footer
+	https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/
+
+Similar Project to Current G4G
+	https://www.geeksforgeeks.org/profile-application-using-python-flask-and-mysql/
+
+Possible Error that may Occur
+	https://stackoverflow.com/questions/23521652/flask-and-python-how-to-make-search-engine-for-data-from-mysql-database
+
+Sample Website Professor is basing on
+	https://www.edutube.org/en
+
+Scrollable Listbox Example
+	https://www.w3.org/TR/wai-aria-practices/examples/listbox/listbox-scrollable.html
