@@ -12,6 +12,15 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     </head>
     <body>
+        <!-- TODO: Change navbar to flask html style that applies to all pages-->
+		<div class='navbar'>
+			<!--TODO: css Buttons for links-->
+			<div class='links'>
+				<a href="{{ url_for('login') }}" class='button'>Login</a>
+				<a href="{{ url_for('add_new')}}" class='button'>Add New</a>
+			</div>
+		</div>
+		
 
         <!--TODO: change this-->
         Boilerplate change me!
