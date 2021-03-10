@@ -16,7 +16,6 @@
 
 /*Applies to all body elements in the website*/
 body {
-	/*Color for background #83baad*/
 	background: url('/static/images/BrainCamTransparent.gif');
 	background-position: center center;
 	background-attachment: fixed;
