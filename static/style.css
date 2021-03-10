@@ -16,10 +16,13 @@
 
 /*Applies to all body elements in the website*/
 body {
-	background: url('/static/images/projectbrainprojector.gif');
+	/*Color for background #83baad*/
+	background: url('/static/images/BrainCamTransparent.gif');
+	background-position: center center;
+	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-size: cover;
-  	margin: 0;
+	background-color: #83baad;
 }
 
 /*TODO: update login/register elements to fit the website theme*/
