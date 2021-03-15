@@ -64,3 +64,8 @@ Storing URL in MYSql
 Sorting Ratings
 	https://www.evanmiller.org/how-not-to-sort-by-average-rating.html
 
+Formatting date/time for mysql/flask
+	https://www.tutorialspoint.com/How-to-insert-date-object-in-MySQL-using-Python
+
+mysql add column
+	https://www.mysqltutorial.org/mysql-add-column/
