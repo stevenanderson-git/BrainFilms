@@ -8,6 +8,7 @@
   	-webkit-font-smoothing: antialiased;
 
   	-moz-osx-font-smoothing: grayscale;
+	display: block;
 }
 
 /*Applies to all body elements in the website*/
@@ -228,7 +229,8 @@
 	outline: none;
 	color: black;
 }
-.search-btn {
+a.search-btn {
+	appearance: button;
 	width: 40px;
 	height: 40px;
 	border: 1px solid #2868c7;

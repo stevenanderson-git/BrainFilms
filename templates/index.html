@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 <!DOCTYPE html>
 
-<html>
+<html lang = 'en'>
 	<head>
 		<title>Index</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -10,26 +10,34 @@
 	<body>
 		{% block content %}
 		<div class='index-content'>
-			<!-- TODO: add searchbar-->
 			<div class = 'search-wrap'>
 				<div class="search">
-					<input type="text" class="search-term" placeholder="Search Videos">
-					<button type="submit" class="search-btn">
-					  <i class="fa fa-search"></i>
-				   </button>
+					<!-- TODO: have searchbar pass value to results page-->
+					<input type="text" class="search-term" placeholder="Search Videos" method = 'POST'>
+					<a href="{{ url_for('search_results') }}" class="search-btn">
+						<i class="fas fa-search"></i>
+					</a>
 				 </div>
 			</div>
 
 			<!-- TODO: display filterable keyword selectors-->
 			<div class='selector-wraper'>
-				<div class='selector category'>
-
+				<div class='selector primary'>
+					<select name='Primary-Keyword' size = '6'>
+						{% for term in primary_terms %}
+						<option name = '{{term}}'>{{term}}</option>
+						{% endfor %}
+					</select>
 				</div>
-				<div class='selector multi-choice'>
-
+				<div class='selector filtered'>
+					<select name='Filtered-Keywords' size = '6'>
+						{% for keyword in filtered_terms %}
+						<option name = '{{keyword}}'>{{keyword}}</option>
+						{% endfor %}
+					</select>
 				</div>
 				<div class='selector rating'>
-					
+
 				</div>
 			</div>
 		</div>
