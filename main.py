@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
+from datetime import datetime
 import MySQLdb.cursors
 import re
 
@@ -100,8 +101,8 @@ def register():
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
-
-        # TODO: form input of creation date.
+        # Formatted date for mysql entry
+        formatted_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -120,7 +121,8 @@ def register():
 
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO UserInfo (firstname, lastname, username, password, email) VALUES (%s, %s, %s, %s, %s)', (firstname, lastname, username, password, email,))
+            # DateTime is only added if the account is created to show creation date.
+            cursor.execute('INSERT INTO UserInfo (firstname, lastname, username, password, email, date) VALUES (%s, %s, %s, %s, %s, %s)', (firstname, lastname, username, password, email,formatted_date,))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
 
@@ -135,12 +137,17 @@ def register():
 def profile(account):    
     return render_template('profile.html', username = account['username'],
      password = account['password'], firstname=account['firstname'], lastname=account['lastname'],
-     email=account['email'])
+     email=account['email'], creation_date=account['date'])
 
-# TODO: implement add_new fully as a page
-@app.route('/add_new')
+
+@app.route('/add_new', methods=['GET', 'POST'])
 def add_new():
-    return render_template('add_new.html')
+    if request.method == 'POST' and 'video_url' in request.form and 'video_title' in request.form:
+        # Variables for video
+        video_url = request.form['video_url']
+        video_title = request.form['video_title']
+
+    return render_template('add_new.html', title = 'Add New')
 
 # TODO: implement search_result fully as page
 @app.route('/search_results', methods = ['GET', 'POST'])

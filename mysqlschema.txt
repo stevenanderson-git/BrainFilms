@@ -14,6 +14,6 @@ Unique (username));
 CREATE TABLE Video(
 id INT AUTO_INCREMENT PRIMARY KEY,
 video_url VARCHAR(255) not null,
-title VARCHAR(255) not null,
+video_title VARCHAR(255) not null,
 UNIQUE KEY unique_url (video_url)
 );
