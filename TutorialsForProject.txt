@@ -14,6 +14,9 @@ GitHub Login Issues & Update
 HTML/CSS Searchbar
 	https://codepen.io/huange/pen/rbqsD
 
+HTML Button as Link
+	https://stackoverflow.com/questions/2906582/how-to-create-an-html-button-that-acts-like-a-link
+
 HTML/CSS/FLASK Search mySql
 	https://medium.com/@joseortizcosta/search-utility-with-flask-and-mysql-60bb8ee83dad
 
@@ -34,3 +37,30 @@ Sample Website Professor is basing on
 
 Scrollable Listbox Example
 	https://www.w3.org/TR/wai-aria-practices/examples/listbox/listbox-scrollable.html
+
+Python Filter lists
+	https://towardsdatascience.com/filtering-lists-in-python-a3387c7b6b5e
+
+Python String checking
+	https://stackabuse.com/python-check-if-string-contains-substring/
+
+Flask/AJAX JAVASCRIPT filtering
+	https://stackoverflow.com/questions/41268096/getting-flask-to-alter-selected-value-in-html-drop-down
+
+Google Docs Signatures
+	https://www.pandadoc.com/ask/google-docs-sign-in/
+
+***Flask Course - Web Development*** Looks Really good!
+	https://www.youtube.com/watch?v=Qr4QMBUPxWo&t=237s
+	* First section covers basics and Dynamic Routes
+	* Second section goes over Bootstrap. Need to update HTML tag to show EN
+
+Dynamic Flask Website
+	https://www.dries.page/website
+
+Storing URL in MYSql
+	https://stackoverflow.com/questions/219569/best-database-field-type-for-a-url
+
+Sorting Ratings
+	https://www.evanmiller.org/how-not-to-sort-by-average-rating.html
+
