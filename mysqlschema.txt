@@ -18,3 +18,17 @@ video_title VARCHAR(255) not null,
 date_added date,
 UNIQUE KEY unique_url (video_url)
 );
+
+CREATE TABLE Category(
+name VARCHAR(20) not null,
+description VARCHAR(100),
+PRIMARY KEY (name)
+);
+
+CREATE TABLE Subcategory(
+sub_name VARCHAR(20) not null,
+description VARCHAR(100),
+PRIMARY KEY (sub_name),
+parent_category VARCHAR(20) not null,
+CONSTRAINT FOREIGN KEY (parent_category) REFERENCES Category (name)
+);
