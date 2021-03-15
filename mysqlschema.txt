@@ -3,10 +3,18 @@ use braindb;
 
 CREATE TABLE UserInfo(
 id int(11) not null auto_increment primary key,
-firstname varchar(20) not null,
-lastname varchar(20) not null,
-username varchar(20) not null,
-email varchar(20),
+firstname VARCHAR(20) not null,
+lastname VARCHAR(20) not null,
+username VARCHAR(20) not null,
+email VARCHAR(20),
 date date,
 password varchar(20) not null,
 Unique (username));
+
+CREATE TABLE Video(
+id INT AUTO_INCREMENT PRIMARY KEY,
+video_url VARCHAR(255) not null,
+video_title VARCHAR(255) not null,
+date_added date,
+UNIQUE KEY unique_url (video_url)
+);

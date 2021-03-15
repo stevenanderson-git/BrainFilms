@@ -1,22 +1,25 @@
 {% extends "layout.html" %}
-<!DOCTYPE html>
 
-<html lang = 'en'>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Add New</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!--Added sheet refrences-->
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-    </head>
     <body>
         {% block content %}
-        <!--TODO: change this-->
-        <p>Boilerplate change me!</p>
+        <div class = 'add-video'>
+            <h1>Add New Video</h1>
+            <form action = "{{url_for('add_new')}}" method = "post" autocomplete="off">
+                <label for='video_url'>
+                    Video URL: 
+                </label>
+                <input type="text" name='video_url' id="video_url" required placeholder="http://www...">
+
+                <label for='video_title'>
+                    Video Title: 
+                </label>
+                <input type="text" name='video_title' id="video_title" required placeholder="Title goes Here">
+                
+                <div class = 'msg'>{{msg}}</div>
+                <input type = 'submit' value = 'Add'>
+            </form>
+        </div>
+        
 
         {% endblock content %}
     </body>
-</html>
