@@ -46,8 +46,6 @@ def index():
         n for n in secondary_terms
             if selected_term in n
     ]
-
-
     return render_template('index.html', title = title, primary_terms = primary_terms, filtered_terms = filtered_terms)
 
 # renamed from / to /login as it is no longer splash page
@@ -145,16 +143,15 @@ def add_new():
     return render_template('add_new.html')
 
 # TODO: implement search_result fully as page
-@app.route('/search_results')
+@app.route('/search_results', methods = ['GET', 'POST'])
 def search_results():
     # dummy data for testing before implementing database
-    searchterm = 'DemoTestingDataDELETEME'
     results = [
         {'res-url': 'www.dumb.com', 'title': 'Dumb Video Website', 'rating': '4', 'date_posted': 'April 20, 2222', 'description': 'This is a dumb video website blah blah balah'},
         {'res-url': 'www.IDKWHy.com', 'title': 'This is Bad', 'rating': '7', 'date_posted': 'April 1, 2011', 'description': 'Greatest bad information ever!'},
         {'res-url': 'www.Study-Stuff.com', 'title': 'This is the best Worst you wille3ver know', 'rating': '0', 'date_posted': 'June 20, 1984', 'description': 'I will highly rate this 0 because of its quality awfulness'}
     ]
-    return render_template('search_results.html', title = searchterm, results = results)
+    return render_template('search_results.html', title = 'searchterm', results = results)
 
 
 
