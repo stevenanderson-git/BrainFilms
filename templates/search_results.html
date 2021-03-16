@@ -1,28 +1,13 @@
 {% extends "layout.html" %}
-<!DOCTYPE html>
 
-<html lang='en'>
-    <head>
-        <meta charset="utf-8">
-        {% if title %}
-            <title>{{title}}</title>
-        {% else %}
-            <title>Brainlabs</title>
-        {% endif %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-    </head>
-    <body>
-        {% block content %}
+    {% block content %}
         <!--Print results from search-->
         {% for result in results %}
-            <h1>{{result.title}}</h1>
-            <h2>{{result.date_posted}}</h2>
-            <p>{{result.res_url}}</p>
-            <p>{{result.rating}}</p>
-            <p>{{result.description}}</p>
+        <div class = 'result-box'>
+            <h1 class = 'video-title'>{{result.video_title}}</h1>
+            <p class = 'video-url'>{{result.video_url}}</p>
+            <p class = 'video-date'>{{result.date_added}}</p>
+        </div>
+        <br>
         {% endfor %}
-
-        {% endblock content %}
-    </body>
-</html>
+    {% endblock content %}

@@ -18,3 +18,46 @@ video_title VARCHAR(255) not null,
 date_added date,
 UNIQUE KEY unique_url (video_url)
 );
+
+INSERT INTO Video (video_url, video_title, date_added) values
+('www.dumb.com', 'Dumb Video Website', '2001-08-06'),
+('www.IEDK.com', 'Its cool', '2003-07-30'),
+('www.website3.com', 'just more datae', '2025-04-16')
+;
+
+CREATE TABLE Category(
+name VARCHAR(20) not null,
+description VARCHAR(100),
+PRIMARY KEY (name)
+);
+
+CREATE TABLE Subcategory(
+sub_name VARCHAR(20) not null,
+parent_category VARCHAR(20) not null,
+description VARCHAR(100),
+PRIMARY KEY (sub_name),
+CONSTRAINT FOREIGN KEY (parent_category) REFERENCES Category (name)
+);
+
+INSERT INTO Category (name) values
+('Other'), ('Agriculture'), ('Animals & Wildlife'), ('Anthropology'), ('Archaeology'), ('Architecture'), ('Art'),
+('Biology'), ('Chemistry'), ('Computer Science'), ('Development')
+;
+
+INSERT INTO Subcategory (sub_name, parent_category) values
+('DIY & How-To', 'Other'),
+('Economics', 'Development'),
+('Education', 'Animals & Wildlife'),
+('Engineering', 'Chemistry'),
+('Environment', 'Biology'),
+('Film & Media', 'Art'),
+('Food & Cooking', 'Anthropology'),
+('Geography', 'Archaeology'),
+('Geology & Earth', 'Archaeology'),
+('Health', 'Biology'),
+('History', 'Other'),
+('Language', 'Anthropology'),
+('Law', 'Animals & Wildlife'),
+('Literature', 'Art'),
+('Marketing', 'Computer Science')
+;

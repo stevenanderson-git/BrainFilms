@@ -1,46 +1,35 @@
 {% extends "layout.html" %}
-<!DOCTYPE html>
 
-<html lang = 'en'>
-	<head>
-		<title>Index</title>
-		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-	</head>
-	<body>
-		{% block content %}
-		<div class='index-content'>
-			<div class = 'search-wrap'>
-				<div class="search">
-					<!-- TODO: have searchbar pass value to results page-->
-					<input type="text" class="search-term" placeholder="Search Videos" method = 'POST'>
-					<a href="{{ url_for('search_results') }}" class="search-btn">
-						<i class="fas fa-search"></i>
-					</a>
-				 </div>
+	{% block content %}
+	<div class='index-content'>
+		<div class = 'search-wrap'>
+			<div class="search">
+				<!-- TODO: have searchbar pass value to results page-->
+				<input type="text" class="search-term" placeholder="Search Videos" method = 'POST'>
+				<a href="{{ url_for('search_results') }}" class="search-btn">
+					<i class="fas fa-search"></i>
+				</a>
+			 </div>
+		</div>
+		<!-- TODO: display filterable keyword selectors-->
+		<div class='selector-wraper'>
+			<div class='selector categories'>
+				<select name='prime-categories' size = '6'>
+					{% for category in categories %}
+					<option name = '{{category}}'>{{category.name}}</option>
+					{% endfor %}
+				</select>
 			</div>
-
-			<!-- TODO: display filterable keyword selectors-->
-			<div class='selector-wraper'>
-				<div class='selector primary'>
-					<select name='Primary-Keyword' size = '6'>
-						{% for term in primary_terms %}
-						<option name = '{{term}}'>{{term}}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class='selector filtered'>
-					<select name='Filtered-Keywords' size = '6'>
-						{% for keyword in filtered_terms %}
-						<option name = '{{keyword}}'>{{keyword}}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class='selector rating'>
-
-				</div>
+			<div class='selector subcategories'>
+				<select name='subcategories' size = '6'>
+					{% for category in subcategories %}
+					<option name = '{{category}}'>{{category.sub_name}}</option>
+					{% endfor %}
+				</select>
+			</div>
+			<div class='selector rating'>
 			</div>
 		</div>
-		{% endblock content %}
-	</body>
-</html>
+	</div>
+	{% endblock content %}
+
