@@ -69,3 +69,15 @@ Formatting date/time for mysql/flask
 
 mysql add column
 	https://www.mysqltutorial.org/mysql-add-column/
+
+MySQL Flask Fetch all
+	https://stackoverflow.com/questions/38540256/flask-python-mysql-how-to-pass-selected-data-though-a-for-loop-and-return-it
+
+MySQL Connector
+	https://overiq.com/mysql-connector-python-101/executing-queries-using-connector-python/
+
+Website Laytout CSS for Responsive design
+	https://www.youtube.com/watch?v=lvYnfMOUOJY
+
+Appending Tags Via MySQl
+	https://stackoverflow.com/questions/16393541/appending-tags-to-a-row-in-a-mysql-db
