@@ -13,6 +13,7 @@
 		</div>
 		<!-- TODO: display filterable keyword selectors-->
 		<div class='selector-wraper'>
+			<label for ='selector categories'>Category</label>
 			<div class='selector categories'>
 				<select name='prime-categories' size = '6'>
 					{% for category in categories %}
@@ -20,6 +21,8 @@
 					{% endfor %}
 				</select>
 			</div>
+			<br>
+			<label for = 'selector subcategories'>Subcategories</label>
 			<div class='selector subcategories'>
 				<select name='subcategories' size = '6'>
 					{% for category in subcategories %}
