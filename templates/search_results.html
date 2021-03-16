@@ -3,8 +3,11 @@
     {% block content %}
         <!--Print results from search-->
         {% for result in results %}
-            <h1>{{result.video_title}}</h1>
-            <h2>{{result.date_added}}</h2>
-            <p>{{result.video_url}}</p>
+        <div class = 'result-box'>
+            <h1 class = 'video-title'>{{result.video_title}}</h1>
+            <p class = 'video-url'>{{result.video_url}}</p>
+            <p class = 'video-date'>{{result.date_added}}</p>
+        </div>
+        <br>
         {% endfor %}
     {% endblock content %}
