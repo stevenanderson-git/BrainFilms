@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+    {% block content %}
+    <form class = "form-layout advanced-search" method = "post">
+        <div class = "inner-form">
+            <div class = "form-row">
+                <div class = "form-row-label" for="search-term">
+                    Search Term
+                </div>
+                <div class = "form-row-content">
+                    <input type="text" name = "search-term" id = "search-term" placeholder = "Enter term to narrow results">
+                </div>
+            </div>
+            <div class = "form-row">
+                <div class = "form-row-label" for="categories">
+                    Primary Category
+                </div>
+                <div class = "form-row-content">
+                    <div class = "selector-categories-wraper">
+                        <select class ="adv-form-selector categories" name = "categories" id = "categories" size = "6">
+                            {% for category in categories %}
+                            <option name = "{{category}}">{{category.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class = "form-row">
+                <div class = "form-row-label" for="subcategories">
+                    Subcategory
+                </div>
+                <div class = "form-row-content">
+                    <div class = "selector-subcategories-wraper">
+                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" name = "subcategories" id = "subcategories" size = "6">
+                            {% for category in subcategories %}
+                            <option name = "{{category}}">{{category.sub_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class = "form-row advanced-search-submit-button">
+                <div class = "form-row-label"></div>
+                <button type = "submit" class = "button-adv-subm">
+                    Search with filters
+                </button>
+            </div>
+        </div>
+    </form>
+    {% endblock content %}

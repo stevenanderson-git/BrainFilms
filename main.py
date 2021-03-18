@@ -27,16 +27,7 @@ mysql = MySQL(app)
 def index():
     # Webpage Title
     title = 'Brainfilms - Home'
-    selected_term = ''
-    # Populate dropdown menus from mysql
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM Category')
-    categories = cursor.fetchall()
-    # TODO: These results should be filtered based category
-    cursor.execute('SELECT * FROM Subcategory')
-    subcategories = cursor.fetchall()
-
-    return render_template('index.html', title = title, categories = categories, subcategories = subcategories)
+    return render_template('index.html', title = title)
 
 # renamed from / to /login as it is no longer splash page
 @app.route('/login', methods=['GET', 'POST'])
@@ -162,6 +153,18 @@ def search_results():
     results = cursor.fetchall()
     return render_template('search_results.html', title = 'searchterm', results = results)
 
+@app.route('/advanced_search', methods = ['GET', 'POST'])
+def advanced_search():
+    title = 'Advanced Search'
+    selected_term = ''
+    # Populate dropdown menus from mysql
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM Category')
+    categories = cursor.fetchall()
+    # TODO: These results should be filtered based category
+    cursor.execute('SELECT * FROM Subcategory')
+    subcategories = cursor.fetchall()
+    return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
 
 
 ####
