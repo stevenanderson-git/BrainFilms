@@ -81,3 +81,6 @@ Website Laytout CSS for Responsive design
 
 Appending Tags Via MySQl
 	https://stackoverflow.com/questions/16393541/appending-tags-to-a-row-in-a-mysql-db
+
+Css Is()
+	https://www.youtube.com/watch?v=McC4QkCvbaY
