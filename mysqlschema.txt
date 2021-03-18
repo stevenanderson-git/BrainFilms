@@ -24,16 +24,18 @@ INSERT INTO Video (video_url, video_title, date_added) values
 ;
 
 CREATE TABLE Category(
+cat_id INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(20) not null,
 description VARCHAR(100),
-PRIMARY KEY (name)
+UNIQUE (name)
 );
 
 CREATE TABLE Subcategory(
+sub_id INT AUTO_INCREMENT PRIMARY KEY,
 sub_name VARCHAR(20) not null,
 parent_category VARCHAR(20) not null,
 description VARCHAR(100),
-PRIMARY KEY (sub_name),
+UNIQUE (sub_name),
 CONSTRAINT FOREIGN KEY (parent_category) REFERENCES Category (name)
 );
 
