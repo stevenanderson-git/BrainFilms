@@ -82,11 +82,9 @@ def register():
     # Output message if something goes wrong...
     msg = ''
     # Check if "username", "password" and "email" POST requests exist (user submitted form)
-    if request.method == 'POST' and 'firstname' in request.form and'lastname' in request.form and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
         
         # Create variables for easy access
-        firstname = request.form['firstname']
-        lastname = request.form['lastname']
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
@@ -105,12 +103,10 @@ def register():
             msg = 'Invalid email address!'
         elif not re.match(r'[A-Za-z0-9]+', username):
             msg = 'Username must contain only characters and numbers!'
-        elif not firstname or not lastname or not username or not password or not email:
-            msg = 'Please fill out the form!'
 
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO UserInfo (firstname, lastname, username, password, email, date) VALUES (%s, %s, %s, %s, %s, %s)', (firstname, lastname, username, password, email,formatted_date,))
+            cursor.execute('INSERT INTO UserInfo (username, password, email, date) VALUES (%s, %s, %s, %s)', (username, password, email,formatted_date,))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
 
@@ -124,7 +120,7 @@ def register():
 @app.route('/profile', methods = ['GET', 'POST'])
 def profile(account):    
     return render_template('profile.html', username = account['username'],
-     password = account['password'], firstname=account['firstname'], lastname=account['lastname'],
+     password = account['password'],
      email=account['email'], creation_date=account['date'])
 
 

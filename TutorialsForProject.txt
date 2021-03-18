@@ -84,3 +84,17 @@ Appending Tags Via MySQl
 
 Css Is()
 	https://www.youtube.com/watch?v=McC4QkCvbaY
+	
+Dropdown Filter select
+	https://stackoverflow.com/questions/62958679/filter-select-drop-down-options-based-on-value-selected-in-another-select
+
+AJAX with jQuery
+	https://flask.palletsprojects.com/en/1.1.x/patterns/jquery/
+
+***Dynamic selectbox***
+	https://www.youtube.com/watch?v=OFxA75PHnSs
+	https://tutorial101.blogspot.com/2020/11/python-flask-dynamic-select-box-and.html
+
+Flask Python & JS
+	https://www.jitsejan.com/python-and-javascript-in-flask.html
+
