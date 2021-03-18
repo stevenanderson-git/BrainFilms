@@ -13,12 +13,7 @@
 
 /*Applies to all body elements in the website*/
 .Site {
-	background: url('/static/images/BrainCamTransparent.gif');
-	background-position: center center;
-	background-attachment: fixed;
-	background-repeat: no-repeat;
-	background-size: 50%; /*reduced size, planning to use as logo homepage redirect in later development*/
-	background-color: #83baad;
+	background-color: lightgray;
 	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
