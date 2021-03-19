@@ -4,9 +4,15 @@
         <!--Print results from search-->
         {% for result in results %}
         <div class = 'result-box'>
-            <h1 class = 'video-title'>{{result.video_title}}</h1>
-            <p class = 'video-url'>{{result.video_url}}</p>
-            <p class = 'video-date'>{{result.date_added}}</p>
+            <div>
+                <h1 class = 'video-title'>{{result.video_title}}</h1>
+            </div>
+            <div>
+                <a class = "video-url" href="{{result.video_url}}" target="_blank">{{result.video_url}}</a>
+            </div>
+            <div>
+                <p class = 'video-date'>{{result.date_added}}</p>
+            </div>
         </div>
         <br>
         {% endfor %}
