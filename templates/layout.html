@@ -3,13 +3,21 @@
 <html lang = 'en'>
     <head>
         <meta charset="utf-8">
-        {% if title %}
+        <title>
+            {% if title %}
+                {{title}}
+            {% else %}
+                Brainlabs
+            {% endif %}
+        </title>
+
+        <!--{% if title %}
             <title>{{title}}</title>
         {% else %}
             <title>Brainlabs</title>
-        {% endif %}
+        {% endif %}-->
         <!--Link for javascript-->
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
         <!--Link for Bootstrap goes here if used-->
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     </head>

@@ -32,6 +32,7 @@ def index():
 # renamed from / to /login as it is no longer splash page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    title = 'Login'
     # Output message if something goes wrong...
     msg = ''
     # Check if "username" and "password" POST requests exist (user submitted form)
@@ -56,7 +57,7 @@ def login():
             # Account doesnt exist or username/password incorrect
             msg = 'Incorrect username/password!'
     # Show the login form with message (if any)
-    return render_template('login.html', msg=msg)
+    return render_template('login.html', title = title, msg=msg)
 
 # TODO: Logout not currently used
 @app.route('/logout')
@@ -70,6 +71,7 @@ def logout():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    title = 'Register'
     # Output message if something goes wrong...
     msg = ''
     # Check if "username", "password" and "email" POST requests exist (user submitted form)
@@ -105,18 +107,20 @@ def register():
         # Form is empty... (no POST data)
         msg = 'Please fill out the form!'
     # Show registration form with message (if any)
-    return render_template('register.html', msg=msg)
+    return render_template('register.html', title = title, msg=msg)
 
 # Profile Page - Implemented as part of Lab 2
 @app.route('/profile', methods = ['GET', 'POST'])
-def profile(account):    
-    return render_template('profile.html', username = account['username'],
+def profile(account):
+    title = 'Profile'    
+    return render_template('profile.html', title = title, username = account['username'],
      password = account['password'],
      email=account['email'], creation_date=account['date'])
 
 
 @app.route('/add_new', methods=['GET', 'POST'])
 def add_new():
+    title = 'Add New'
     # error message
     msg = ''
     if request.method == 'POST' and 'video_url' in request.form and 'video_title' in request.form:
@@ -143,15 +147,16 @@ def add_new():
             mysql.connection.commit()
             msg = 'Video Added!'
 
-    return render_template('add_new.html', title = 'Add New', msg = msg)
+    return render_template('add_new.html', title = title, msg = msg)
 
 # TODO: implement search_result fully as page
 @app.route('/search_results', methods = ['GET', 'POST'])
 def search_results():
+    title = 'Search Term'
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute('SELECT * FROM Video')
     results = cursor.fetchall()
-    return render_template('search_results.html', title = 'searchterm', results = results)
+    return render_template('search_results.html', title = title, results = results)
 
 @app.route('/advanced_search', methods = ['GET', 'POST'])
 def advanced_search():
