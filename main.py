@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, json, render_template, request, redirect, url_for, session, jsonify
 from flask_mysqldb import MySQL
 from datetime import datetime
 import MySQLdb.cursors
@@ -170,6 +170,21 @@ def advanced_search():
     cursor.execute('SELECT * FROM Subcategory')
     subcategories = cursor.fetchall()
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
+
+@app.route('/filter', methods = ['POST', 'GET'])
+def filter():
+    filteredterm = 'Missing'
+    searchterm = request.form['searchterm']
+    category = request.form['category']
+    subcategory = request.form['subcategory']
+    if searchterm and category:
+        filteredterm = searchterm + ' ' + category
+    elif searchterm:
+        filteredterm = searchterm
+    elif category:
+        filteredterm = category
+    return jsonify({'filteredterm' : filteredterm})
+    
 
 
 ####

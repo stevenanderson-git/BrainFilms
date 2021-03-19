@@ -1,5 +1,4 @@
 {% extends "layout.html" %}
-
     {% block content %}
     <form class = "form-layout advanced-search" method = "post">
         <div class = "inner-form">
@@ -17,9 +16,11 @@
                 </div>
                 <div class = "form-row-content">
                     <div class = "selector-categories-wraper">
-                        <select class ="adv-form-selector categories" name = "categories" id = "categories" size = "6">
+                        <select class ="adv-form-selector categories" name = "categories" id = "categories" size = "6" onchange="ddlselect();">
+                            <!--Blank option to show all-->
+                            <option value = ""></option>
                             {% for category in categories %}
-                            <option name = "{{category}}">{{category.name}}</option>
+                            <option value = "{{category.name}}">{{category.name}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -33,13 +34,28 @@
                     <div class = "selector-subcategories-wraper">
                         <select multiple = "multiple-sub" class ="adv-form-selector subcategories" name = "subcategories" id = "subcategories" size = "6">
                             {% for category in subcategories %}
-                            <option name = "{{category}}">{{category.sub_name}}</option>
+                            <option name = "{{category.sub_name}}">{{category.sub_name}}</option>
                             {% endfor %}
                         </select>
                     </div>
                 </div>
             </div>
 
+            <div class = "form-row selection">
+                <div class = "form-row-label" for="current-selection">
+                    Selected
+                </div>
+                <div class = "form-row-content">
+                    <div class = "selection-wrapper">
+                        <div class = "selected-category">
+                            <input type = "text" id = "current-selected-category">
+                        </div>
+                        <div class = "selected-subcategories">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <div class = "form-row advanced-search-submit-button">
                 <div class = "form-row-label"></div>
@@ -49,4 +65,14 @@
             </div>
         </div>
     </form>
+
+
+
+    <script>
+        function ddlselect(){
+            var d=document.getElementById("categories");
+            var displaytext = d.options[d.selectedIndex].text
+            document.getElementById("current-selected-category").value = displaytext;
+        }
+    </script>
     {% endblock content %}
