@@ -16,7 +16,7 @@
                 </div>
                 <div class = "form-row-content">
                     <div class = "selector-categories-wraper">
-                        <select class ="adv-form-selector categories" name = "categories" id = "categories" size = "6" onchange="ddlselect();">
+                        <select class ="adv-form-selector categories" name = "categories" id = "category-selector" size = "6" onchange="ddlselect();">
                             <!--Blank option to show all-->
                             <option value = ""></option>
                             {% for category in categories %}
@@ -32,9 +32,9 @@
                 </div>
                 <div class = "form-row-content">
                     <div class = "selector-subcategories-wraper">
-                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" name = "subcategories" id = "subcategories" size = "6">
+                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" name = "subcategories" id = "subcategory-selector" size = "6">
                             {% for category in subcategories %}
-                            <option name = "{{category.sub_name}}">{{category.sub_name}}</option>
+                                <option name = "{{category.sub_name}}">{{category}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -43,20 +43,21 @@
 
             <div class = "form-row selection">
                 <div class = "form-row-label" for="current-selection">
-                    Selected
+                    <h3>Category Selected</h3>
                 </div>
                 <div class = "form-row-content">
                     <div class = "selection-wrapper">
                         <div class = "selected-category">
-                            <input type = "text" id = "current-selected-category">
+                            <label id = "current-selected-category"></label>
                         </div>
                         <div class = "selected-subcategories">
-
+                            <label id = "current-selected-subcategory"></label>
                         </div>
                     </div>
                 </div>
             </div>
             
+            <br><br>
             <div class = "form-row advanced-search-submit-button">
                 <div class = "form-row-label"></div>
                 <button type = "submit" class = "button-adv-subm">
@@ -70,9 +71,14 @@
 
     <script>
         function ddlselect(){
-            var d=document.getElementById("categories");
-            var displaytext = d.options[d.selectedIndex].text
-            document.getElementById("current-selected-category").value = displaytext;
+            var categoryselector=document.getElementById("category-selector");
+            var displaytext = categoryselector.options[categoryselector.selectedIndex].text
+            document.getElementById("current-selected-category").innerHTML = displaytext;
+            
+            var subcategoryselector = document.getElementById("subcategory-selector");
+            var subcategories = subcategories;
+            document.getElementById("current-selected-subcategory").innerHTML = subcategories;
+
         }
     </script>
     {% endblock content %}

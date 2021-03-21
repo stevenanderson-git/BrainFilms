@@ -169,6 +169,7 @@ def advanced_search():
     # TODO: These results should be filtered based category
     cursor.execute('SELECT * FROM Subcategory')
     subcategories = cursor.fetchall()
+    jsonify(subcategories)
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
 
 @app.route('/filter', methods = ['POST', 'GET'])
