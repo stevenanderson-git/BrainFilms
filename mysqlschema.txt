@@ -61,3 +61,14 @@ INSERT INTO Subcategory (sub_name, parent_category) values
 ('Literature', 'Art'),
 ('Marketing', 'Computer Science')
 ;
+
+CREATE TABLE Video_Categories(
+    Video_Id int not null,
+    Sub_Id int not null,
+    FOREIGN KEY (Video_Id) REFERENCES Video(id),
+    FOREIGN KEY (Sub_ID) REFERENCES Subcategory(sub_id)
+);
+
+INSERT INTO Video_Categories(Video_Id, Sub_Id) values
+(1, 3), (2, 8), (3, 7), (1, 7), (2, 7), (2, 11)
+;
