@@ -18,9 +18,9 @@
                     <div class = "selector-categories-wraper">
                         <select class ="adv-form-selector categories" name = "categories" id = "category-selector" size = "6" onchange="ddlselect();">
                             <!--Blank option to show all-->
-                            <option value = ""></option>
+                            <option value = "*"></option>
                             {% for category in categories %}
-                            <option value = "{{category.name}}">{{category}}</option>
+                            <option value = "{{category.cat_id}}">{{category.name}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -34,7 +34,7 @@
                     <div class = "selector-subcategories-wraper">
                         <select multiple = "multiple-sub" class ="adv-form-selector subcategories" name = "subcategories" id = "subcategory-selector" size = "6">
                             {% for category in subcategories %}
-                                <option name = "{{category.sub_name}}">{{category}}</option>
+                                <option value = "{{category.sub_id}}">{{category.sub_name}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -67,18 +67,7 @@
         </div>
     </form>
 
-
-
-    <script>
-        function ddlselect(){
-            var categoryselector=document.getElementById("category-selector");
-            var displaytext = categoryselector.options[categoryselector.selectedIndex].text
-            document.getElementById("current-selected-category").innerHTML = displaytext;
-            
-            var subcategoryselector = document.getElementById("subcategory-selector");
-            var subcategories = subcategories;
-            document.getElementById("current-selected-subcategory").innerHTML = subcategories;
-
-        }
-    </script>
+    
+    <script src="{{url_for('static', filename='/js/search.js')}}"></script>
+    
     {% endblock content %}
