@@ -164,13 +164,11 @@ def advanced_search():
     selected_term = ''
     # Populate dropdown menus from mysql
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    # Selects everything by id
-    # cursor.execute('SELECT * FROM Category')
     # Select everything alphabetically
     cursor.execute('SELECT * FROM Category ORDER BY name')
     categories = cursor.fetchall()
     # TODO: These results should be filtered based category
-    cursor.execute('SELECT * FROM Subcategory')
+    cursor.execute('SELECT * FROM Subcategory ORDER BY sub_name')
     subcategories = cursor.fetchall()
     jsonify(subcategories)
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)

@@ -16,11 +16,11 @@
                 </div>
                 <div class = "form-row-content">
                     <div class = "selector-categories-wraper">
-                        <select class ="adv-form-selector categories" name = "categories" id = "category-selector" size = "6" onchange="ddlselect();">
+                        <select class ="adv-form-selector categories" name = "categories" id = "category-selector" size = "6" onchange="ddlselect(this);">
                             <!--Blank option to show all-->
-                            <option value = "*"></option>
+                            <option value = "*" name = "*"></option>
                             {% for category in categories %}
-                            <option value = "{{category.cat_id}}">{{category.name}}</option>
+                            <option value = "{{category.cat_id}}" name = "{{category.name}}">{{category.name}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -32,10 +32,10 @@
                 </div>
                 <div class = "form-row-content">
                     <div class = "selector-subcategories-wraper">
-                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" name = "subcategories" id = "subcategory-selector" size = "6">
-                            {% for category in subcategories %}
+                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" name = "subcategories" id = "subcategory-selector" size = "6" onchange="update_display(this);">
+                            <!--{% for category in subcategories %}
                                 <option value = "{{category.sub_id}}">{{category.sub_name}}</option>
-                            {% endfor %}
+                            {% endfor %}-->
                         </select>
                     </div>
                 </div>
