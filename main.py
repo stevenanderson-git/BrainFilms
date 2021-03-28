@@ -4,6 +4,7 @@ from datetime import datetime
 import MySQLdb.cursors
 import re
 
+
 app = Flask(__name__)
 
 # Change this to your secret key (can be anything, it's for extra protection)
@@ -170,7 +171,6 @@ def advanced_search():
     # TODO: These results should be filtered based category
     cursor.execute('SELECT * FROM Subcategory ORDER BY sub_name')
     subcategories = cursor.fetchall()
-    jsonify(subcategories)
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
 
 @app.route('/filter', methods = ['POST', 'GET'])

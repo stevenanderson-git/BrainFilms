@@ -1,3 +1,8 @@
+
+<script type="text/javascript" src="{{url_for('static', filename='/js/search.js')}}"></script>
+<!--Ignore errors in editor-->
+<script>var global_categories = {{ categories|tojson }};</script>
+<script>var global_sub = {{ subcategories|tojson }};</script>
 {% extends "layout.html" %}
     {% block content %}
     <form class = "form-layout advanced-search" method = "post">
@@ -16,12 +21,8 @@
                 </div>
                 <div class = "form-row-content">
                     <div class = "selector-categories-wraper">
-                        <select class ="adv-form-selector categories" name = "categories" id = "category-selector" size = "6" onchange="ddlselect(this);">
-                            <!--Blank option to show all-->
-                            <option value = "*" name = "*"></option>
-                            {% for category in categories %}
-                            <option value = "{{category.cat_id}}" name = "{{category.name}}">{{category.name}}</option>
-                            {% endfor %}
+                        <select class ="adv-form-selector categories" name = "categories" id = "category-selector" size = "6" onchange="filter_sub(this);">
+                            <!--Populated by JS-->
                         </select>
                     </div>
                 </div>
@@ -32,15 +33,15 @@
                 </div>
                 <div class = "form-row-content">
                     <div class = "selector-subcategories-wraper">
-                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" name = "subcategories" id = "subcategory-selector" size = "6" onchange="update_display(this);">
-                            <!--{% for category in subcategories %}
-                                <option value = "{{category.sub_id}}">{{category.sub_name}}</option>
-                            {% endfor %}-->
+                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" name = "subcategories" id = "subcategory-selector" size = "6" onchange="update_display(this);" onload="pop_subs()">
+                            <!--Populated from category slector option-->
                         </select>
                     </div>
                 </div>
             </div>
+            
 
+            <!--Testing Output-->
             <div class = "form-row selection">
                 <div class = "form-row-label" for="current-selection">
                     <h3>Category Selected</h3>
@@ -68,6 +69,6 @@
     </form>
 
     
-    <script src="{{url_for('static', filename='/js/search.js')}}"></script>
-    
+
+    <script type="text/javascript">init();</script>
     {% endblock content %}

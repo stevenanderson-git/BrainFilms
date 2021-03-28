@@ -1,29 +1,58 @@
-
-
-function ddlselect(selected){
-    console.log(selected.options[selected.selectedIndex])
-    let category_value = selected.options[selected.selectedIndex].value;
-    let category_name = selected.options[selected.selectedIndex].text;
-    document.getElementById("current-selected-category").innerHTML = category_value;
-    let sub_selector = document.getElementById("subcategory-selector");
-    // clear any previous options
-    sub_selector.options.length = 0;
-    let sub_option = document.createElement("option");
-    sub_option.value = category_value;
-    sub_option.name = category_name;
-    sub_option.text = category_name;
-    sub_selector.add(sub_option);
+// Populates selector options
+function init(){
+    populate_primary();
+    console.table(global_categories);
+    console.table(global_sub);
 }
-function pop_subs(parent_category){
-    let categoryselector = document.getElementById("category-selector");
-    let option = document.createElement("option");
-    option.text = "test";
-    categoryselector.add(option);
+// Populate options in primary selector
+function populate_primary(){
+    var catetory_selector = document.getElementById("category-selector");
+    catetory_selector.options.length = 0; // clear any data in selector
+    let category_option = document.createElement("option");
+    // Create blank option
+    category_option.value = "0";
+    category_option.text = "Show All";
+    category_option.selected = true;
+    catetory_selector.add(category_option);
+    // Loop to populate from json
+    for (var i = 0; i < global_categories.length; i++){
+        category_option = document.createElement("option");
+        category_option.value = global_categories[i]['cat_id'];
+        category_option.text = global_categories[i]['name'];
+        catetory_selector.add(category_option);
+    }
+    // Populates the subcategories with all elements
+    populate_sub(0);
 }
-
-// this should add to a list and the list items could be removed/added
-function update_display(subcategory){
-    let sub_value = subcategory.options[subcategory.selectedIndex].value;
-    let sub_name = subcategory.options[subcategory.selectedIndex].text;
-    document.getElementById("current-selected-category").innerHTML = sub_value + " " + sub_name;
+// Populate subcategory
+function populate_sub(category_id){
+    var sub_selector = document.getElementById("subcategory-selector");
+    sub_selector.options.length = 0; // clear any data in selector
+    // if id = star, show all
+    if(category_id === 0){
+        // Loop to populate from json
+        for (var i = 0; i < global_sub.length; i++){
+            let category_option = document.createElement("option");
+            category_option.value = global_sub[i]['sub_id'];
+            category_option.text = global_sub[i]['sub_name'];
+            sub_selector.add(category_option);
+        }
+    }
+    // else show by the filtered id
+    else{
+        for (i = 0; i < global_sub.length; i++){
+            // Check if selected category matches the parent category
+            if(category_id === Number(global_sub[i]['parent_category'])){
+                let category_option = document.createElement("option");
+                category_option.value = global_sub[i]['sub_id'];
+                category_option.text = global_sub[i]['sub_name'];
+                sub_selector.add(category_option);
+            }
+        }
+    }
+}
+// Filters the subcategory
+function filter_sub(selected){
+    let category_value = Number(selected.options[selected.selectedIndex].value);
+    populate_sub(category_value);
 }
