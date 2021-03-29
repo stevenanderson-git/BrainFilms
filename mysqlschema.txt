@@ -59,7 +59,9 @@ INSERT INTO Subcategory (sub_name, parent_category) values
 ('Language', '4'),
 ('Law', '3'),
 ('Literature', '7'),
-('Marketing', '10')
+('Marketing', '10'),
+('Amazon', '12'),
+('Zumba', '13')
 ;
 
 CREATE TABLE Video_Category(

@@ -33,29 +33,21 @@
                 </div>
                 <div class = "form-row-content">
                     <div class = "selector-subcategories-wraper">
-                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" name = "subcategories" id = "subcategory-selector" size = "6" onchange="update_display(this);" onload="pop_subs()">
+                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" name = "subcategories" id = "subcategory-selector" size = "6" onchange="add_to_filters(this);">
                             <!--Populated from category slector option-->
                         </select>
                     </div>
                 </div>
             </div>
             
-
-            <!--Testing Output-->
-            <div class = "form-row selection">
-                <div class = "form-row-label" for="current-selection">
-                    <h3>Category Selected</h3>
+            <div class = "filter-selected-wrapper">
+                <div class = "filter-selected-heading">
+                    <h3>Filters Selected</h3>
                 </div>
-                <div class = "form-row-content">
-                    <div class = "selection-wrapper">
-                        <div class = "selected-category">
-                            <label id = "current-selected-category"></label>
-                        </div>
-                        <div class = "selected-subcategories">
-                            <label id = "current-selected-subcategory"></label>
-                        </div>
-                    </div>
-                </div>
+                <!--Use CSS to style and remove bullets-->
+                <ul class="filter-list" id="filter-list">
+                    <!--JS populates items-->
+                </ul>
             </div>
             
             <br><br>
