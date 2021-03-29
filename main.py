@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, json, render_template, request, redirect, url_for, session, jsonify
 from flask_mysqldb import MySQL
 from datetime import datetime
 import MySQLdb.cursors
 import re
+
 
 app = Flask(__name__)
 
@@ -164,12 +165,28 @@ def advanced_search():
     selected_term = ''
     # Populate dropdown menus from mysql
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM Category')
+    # Select everything alphabetically
+    cursor.execute('SELECT * FROM Category ORDER BY name')
     categories = cursor.fetchall()
     # TODO: These results should be filtered based category
-    cursor.execute('SELECT * FROM Subcategory')
+    cursor.execute('SELECT * FROM Subcategory ORDER BY sub_name')
     subcategories = cursor.fetchall()
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
+
+@app.route('/filter', methods = ['POST', 'GET'])
+def filter():
+    filteredterm = 'Missing'
+    searchterm = request.form['searchterm']
+    category = request.form['category']
+    subcategory = request.form['subcategory']
+    if searchterm and category:
+        filteredterm = searchterm + ' ' + category
+    elif searchterm:
+        filteredterm = searchterm
+    elif category:
+        filteredterm = category
+    return jsonify({'filteredterm' : filteredterm})
+    
 
 
 ####
