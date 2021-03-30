@@ -1,5 +1,9 @@
-{% extends "layout.html" %}
 
+<script type="text/javascript" src="{{url_for('static', filename='/js/search.js')}}"></script>
+<!--Ignore errors in editor-->
+<script>var global_categories = {{ categories|tojson }};</script>
+<script>var global_sub = {{ subcategories|tojson }};</script>
+{% extends "layout.html" %}
     {% block content %}
     <form class = "form-layout advanced-search" method = "post">
         <div class = "inner-form">
@@ -17,10 +21,8 @@
                 </div>
                 <div class = "form-row-content">
                     <div class = "selector-categories-wraper">
-                        <select class ="adv-form-selector categories" name = "categories" id = "categories" size = "6">
-                            {% for category in categories %}
-                            <option name = "{{category}}">{{category.name}}</option>
-                            {% endfor %}
+                        <select class ="adv-form-selector categories" name = "categories" id = "category-selector" size = "6" onchange="filter_sub(this);">
+                            <!--Populated by JS-->
                         </select>
                     </div>
                 </div>
@@ -31,16 +33,24 @@
                 </div>
                 <div class = "form-row-content">
                     <div class = "selector-subcategories-wraper">
-                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" name = "subcategories" id = "subcategories" size = "6">
-                            {% for category in subcategories %}
-                            <option name = "{{category}}">{{category.sub_name}}</option>
-                            {% endfor %}
+                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" name = "subcategories" id = "subcategory-selector" size = "6" onchange="add_to_filters(this);">
+                            <!--Populated from category slector option-->
                         </select>
                     </div>
                 </div>
             </div>
-
             
+            <div class = "filter-selected-wrapper">
+                <div class = "filter-selected-heading">
+                    <h3>Filters Selected</h3>
+                </div>
+                <!--Use CSS to style and remove bullets-->
+                <ul class="filter-list" id="filter-list">
+                    <!--JS populates items-->
+                </ul>
+            </div>
+            
+            <br><br>
             <div class = "form-row advanced-search-submit-button">
                 <div class = "form-row-label"></div>
                 <button type = "submit" class = "button-adv-subm">
@@ -49,4 +59,8 @@
             </div>
         </div>
     </form>
+
+    
+
+    <script type="text/javascript">init();</script>
     {% endblock content %}

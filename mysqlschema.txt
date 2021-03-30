@@ -33,31 +33,44 @@ UNIQUE (name)
 CREATE TABLE Subcategory(
 sub_id INT AUTO_INCREMENT PRIMARY KEY,
 sub_name VARCHAR(20) not null,
-parent_category VARCHAR(20) not null,
+parent_category INT not null,
 description VARCHAR(100),
 UNIQUE (sub_name),
-CONSTRAINT FOREIGN KEY (parent_category) REFERENCES Category (name)
+CONSTRAINT FOREIGN KEY (parent_category) REFERENCES Category (cat_id)
 );
 
 INSERT INTO Category (name) values
-('Other'), ('Agriculture'), ('Animals & Wildlife'), ('Anthropology'), ('Archaeology'), ('Architecture'), ('Art'),
-('Biology'), ('Chemistry'), ('Computer Science'), ('Development')
+('Other'), ('Agriculture'), ('Animals'), ('Anthropology'), ('Archaeology'), ('Architecture'), ('Art'),
+('Biology'), ('Chemistry'), ('Computer Science'), ('Development'), ('Zoology'), ('Quest'), ('Wildlife')
 ;
 
 INSERT INTO Subcategory (sub_name, parent_category) values
-('DIY & How-To', 'Other'),
-('Economics', 'Development'),
-('Education', 'Animals & Wildlife'),
-('Engineering', 'Chemistry'),
-('Environment', 'Biology'),
-('Film & Media', 'Art'),
-('Food & Cooking', 'Anthropology'),
-('Geography', 'Archaeology'),
-('Geology & Earth', 'Archaeology'),
-('Health', 'Biology'),
-('History', 'Other'),
-('Language', 'Anthropology'),
-('Law', 'Animals & Wildlife'),
-('Literature', 'Art'),
-('Marketing', 'Computer Science')
+('DIY & How-To', '1'),
+('Economics', '11'),
+('Education', '3'),
+('Engineering', '9'),
+('Environment', '8'),
+('Film & Media', '7'),
+('Food & Cooking', '4'),
+('Geography', '5'),
+('Geology & Earth', '5'),
+('Health', '8'),
+('History', '1'),
+('Language', '4'),
+('Law', '3'),
+('Literature', '7'),
+('Marketing', '10'),
+('Amazon', '12'),
+('Zumba', '13')
+;
+
+CREATE TABLE Video_Category(
+    Video_Id int not null,
+    Sub_Id int not null,
+    FOREIGN KEY (Video_Id) REFERENCES Video(id),
+    FOREIGN KEY (Sub_ID) REFERENCES Subcategory(sub_id)
+);
+
+INSERT INTO Video_Category(Video_Id, Sub_Id) values
+(1, 3), (2, 8), (3, 7), (1, 7), (2, 7), (2, 11)
 ;
