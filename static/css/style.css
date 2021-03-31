@@ -2,7 +2,7 @@
 /* TODO: change to have elements styled specifically
 	TODO: KEEP COMMENTS HIGH!!!*/
 * {
-  	font-family: -apple-system, BlinkMacSystemFont, "segoe ui", roboto, oxygen, ubuntu, cantarell, "fira sans", "droid sans", "helvetica neue", Arial, sans-serif;
+  	font-family:Arial, Helvetica Neue, Helvetica, sans-serif;
 
   	font-size: 16px;
 
@@ -13,7 +13,7 @@
 
 /*Applies to all body elements in the website*/
 .Site {
-	background-color: rgb(131, 186, 173);
+	background-color: #83baad;
 	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
@@ -26,46 +26,56 @@
 
 .Site-header .links{
 	display: flex;
-	justify-content: <content-position>right;
-	padding: 15px;
+	justify-content: space-between;
+	padding: 10px;
 	margin: 10px;
 }
 
-.Site-header a.home-button{
-	/* TODO: get working with image logo as hyperlink*/
-	background-color:#febac2;
-	color:#620e0a;
-	text-decoration: none;
-	font-weight: bold;
-	text-transform: uppercase;
-	box-shadow: 5px 5px #0e000c31;
-}
-
+/*Button margins added to keep img size stable while maintaining proper button size*/
 .Site-header a.button{
 	background-color:#febac2;
 	color:#620e0a;
-	padding: 10px;
+	padding: 5px 5px;
+	text-align: center;
 	text-decoration: none;
 	font-weight: bold;
 	text-transform: uppercase;
-	box-shadow: 5px 5px #40e000c31;
+	box-shadow: 5px 5px #423133;
+	margin: auto;
+	border-radius: 5px 5px 5px 5px;
+}
+.Site-header a.button:hover, .Site-header a.button:hover {
+	background-color:#febac2;
+	color:#ffffff;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 10px 10px #423133;
+	margin: auto;
+	border-radius: 5px 5px 5px 5px;
+  	transition: background-color 0.2s;
 }
 
-/*TODO: update login/register elements to fit the website theme*/
+.Site-header a.button4{
+	background-color:#febac2;
+	color:#620e0a;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 5px 5px #423133;
+	margin: auto;
+	border-radius: 5px 5px 5px 5px;
+}
+
+
 .login, .register {
   	width: 400px;
-  	background-color: #ffffff;
-  	box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.3);
+  	background-color: #83baad;
   	margin: 100px auto;
 }
 
-.login h1, .register h1 {
-  	text-align: center;
-  	color: #5b6574;
-  	font-size: 24px;
-  	padding: 20px 0 20px 0;
-  	border-bottom: 1px solid #dee0e4;
-}
 
 .login .links, .register .links {
   	display: flex;
@@ -73,20 +83,22 @@
 }
 
 .login .links a, .register .links a {
-  	color: #adb2ba;
-  	text-decoration: none;
-  	display: inline-flex;
-  	padding: 0 10px 10px 10px;
-  	font-weight: bold;
+	background-color:#febac2;
+	color:#620e0a;
+	padding: 7px 5px;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 5px 5px #423133;
 }
 
 .login .links a:hover, .register .links a:hover {
-  	color: #9da3ac;
+  	color: #620e0a;
 }
 
 .login .links a.active, .register .links a.active {
-  	border-bottom: 3px solid #3274d6;
-  	color: #3274d6;
+  	border-bottom: 3px solid #000000;
+  	color: #ffffff;
 }
 
 .login form, .register form {
@@ -102,14 +114,14 @@
   	align-items: center;
   	width: 50px;
   	height: 50px;
-  	background-color: #3274d6;
+  	background-color: #903445;
   	color: #ffffff;
 }
 
 .login form input[type="password"], .login form input[type="text"], .login form input[type="email"], .register form input[type="password"], .register form input[type="text"], .register form input[type="email"] {
   	width: 310px;
   	height: 50px;
-  	border: 1px solid #dee0e4;
+  	border: 1px solid #903445;
   	margin-bottom: 20px;
   	padding: 0 15px;
 }
@@ -118,16 +130,28 @@
   	width: 100%;
   	padding: 15px;
   	margin-top: 20px;
-  	background-color: #3274d6;
-  	border: 0;
-  	cursor: pointer;
-  	font-weight: bold;
-  	color: #ffffff;
+	  background-color:#febac2;
+	  color:#620e0a;
+	  text-align: center;
+	  text-decoration: none;
+	  font-weight: bold;
+	  text-transform: uppercase;
+	  box-shadow: 5px 5px #423133;
+	  margin: auto;
+	  border-radius: 5px 5px 5px 5px;
   	transition: background-color 0.2s;
 }
 
 .login form input[type="submit"]:hover, .register form input[type="submit"]:hover {
-  	background-color: #2868c7;
+	background-color:#febac2;
+	color:#ffffff;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 10px 10px #423133;
+	margin: auto;
+	border-radius: 5px 5px 5px 5px;
   	transition: background-color 0.2s;
 }
 
@@ -142,7 +166,7 @@
   	padding: 25px 0;
   	font-size: 22px;
   	border-bottom: 1px solid #e0e0e3;
-  	color: #4a536e;
+  	color: #620e0a;
 }
 
 .content > p, .content > div {
@@ -158,7 +182,7 @@
 
 .content > p table td:first-child, .content > div table td:first-child {
 	font-weight: bold;
-	color: #4a536e;
+	color: #620e0a;
 	padding-right: 15px;
 }
 
@@ -178,14 +202,14 @@
 
 .profile h1{
 	text-align: center;
-	color: #5b6574;
+	color: #620e0a;
 	font-size: 24px;
 	padding: 20px 0 20px 0;
 	border-bottom: 1px solid #dee0e4;
 }
 
 .profile h3{
-	color: #5b6574;
+	color: #620e0a;
 	text-align: center;
 	padding: 5px;
 }
@@ -217,7 +241,7 @@
 }
 .search-term {
 	width: 100%;
-	border: 3px solid #2868c7;
+	border: 3px solid #903445;
 	border-right: none;
 	padding: 5px;
 	height: 24px;
@@ -228,14 +252,37 @@
 a.search-btn {
 	appearance: button;
 	width: 40px;
-	height: 40px;
-	border: 1px solid #2868c7;
-	background: #2868c7;
+	height: 34px;
+	border: 3px solid #903445;
+	background: #ce4a62;
 	text-align: center;
 	color: #fff;
 	border-radius: 0 5px 5px 0;
 	cursor: pointer;
 	font-size: 20px;
+}
+a.advanced-search-btn {
+	background-color:#febac2;
+	color:#620e0a;
+	padding: 5px 5px;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 5px 5px #423133;
+	margin: 5px 5px 120px;
+	border-radius: 5px 5px 5px 5px;
+}
+a.advanced-search-btn:hover, a.advanced-search-btnhover {
+	background-color:#febac2;
+	color:#ffffff;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 10px 10px #423133;
+	margin: auto;
+	border-radius: 5px 5px 5px 5px;
+  	transition: background-color 0.2s;
 }
 .search-wrap{
 	width: 60%;
