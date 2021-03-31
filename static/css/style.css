@@ -1,5 +1,6 @@
 
-/* TODO: change to have elements styled specifically*/
+/* TODO: change to have elements styled specifically
+	TODO: KEEP COMMENTS HIGH!!!*/
 * {
   	font-family: -apple-system, BlinkMacSystemFont, "segoe ui", roboto, oxygen, ubuntu, cantarell, "fira sans", "droid sans", "helvetica neue", Arial, sans-serif;
 
@@ -12,7 +13,7 @@
 
 /*Applies to all body elements in the website*/
 .Site {
-	background-color: lightgray;
+	background-color: rgb(131, 186, 173);
 	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
@@ -25,30 +26,29 @@
 
 .Site-header .links{
 	display: flex;
-	justify-content: space-between;
+	justify-content: <content-position>right;
 	padding: 15px;
 	margin: 10px;
 }
 
 .Site-header a.home-button{
 	/* TODO: get working with image logo as hyperlink*/
-	background-color:#2868c7;
-	color:#c1c4c8;
-	padding: 10px;
+	background-color:#febac2;
+	color:#620e0a;
 	text-decoration: none;
 	font-weight: bold;
 	text-transform: uppercase;
-	box-shadow: 5px 5px #49529b;
+	box-shadow: 5px 5px #0e000c31;
 }
 
 .Site-header a.button{
-	background-color:#2868c7;
-	color:#c1c4c8;
+	background-color:#febac2;
+	color:#620e0a;
 	padding: 10px;
 	text-decoration: none;
 	font-weight: bold;
 	text-transform: uppercase;
-	box-shadow: 5px 5px #49529b;
+	box-shadow: 5px 5px #40e000c31;
 }
 
 /*TODO: update login/register elements to fit the website theme*/
