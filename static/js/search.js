@@ -1,8 +1,6 @@
 // Populates selector options
 function init(){
     populate_primary();
-    console.table(global_categories);
-    console.table(global_sub);
 }
 // Populate options in primary selector
 function populate_primary(){
@@ -62,13 +60,14 @@ function add_to_filters(selected){
     let sub_cat = selected.options[selected.selectedIndex];
     let filter_list = document.getElementById("filter-list");
     // Create clear all button if empty
-    if(filter_list.innerHTML===""){
+    if(filter_list.getElementsByTagName("li").length === 0){
         let clearall = document.createElement("li");
+        clearall.value = 0;
+        clearall.onclick = clear_all_filters;
         let clearbutton = document.createElement("button");
         clearbutton.type = "button";
         clearbutton.value = "clear-all"
         clearbutton.className = "filter-tag clear-all";
-        clearbutton.onclick = clear_all_filters();
         clearbutton.innerHTML = "Clear All";
         clearall.appendChild(clearbutton);
         filter_list.append(clearall);
