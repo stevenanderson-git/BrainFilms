@@ -153,7 +153,7 @@ def add_new():
 # TODO: implement search_result fully as page
 @app.route('/search_results', methods = ['GET', 'POST'])
 def search_results():
-    title = 'Search Term'
+    title = 'search_term'
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute('SELECT * FROM Video')
     results = cursor.fetchall()
@@ -162,7 +162,6 @@ def search_results():
 @app.route('/advanced_search', methods = ['GET', 'POST'])
 def advanced_search():
     title = 'Advanced Search'
-    selected_term = ''
     # Populate dropdown menus from mysql
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     # Select everything alphabetically
@@ -171,6 +170,13 @@ def advanced_search():
     # TODO: These results should be filtered based category
     cursor.execute('SELECT * FROM Subcategory ORDER BY sub_name')
     subcategories = cursor.fetchall()
+
+    if request.method == 'POST' and('search-term' in request.form or 'filter-list' in request.form.getlist("selected_filters")):
+        query_term = request.form["search-term"]
+        query_list = request.form.getlist("selected_filters")
+        
+        return redirect(url_for('search_results'))
+
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
 
 @app.route('/filter', methods = ['POST', 'GET'])

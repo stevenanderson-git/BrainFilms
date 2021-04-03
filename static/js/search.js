@@ -86,12 +86,16 @@ function add_to_filters(selected){
         filter_button.onclick = remove_from_filters();
         filter_button.innerHTML = sub_cat.text + " <i class='fas fa-times'></i>";
         filter.appendChild(filter_button);
+        let filter_input = document.createElement("input");
+        filter_input.type = "hidden";
+        filter_input.value = sub_cat.value;
+        filter_input.name = "selected_filters[]";
+        filter.appendChild(filter_input);
         filter_list.prepend(filter);
     }
 }
 // check if ul contains value
 function contains_filter(list, liValue){
-    console.log("reset");
     for(let index = 0; index < list.length; index++){
         if(Number(list[index].value) == liValue){
             return true;
@@ -101,11 +105,14 @@ function contains_filter(list, liValue){
 }
 
 // Remove filters from list
+// TODO: implement later
 function remove_from_filters(){
 
 }
 // Remove all filters from list
 function clear_all_filters(){
     let filter_list = document.getElementById("filter-list");
-    filter_list.length = 0;
+    while(filter_list.firstChild){
+        filter_list.removeChild(filter_list.firstChild);
+    }
 }
