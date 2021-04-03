@@ -11,34 +11,5 @@
 				</a>
 			 </div>
 		</div>
-		<div class = 'advanced-search-wrap'>
-			<a href="{{url_for('advanced_search')}}" class = 'advanced-button'>
-				<labe>Advanced Search</labe>
-			</a>
-		</div>
-		<!-- TODO: display filterable keyword selectors-->
-		<!-- Removed for testing-->
-		<!--<div class='selector-wraper'>
-			<label for ='selector categories'>Category</label>
-			<div class='selector categories'>
-				<select name='prime-categories' size = '6'>
-					{% for category in categories %}
-					<option name = '{{category}}'>{{category.name}}</option>
-					{% endfor %}
-				</select>
-			</div>
-			<br>
-			<label for = 'selector subcategories'>Subcategories</label>
-			<div class='selector subcategories'>
-				<select name='subcategories' size = '6'>
-					{% for category in subcategories %}
-					<option name = '{{category}}'>{{category.sub_name}}</option>
-					{% endfor %}
-				</select>
-			</div>
-			<div class='selector rating'>
-			</div>
-		</div>-->
-	</div>
 	{% endblock content %}
 
