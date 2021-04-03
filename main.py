@@ -1,4 +1,4 @@
-from flask import Flask, json, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 from datetime import datetime
 import MySQLdb.cursors
@@ -150,12 +150,14 @@ def add_new():
 
     return render_template('add_new.html', title = title, msg = msg)
 
-# TODO: implement search_result fully as page
-@app.route('/search_results', methods = ['GET', 'POST'])
-def search_results():
-    title = 'search_term'
+
+@app.route('/search_results/<query_list>')
+@app.route('/search_results/<query_term>')
+@app.route('/search_results/<query_term>/<query_list>')
+def search_results(query_term = "*", query_list = ""):
+    title = "Search Results"
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM Video')
+    cursor.execute('SELECT * FROM Video WHERE video_title LIKE %s', ("%"+query_term+"%",))
     results = cursor.fetchall()
     return render_template('search_results.html', title = title, results = results)
 
@@ -171,11 +173,15 @@ def advanced_search():
     cursor.execute('SELECT * FROM Subcategory ORDER BY sub_name')
     subcategories = cursor.fetchall()
 
-    if request.method == 'POST' and('search-term' in request.form or 'filter-list' in request.form.getlist("selected_filters")):
+    if request.method == 'POST':
         query_term = request.form["search-term"]
         query_list = request.form.getlist("selected_filters")
+        if query_list or query_term:
 
-        return redirect(url_for('search_results'))
+            # TODO: delete testing outputs
+            print(query_term)
+            print(query_list)
+            return redirect(url_for('search_results', query_term = query_term, query_list = query_list))
 
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
 
