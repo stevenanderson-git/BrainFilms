@@ -174,25 +174,11 @@ def advanced_search():
     if request.method == 'POST' and('search-term' in request.form or 'filter-list' in request.form.getlist("selected_filters")):
         query_term = request.form["search-term"]
         query_list = request.form.getlist("selected_filters")
-        
+
         return redirect(url_for('search_results'))
 
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
 
-@app.route('/filter', methods = ['POST', 'GET'])
-def filter():
-    filteredterm = 'Missing'
-    searchterm = request.form['searchterm']
-    category = request.form['category']
-    subcategory = request.form['subcategory']
-    if searchterm and category:
-        filteredterm = searchterm + ' ' + category
-    elif searchterm:
-        filteredterm = searchterm
-    elif category:
-        filteredterm = category
-    return jsonify({'filteredterm' : filteredterm})
-    
 
 
 ####
