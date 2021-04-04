@@ -131,3 +131,19 @@ Query strings in Flask | Learning Flask Ep. 11
 
 How to remove parameters from URL in Flask python
 	https://stackoverflow.com/questions/26303668/how-to-remove-parameters-from-url-in-flask-python
+
+Python MySQLdb TypeError: not all arguments converted during string formatting
+	https://stackoverflow.com/questions/21740359/python-mysqldb-typeerror-not-all-arguments-converted-during-string-formatting
+
+10.5.4 MySQLCursor.execute() Method
+	https://dev.mysql.com/doc/connector-python/en/connector-python-api-mysqlcursor-execute.html
+
+SQL search multiple values in same field
+	https://stackoverflow.com/questions/16240041/sql-search-multiple-values-in-same-field
+
+3.3.4.3 Selecting Particular Columns
+	https://dev.mysql.com/doc/refman/8.0/en/selecting-columns.html
+
+Multiple WHERE with AND & OR Operators
+	https://www.brainbell.com/tutorials/MySQL/Combining_WHERE_Clauses.htm
+

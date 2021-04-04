@@ -155,33 +155,42 @@ def add_new():
 def search_results():
     args = request.args
     title = "Search Results"
+    page = 'search_results.html'
     # TODO: remove test prints
     print(args)
     results = None
     key_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    key_sql = 'SELECT * FROM Video WHERE video_title REGEXP %s'
     filter_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    filter_sql = 'SELECT DISTINCT video.* FROM video INNER JOIN video_category ON video.id = video_category.video_id WHERE sub_id IN %s'
+    multi_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    multi_sql = ''
+
     if args:
-        # TODO: parse empty information before if
-        if args.get("search-term") != "":
+        if (args.get("search-term") != "") and args.get("filterID"):
+            print("both")
+            results = filter_cursor.execute(filter_sql, [args.getlist("filterID")])
+
+            return render_template(page, title = "Term and ID", results=results)
+
+
+
+        elif args.get("search-term") != "":
             # Search OR keyword
-            # key_cursor.execute('SELECT * FROM Video WHERE video_title REGEXP %s', (" ".join(args.get("search-term").split()).replace(" ", "|"),))
+            key_cursor.execute(key_sql, (" ".join(args.get("search-term").split()).replace(" ", "|"),))
             # Search And Keyword
-            key_cursor.execute('SELECT * FROM Video WHERE video_title REGEXP %s', (" ".join(args.get("search-term").split()).replace(" ", "&"),))
+            # key_cursor.execute(key_sql, (" ".join(args.get("search-term").split()).replace(" ", "&"),))
             results = key_cursor.fetchall()
-            return render_template('search_results.html', title = title, results=results)
-        if args.get("filterID"):
-            for fid in args.getlist("filterID"):
-                print(fid)
-            f_id = ", ".join(f"{v}" for v in args.getlist("filterID"))
-            print(args.getlist("filterID"))
-            # filter_cursor.execute('SELECT Video.* FROM Video INNER JOIN Video_Category ON Video.id = Video_Category.Video_Id WHERE Video_Category.Sub_Id = %s', (f_id,))
-            # sub_id=11 or sub_id=7
-            filter_cursor.execute('select distinct video.* from video inner join video_category on video.id = video_category.video_id where sub_id in %s', [args.getlist("filterID")])
+            print(results)
+            return render_template(page, title = title, results=results)
+
+        elif args.get("filterID"):
+            filter_cursor.execute(filter_sql, [args.getlist("filterID")])
             results = filter_cursor.fetchall()
             print(results)
-            return render_template('search_results.html', title = title, results=results)
+            return render_template(page, title = title, results=results)
 
-    return render_template('search_results.html', title = title)
+    return render_template(page, title = title)
 
 @app.route('/advanced_search', methods = ['GET','POST'])
 def advanced_search():
