@@ -5,7 +5,7 @@
 		<div class = 'search-wrap'>
 			<form class="search" method = 'GET' action="{{url_for('search_results')}}">
 				<!-- TODO: have searchbar pass value to results page-->
-				<input type="text" class="search-term" name = "search-term" id = "search-term" placeholder="Search Videos">
+				<input type="text" class="search-term" name = "search-term" id = "search-term" placeholder="Search Videos" pattern="[A-Za-z0-9 ]+">
 				<button type = "submit" class="search-btn">
 					<i class="fas fa-search"></i>
 				</button>

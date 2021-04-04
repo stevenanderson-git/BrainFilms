@@ -153,20 +153,35 @@ def add_new():
 
 @app.route('/search_results', methods = ['GET', 'POST'])
 def search_results():
-    rqs = request.query_string
+    args = request.args
     title = "Search Results"
     # TODO: remove test prints
-    print(rqs)
+    print(args)
     results = None
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    if(title == "test"):
-        cursor.execute('SELECT * FROM Video WHERE video_title LIKE %s', ("%" + rqs + "%",))
-        results = cursor.fetchall()
-    if(title == "test2"):
-        cursor.execute('SELECT Video.* FROM Video INNER JOIN Video_Category ON Video.id = Video_Category.Video_Id WHERE Video_Category.Sub_Id = %s', (rqs,))
-        #results = cursor.fetchall()
+    key_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    filter_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    if args:
+        # TODO: parse empty information before if
+        if args.get("search-term") != "":
+            # Search OR keyword
+            # key_cursor.execute('SELECT * FROM Video WHERE video_title REGEXP %s', (" ".join(args.get("search-term").split()).replace(" ", "|"),))
+            # Search And Keyword
+            key_cursor.execute('SELECT * FROM Video WHERE video_title REGEXP %s', (" ".join(args.get("search-term").split()).replace(" ", "&"),))
+            results = key_cursor.fetchall()
+            return render_template('search_results.html', title = title, results=results)
+        if args.get("filterID"):
+            for fid in args.getlist("filterID"):
+                print(fid)
+            f_id = ", ".join(f"{v}" for v in args.getlist("filterID"))
+            print(args.getlist("filterID"))
+            # filter_cursor.execute('SELECT Video.* FROM Video INNER JOIN Video_Category ON Video.id = Video_Category.Video_Id WHERE Video_Category.Sub_Id = %s', (f_id,))
+            # sub_id=11 or sub_id=7
+            filter_cursor.execute('select distinct video.* from video inner join video_category on video.id = video_category.video_id where sub_id in %s', [args.getlist("filterID")])
+            results = filter_cursor.fetchall()
+            print(results)
+            return render_template('search_results.html', title = title, results=results)
 
-    return render_template('search_results.html', title = title, results = results)
+    return render_template('search_results.html', title = title)
 
 @app.route('/advanced_search', methods = ['GET','POST'])
 def advanced_search():
@@ -209,7 +224,7 @@ def query():
                 print(foo)
             print(f"{k} : {v}")
         #serialized strings and string interpolation
-        serialized = ", ".join(f"{k} : {v}" for k, v in args.items())
+        serialized = ", ".join(f"{k}: {v}" for k, v in args.items())
         return f"(Query) {serialized}", 200
 
     return "query received", 200

@@ -17,5 +17,9 @@
             </div>
             <br>
             {% endfor %}
+        {% else %}
+            <div class = 'result-box'>
+                search again, no terms or filters entered
+            </div>
         {% endif %}
     {% endblock content %}

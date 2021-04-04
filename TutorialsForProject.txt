@@ -128,3 +128,6 @@ How do you get a query string on Flask?
 
 Query strings in Flask | Learning Flask Ep. 11
 	https://pythonise.com/series/learning-flask/flask-query-strings
+
+How to remove parameters from URL in Flask python
+	https://stackoverflow.com/questions/26303668/how-to-remove-parameters-from-url-in-flask-python
