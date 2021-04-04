@@ -167,6 +167,7 @@ def search_results():
     multi_sql = ''
 
     if args:
+        # TODO: Continue work on SQL Query for both video_title and id lists
         if (args.get("search-term") != "") and args.get("filterID"):
             print("both")
             results = filter_cursor.execute(filter_sql, [args.getlist("filterID")])
