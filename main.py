@@ -151,14 +151,20 @@ def add_new():
     return render_template('add_new.html', title = title, msg = msg)
 
 
-@app.route('/search_results/<query_list>')
-@app.route('/search_results/<query_term>')
 @app.route('/search_results/<query_term>/<query_list>')
-def search_results(query_term = "*", query_list = ""):
+def search_results(query_term, query_list):
     title = "Search Results"
+    # TODO: remove test prints
+    print(query_term)
+    print(query_list)
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM Video WHERE video_title LIKE %s', ("%"+query_term+"%",))
-    results = cursor.fetchall()
+    if(query_term):
+        cursor.execute('SELECT * FROM Video WHERE video_title LIKE %s', ("%" + query_term + "%",))
+        results = cursor.fetchall()
+    if(query_list):
+        cursor.execute('SELECT Video.* FROM Video INNER JOIN Video_Category ON Video.id = Video_Category.Video_Id WHERE Video_Category.Sub_Id = %s', (query_list,))
+        #results = cursor.fetchall()
+
     return render_template('search_results.html', title = title, results = results)
 
 @app.route('/advanced_search', methods = ['GET', 'POST'])
@@ -175,12 +181,9 @@ def advanced_search():
 
     if request.method == 'POST':
         query_term = request.form["search-term"]
-        query_list = request.form.getlist("selected_filters")
+        query_list = request.form.getlist("selected_filters[]")
+        # Different redirects depending on what is entered
         if query_list or query_term:
-
-            # TODO: delete testing outputs
-            print(query_term)
-            print(query_list)
             return redirect(url_for('search_results', query_term = query_term, query_list = query_list))
 
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
