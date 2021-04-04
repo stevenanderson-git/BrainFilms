@@ -52,6 +52,16 @@ def login():
             session['loggedin'] = True
             session['id'] = account['id']
             session['username'] = account['username']
+
+            # Check if user is admin
+            cursor.execute(f'SELECT * FROM Admin WHERE id = {account["id"]}')
+            is_admin = cursor.fetchone()
+            if is_admin:
+                session['is_admin'] = True
+                return admin()
+            else:
+                session['is_admin'] = False
+
             # Go to Profile page
             return profile(account)
         else:
@@ -64,11 +74,12 @@ def login():
 @app.route('/logout')
 def logout():
     # Remove session data, this will log the user out
-   session.pop('loggedin', None)
-   session.pop('id', None)
-   session.pop('username', None)
-   # TODO: Redirect to homepage, not sure if this is correct syntax
-   return redirect(url_for('index'))
+    session.pop('loggedin', None)
+    session.pop('id', None)
+    session.pop('username', None)
+    session.pop('is_admin', None)
+    # TODO: Redirect to homepage, not sure if this is correct syntax
+    return redirect(url_for('index'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -118,6 +129,37 @@ def profile(account):
      password = account['password'],
      email=account['email'], creation_date=account['date'])
 
+@app.route('/admin/dashboard', methods = ['GET', 'POST'])
+def admin():
+    if session.get('is_admin') and session['is_admin']:
+        return render_template('admin.html', username = session['username'], is_admin=True)
+    else:
+        return render_template('admin.html', username=None, is_admin=False)
+
+@app.route('/admin/dashboard/add', methods = ['GET', 'POST'])
+def add_admin():
+    if session.get('is_admin') and session['is_admin']:
+        msg = ''
+        if request.method == 'POST' and 'username' in request.form:
+            username = request.form['username']
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute(f'SELECT * FROM UserInfo WHERE username = "{username}"')
+            account = cursor.fetchone()
+            if account:
+                # Check if user is already admin
+                cursor.execute(f'SELECT * FROM Admin WHERE id = {account["id"]}')
+                is_admin = cursor.fetchone()
+                if is_admin:
+                    msg = 'User is already admin'
+                else:
+                    cursor.execute(f'INSERT INTO ADMIN(id) VALUES({account["id"]})')
+                    mysql.connection.commit()
+                    msg = 'User successfully added'
+            else:
+                msg = 'User not found'
+        return render_template('add_admin.html', msg=msg)
+    else:
+        return render_template('admin.html', username=None, is_admin=False)
 
 @app.route('/add_new', methods=['GET', 'POST'])
 def add_new():
