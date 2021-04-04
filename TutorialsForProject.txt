@@ -98,3 +98,33 @@ AJAX with jQuery
 Flask Python & JS
 	https://www.jitsejan.com/python-and-javascript-in-flask.html
 
+Ignore fields in Form : HTML
+	https://stackoverflow.com/questions/6011951/how-to-stop-submit-of-all-of-fields-in-a-div-of-a-form
+
+Flask Query Strings
+	https://www.youtube.com/watch?v=PL6wzmKrgRg
+
+Flask QS as argument
+	https://stackoverflow.com/questions/32815609/capture-url-with-query-string-as-parameter-in-flask-route
+
+
+Creating URL query strings in Python
+	http://www.compciv.org/guides/python/how-tos/creating-proper-url-query-strings/
+
+Combined form and query string
+	https://riptutorial.com/flask/example/26931/combined-form-and-query-string
+
+In Flask, how can I generate a dynamic URL upon button click?
+	https://stackoverflow.com/questions/51639744/in-flask-how-can-i-generate-a-dynamic-url-upon-button-click
+
+How can I get the named parameters from a URL using Flask?
+	https://stackoverflow.com/questions/24892035/how-can-i-get-the-named-parameters-from-a-url-using-flask
+
+FLASK API Query String
+	https://flask.palletsprojects.com/en/1.0.x/api/#flask.Request.query_string
+
+How do you get a query string on Flask?
+	https://stackoverflow.com/questions/11774265/how-do-you-get-a-query-string-on-flask
+
+Query strings in Flask | Learning Flask Ep. 11
+	https://pythonise.com/series/learning-flask/flask-query-strings

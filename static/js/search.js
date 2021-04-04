@@ -89,7 +89,7 @@ function add_to_filters(selected){
         let filter_input = document.createElement("input");
         filter_input.type = "hidden";
         filter_input.value = sub_cat.value;
-        filter_input.name = "selected_filters[]";
+        filter_input.name = "filterID";
         filter.appendChild(filter_input);
         filter_list.prepend(filter);
     }

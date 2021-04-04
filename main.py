@@ -151,23 +151,24 @@ def add_new():
     return render_template('add_new.html', title = title, msg = msg)
 
 
-@app.route('/search_results/<query_term>/<query_list>')
-def search_results(query_term, query_list):
+@app.route('/search_results', methods = ['GET', 'POST'])
+def search_results():
+    rqs = request.query_string
     title = "Search Results"
     # TODO: remove test prints
-    print(query_term)
-    print(query_list)
+    print(rqs)
+    results = None
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    if(query_term):
-        cursor.execute('SELECT * FROM Video WHERE video_title LIKE %s', ("%" + query_term + "%",))
+    if(title == "test"):
+        cursor.execute('SELECT * FROM Video WHERE video_title LIKE %s', ("%" + rqs + "%",))
         results = cursor.fetchall()
-    if(query_list):
-        cursor.execute('SELECT Video.* FROM Video INNER JOIN Video_Category ON Video.id = Video_Category.Video_Id WHERE Video_Category.Sub_Id = %s', (query_list,))
+    if(title == "test2"):
+        cursor.execute('SELECT Video.* FROM Video INNER JOIN Video_Category ON Video.id = Video_Category.Video_Id WHERE Video_Category.Sub_Id = %s', (rqs,))
         #results = cursor.fetchall()
 
     return render_template('search_results.html', title = title, results = results)
 
-@app.route('/advanced_search', methods = ['GET', 'POST'])
+@app.route('/advanced_search', methods = ['GET','POST'])
 def advanced_search():
     title = 'Advanced Search'
     # Populate dropdown menus from mysql
@@ -179,14 +180,39 @@ def advanced_search():
     cursor.execute('SELECT * FROM Subcategory ORDER BY sub_name')
     subcategories = cursor.fetchall()
 
-    if request.method == 'POST':
-        query_term = request.form["search-term"]
-        query_list = request.form.getlist("selected_filters[]")
-        # Different redirects depending on what is entered
-        if query_list or query_term:
-            return redirect(url_for('search_results', query_term = query_term, query_list = query_list))
-
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
+
+
+
+# TODO: Delete this route, for testing only
+@app.route("/query")
+def query():
+    # Test String: /query?query_term=query+strings+with+flask&foo=steven&bar=weeeeeeebar&baz=baz
+    #check if args exist
+    if request.args:
+        print(request.query_string)
+        # parse query string and serialzise into immutable multi dictionary
+        args = request.args
+        if "query_term" in args:
+            qt = args.get("query_term")
+            print(f"QT: {qt}")
+        if "bar" in args:
+            bar = args["bar"]
+            print(bar)
+        if "baz" in args:
+            print(request.args.get("baz"))
+        for k, v in args.items():
+            if(k == "title"):
+                print(f"TITLE : {k} VALUE : {v}")
+            if("foo" in args):
+                foo = args.get("foo")
+                print(foo)
+            print(f"{k} : {v}")
+        #serialized strings and string interpolation
+        serialized = ", ".join(f"{k} : {v}" for k, v in args.items())
+        return f"(Query) {serialized}", 200
+
+    return "query received", 200
 
 
 
