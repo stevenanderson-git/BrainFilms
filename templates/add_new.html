@@ -14,7 +14,35 @@
                     Video Title: 
                 </label>
                 <input type="text" name='video_title' id="video_title" required placeholder="Title goes Here">
-                
+
+                <!--TODO: use jinja to make this block repeatable-->
+                <div class = "form-row-label" for="categories">
+                    Primary Category
+                </div>
+                <div class = "form-row-content">
+                    <div class = "selector-categories-wraper">
+                        <select class ="adv-form-selector categories" id = "category-selector" size = "6" onchange="filter_sub(this);">
+                            {%for cat in categories%}
+                                <option>{{cat.name}}</option>
+                            {% endfor %} 
+                        </select>
+                    </div>
+                </div>
+
+                <div class = "form-row-label" for="subcategories">
+                    Subcategory
+                </div>
+                <div class = "form-row-content">
+                    <div class = "selector-subcategories-wraper">
+                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" id = "subcategory-selector" size = "6" onchange="add_to_filters(this);" required>
+                            {%for sub in subcategories%}
+                                <option>{{sub.sub_name}}</option>
+                            {% endfor %} 
+                        </select>
+                    </div>
+                </div>
+
+
                 <div class = 'msg'>{{msg}}</div>
                 <input type = 'submit' value = 'Add'>
             </form>

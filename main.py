@@ -122,6 +122,14 @@ def profile(account):
 @app.route('/add_new', methods=['GET', 'POST'])
 def add_new():
     title = 'Add New'
+    # Populate dropdown menus from mysql
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    # Select everything alphabetically
+    cursor.execute('SELECT * FROM Category ORDER BY name')
+    categories = cursor.fetchall()
+    # TODO: These results should be filtered based category
+    cursor.execute('SELECT * FROM Subcategory ORDER BY sub_name')
+    subcategories = cursor.fetchall()
     # error message
     msg = ''
     if request.method == 'POST' and 'video_url' in request.form and 'video_title' in request.form:
@@ -148,7 +156,7 @@ def add_new():
             mysql.connection.commit()
             msg = 'Video Added!'
 
-    return render_template('add_new.html', title = title, msg = msg)
+    return render_template('add_new.html', title = title, msg = msg, categories = categories, subcategories = subcategories)
 
 
 @app.route('/search_results', methods = ['GET', 'POST'])
@@ -157,8 +165,6 @@ def search_results():
     title = "Search Results"
     page = 'search_results.html'
     # TODO: remove test prints
-    print(args)
-    results = None
     key_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     key_sql = 'SELECT * FROM Video WHERE video_title REGEXP %s'
     filter_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -170,9 +176,10 @@ def search_results():
         # TODO: Continue work on SQL Query for both video_title and id lists
         if (args.get("search-term") != "") and args.get("filterID"):
             print("both")
+            print(args.getlist("filterID"))
             results = filter_cursor.execute(filter_sql, [args.getlist("filterID")])
-
-            return render_template(page, title = "Term and ID", results=results)
+            print(results)
+            return render_template(page, title = title)
 
 
 
@@ -182,13 +189,11 @@ def search_results():
             # Search And Keyword
             # key_cursor.execute(key_sql, (" ".join(args.get("search-term").split()).replace(" ", "&"),))
             results = key_cursor.fetchall()
-            print(results)
             return render_template(page, title = title, results=results)
 
         elif args.get("filterID"):
             filter_cursor.execute(filter_sql, [args.getlist("filterID")])
             results = filter_cursor.fetchall()
-            print(results)
             return render_template(page, title = title, results=results)
 
     return render_template(page, title = title)
