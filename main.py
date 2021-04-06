@@ -168,9 +168,9 @@ def search_results():
     key_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     key_sql = 'SELECT * FROM Video WHERE video_title REGEXP %s'
     filter_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    filter_sql = 'SELECT DISTINCT video.* FROM video INNER JOIN video_category ON video.id = video_category.video_id WHERE sub_id IN %s'
+    filter_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE sub_id IN %s'
     multi_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    multi_sql = ''
+    multi_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE sub_id IN %s HAVING video.video_title REGEXP %s'
 
     if args:
         # TODO: Continue work on SQL Query for both video_title and id lists
