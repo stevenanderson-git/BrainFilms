@@ -131,10 +131,11 @@ def profile(account):
 
 @app.route('/admin/dashboard', methods = ['GET', 'POST'])
 def admin():
+    admin_page_var = 'admin.html'
     if session.get('is_admin') and session['is_admin']:
-        return render_template('admin.html', username = session['username'], is_admin=True)
+        return render_template(admin_page_var, username = session['username'], is_admin=True)
     else:
-        return render_template('admin.html', username=None, is_admin=False)
+        return render_template(admin_page_var, username=None, is_admin=False)
 
 @app.route('/admin/dashboard/add', methods = ['GET', 'POST'])
 def add_admin():
