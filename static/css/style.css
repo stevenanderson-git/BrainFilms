@@ -32,6 +32,12 @@
 }
 
 /*Button margins added to keep img size stable while maintaining proper button size*/
+.Site-header a.home-button{
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
 .Site-header a.button{
 	background-color:#febac2;
 	color:#620e0a;
@@ -43,6 +49,7 @@
 	box-shadow: 5px 5px #423133;
 	margin: auto;
 	border-radius: 5px 5px 5px 5px;
+	width: 80px;
 }
 .Site-header a.button:hover, .Site-header a.button:hover {
 	background-color:#febac2;
@@ -81,7 +88,7 @@
   	display: flex;
   	padding: 0 15px;
 }
-
+/*login buttons*/
 .login .links a, .register .links a {
 	background-color:#febac2;
 	color:#620e0a;
@@ -234,10 +241,13 @@
 }
 
 /*index.html*/
+/*Increased margin to prevent overlaying on top of header*/
 .search {
+	margin-top:150px;
 	width: 100%;
-	position: relative;
-	display: flex;
+	position: absolute;
+	display:flex;
+
 }
 .search-term {
 	width: 100%;
