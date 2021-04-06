@@ -167,21 +167,18 @@ def search_results():
     # TODO: remove test prints
     key_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     key_sql = 'SELECT * FROM Video WHERE video_title REGEXP %s'
+
     filter_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     filter_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE sub_id IN %s'
+
     multi_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     multi_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE sub_id IN %s HAVING video.video_title REGEXP %s'
 
     if args:
-        # TODO: Continue work on SQL Query for both video_title and id lists
         if (args.get("search-term") != "") and args.get("filterID"):
-            print("both")
-            print(args.getlist("filterID"))
-            results = filter_cursor.execute(filter_sql, [args.getlist("filterID")])
-            print(results)
-            return render_template(page, title = title)
-
-
+            multi_cursor.execute(multi_sql, [args.getlist("filterID")," ".join(args.get("search-term").split()).replace(" ", "|")])
+            results = multi_cursor.fetchall()
+            return render_template(page, title = title, results = results)
 
         elif args.get("search-term") != "":
             # Search OR keyword

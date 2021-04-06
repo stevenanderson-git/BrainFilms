@@ -33,3 +33,4 @@ where video_category.sub_id in (3, 2, 8)
 having video.video_title regexp 'e'
 ;
 
+SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE sub_id IN (2, 3, 8) HAVING video.video_title REGEXP 'e';
