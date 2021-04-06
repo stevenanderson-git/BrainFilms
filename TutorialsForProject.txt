@@ -98,3 +98,52 @@ AJAX with jQuery
 Flask Python & JS
 	https://www.jitsejan.com/python-and-javascript-in-flask.html
 
+Ignore fields in Form : HTML
+	https://stackoverflow.com/questions/6011951/how-to-stop-submit-of-all-of-fields-in-a-div-of-a-form
+
+Flask Query Strings
+	https://www.youtube.com/watch?v=PL6wzmKrgRg
+
+Flask QS as argument
+	https://stackoverflow.com/questions/32815609/capture-url-with-query-string-as-parameter-in-flask-route
+
+
+Creating URL query strings in Python
+	http://www.compciv.org/guides/python/how-tos/creating-proper-url-query-strings/
+
+Combined form and query string
+	https://riptutorial.com/flask/example/26931/combined-form-and-query-string
+
+In Flask, how can I generate a dynamic URL upon button click?
+	https://stackoverflow.com/questions/51639744/in-flask-how-can-i-generate-a-dynamic-url-upon-button-click
+
+How can I get the named parameters from a URL using Flask?
+	https://stackoverflow.com/questions/24892035/how-can-i-get-the-named-parameters-from-a-url-using-flask
+
+FLASK API Query String
+	https://flask.palletsprojects.com/en/1.0.x/api/#flask.Request.query_string
+
+How do you get a query string on Flask?
+	https://stackoverflow.com/questions/11774265/how-do-you-get-a-query-string-on-flask
+
+Query strings in Flask | Learning Flask Ep. 11
+	https://pythonise.com/series/learning-flask/flask-query-strings
+
+How to remove parameters from URL in Flask python
+	https://stackoverflow.com/questions/26303668/how-to-remove-parameters-from-url-in-flask-python
+
+Python MySQLdb TypeError: not all arguments converted during string formatting
+	https://stackoverflow.com/questions/21740359/python-mysqldb-typeerror-not-all-arguments-converted-during-string-formatting
+
+10.5.4 MySQLCursor.execute() Method
+	https://dev.mysql.com/doc/connector-python/en/connector-python-api-mysqlcursor-execute.html
+
+SQL search multiple values in same field
+	https://stackoverflow.com/questions/16240041/sql-search-multiple-values-in-same-field
+
+3.3.4.3 Selecting Particular Columns
+	https://dev.mysql.com/doc/refman/8.0/en/selecting-columns.html
+
+Multiple WHERE with AND & OR Operators
+	https://www.brainbell.com/tutorials/MySQL/Combining_WHERE_Clauses.htm
+
