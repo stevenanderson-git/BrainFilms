@@ -10,7 +10,7 @@ password varchar(20) not null,
 Unique (username));
 
 CREATE TABLE IF NOT EXISTS Video(
-id INT AUTO_INCREMENT PRIMARY KEY,
+video_id INT AUTO_INCREMENT PRIMARY KEY,
 video_url VARCHAR(255) not null,
 video_title VARCHAR(255) not null,
 date_added date,
@@ -65,13 +65,13 @@ INSERT INTO Subcategory (sub_name, parent_category) values
 ;
 
 CREATE TABLE IF NOT EXISTS Video_Category(
-    Video_Id int not null,
-    Sub_Id int not null,
-    FOREIGN KEY (Video_Id) REFERENCES Video(id),
-    FOREIGN KEY (Sub_ID) REFERENCES Subcategory(sub_id)
+    video_id int not null,
+    sub_id int not null,
+    FOREIGN KEY (video_id) REFERENCES Video(video_id),
+    FOREIGN KEY (sub_id) REFERENCES Subcategory(sub_id)
 );
 
-INSERT INTO Video_Category(Video_Id, Sub_Id) values
+INSERT INTO Video_Category(video_id, sub_id) values
 (1, 3), (2, 8), (3, 7), (1, 7), (2, 7), (2, 11)
 ;
 
