@@ -1,8 +1,6 @@
 // Populates selector options
 function init(){
     populate_primary();
-    console.table(global_categories);
-    console.table(global_sub);
 }
 // Populate options in primary selector
 function populate_primary(){
@@ -59,39 +57,62 @@ function filter_sub(selected){
 // Add filters to list
 // TODO: add check to prevent multiple additions
 function add_to_filters(selected){
-    let sub_cat = selected.options[selected.selectedIndex];
-    let filter_list = document.getElementById("filter-list");
+    var sub_cat = selected.options[selected.selectedIndex];
+    var filter_list = document.getElementById("filter-list");
+    var filter_elements = filter_list.getElementsByTagName("li");
     // Create clear all button if empty
-    if(filter_list.innerHTML===""){
-        let clearall = document.createElement("li");
-        let clearbutton = document.createElement("button");
+    if(filter_elements.length === 0){
+        var clearall = document.createElement("li");
+        clearall.value = 0;
+        clearall.className = "filter-tag-clear-all"
+        clearall.onclick = clear_all_filters;
+        var clearbutton = document.createElement("button");
         clearbutton.type = "button";
         clearbutton.value = "clear-all"
         clearbutton.className = "filter-tag clear-all";
-        clearbutton.onclick = clear_all_filters();
         clearbutton.innerHTML = "Clear All";
         clearall.appendChild(clearbutton);
         filter_list.append(clearall);
+    }    
+    // call function to check if value is in list already
+    if(!contains_filter(filter_elements, sub_cat.value)){
+        let filter = document.createElement("li");
+        filter.className = "filter-tag";
+        filter.value = sub_cat.value;
+        let filter_button = document.createElement("button");
+        filter_button.className = "filter-tag-button";
+        filter_button.type = "button";
+        filter_button.value = sub_cat.value;
+        filter_button.onclick = remove_from_filters();
+        filter_button.innerHTML = sub_cat.text + " <i class='fas fa-times'></i>";
+        filter.appendChild(filter_button);
+        let filter_input = document.createElement("input");
+        filter_input.type = "hidden";
+        filter_input.value = sub_cat.value;
+        filter_input.name = "filterID";
+        filter.appendChild(filter_input);
+        filter_list.prepend(filter);
     }
-
-    let filter = document.createElement("li");
-    filter.className = "filter-tag";
-    filter.value = sub_cat.value;
-    let filter_button = document.createElement("button");
-    filter_button.className = "filter-tag-button";
-    filter_button.type = "button";
-    filter_button.value = sub_cat.value;
-    filter_button.onclick = remove_from_filters();
-    filter_button.innerHTML = sub_cat.text + " <i class='fas fa-times'></i>";
-    filter.appendChild(filter_button);
-    filter_list.prepend(filter);
 }
+// check if ul contains value
+function contains_filter(list, liValue){
+    for(let index = 0; index < list.length; index++){
+        if(Number(list[index].value) == liValue){
+            return true;
+        }
+    }
+    return false;
+}
+
 // Remove filters from list
+// TODO: implement later
 function remove_from_filters(){
 
 }
 // Remove all filters from list
 function clear_all_filters(){
     let filter_list = document.getElementById("filter-list");
-    filter_list.length = 0;
+    while(filter_list.firstChild){
+        filter_list.removeChild(filter_list.firstChild);
+    }
 }

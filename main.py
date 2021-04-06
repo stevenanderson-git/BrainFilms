@@ -1,4 +1,4 @@
-from flask import Flask, json, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 from datetime import datetime
 import MySQLdb.cursors
@@ -52,6 +52,16 @@ def login():
             session['loggedin'] = True
             session['id'] = account['id']
             session['username'] = account['username']
+
+            # Check if user is admin
+            cursor.execute(f'SELECT * FROM Admin WHERE id = {account["id"]}')
+            is_admin = cursor.fetchone()
+            if is_admin:
+                session['is_admin'] = True
+                return admin()
+            else:
+                session['is_admin'] = False
+
             # Go to Profile page
             return profile(account)
         else:
@@ -64,11 +74,12 @@ def login():
 @app.route('/logout')
 def logout():
     # Remove session data, this will log the user out
-   session.pop('loggedin', None)
-   session.pop('id', None)
-   session.pop('username', None)
-   # TODO: Redirect to homepage, not sure if this is correct syntax
-   return redirect(url_for('index'))
+    session.pop('loggedin', None)
+    session.pop('id', None)
+    session.pop('username', None)
+    session.pop('is_admin', None)
+    # TODO: Redirect to homepage, not sure if this is correct syntax
+    return redirect(url_for('index'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -118,10 +129,50 @@ def profile(account):
      password = account['password'],
      email=account['email'], creation_date=account['date'])
 
+@app.route('/admin/dashboard', methods = ['GET', 'POST'])
+def admin():
+    admin_page_var = 'admin.html'
+    if session.get('is_admin') and session['is_admin']:
+        return render_template(admin_page_var, username = session['username'], is_admin=True)
+    else:
+        return render_template(admin_page_var, username=None, is_admin=False)
+
+@app.route('/admin/dashboard/add', methods = ['GET', 'POST'])
+def add_admin():
+    if session.get('is_admin') and session['is_admin']:
+        msg = ''
+        if request.method == 'POST' and 'username' in request.form:
+            username = request.form['username']
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute(f'SELECT * FROM UserInfo WHERE username = "{username}"')
+            account = cursor.fetchone()
+            if account:
+                # Check if user is already admin
+                cursor.execute(f'SELECT * FROM Admin WHERE id = {account["id"]}')
+                is_admin = cursor.fetchone()
+                if is_admin:
+                    msg = 'User is already admin'
+                else:
+                    cursor.execute(f'INSERT INTO ADMIN(id) VALUES({account["id"]})')
+                    mysql.connection.commit()
+                    msg = 'User successfully added'
+            else:
+                msg = 'User not found'
+        return render_template('add_admin.html', msg=msg)
+    else:
+        return render_template('admin.html', username=None, is_admin=False)
 
 @app.route('/add_new', methods=['GET', 'POST'])
 def add_new():
     title = 'Add New'
+    # Populate dropdown menus from mysql
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    # Select everything alphabetically
+    cursor.execute('SELECT * FROM Category ORDER BY name')
+    categories = cursor.fetchall()
+    # TODO: These results should be filtered based category
+    cursor.execute('SELECT * FROM Subcategory ORDER BY sub_name')
+    subcategories = cursor.fetchall()
     # error message
     msg = ''
     if request.method == 'POST' and 'video_url' in request.form and 'video_title' in request.form:
@@ -148,21 +199,54 @@ def add_new():
             mysql.connection.commit()
             msg = 'Video Added!'
 
-    return render_template('add_new.html', title = title, msg = msg)
+    return render_template('add_new.html', title = title, msg = msg, categories = categories, subcategories = subcategories)
 
-# TODO: implement search_result fully as page
+
 @app.route('/search_results', methods = ['GET', 'POST'])
 def search_results():
-    title = 'Search Term'
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM Video')
-    results = cursor.fetchall()
-    return render_template('search_results.html', title = title, results = results)
+    args = request.args
+    title = "Search Results"
+    page = 'search_results.html'
+    # TODO: remove test prints
+    key_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    key_sql = 'SELECT * FROM Video WHERE video_title REGEXP %s'
 
-@app.route('/advanced_search', methods = ['GET', 'POST'])
+    filter_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    filter_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE sub_id IN %s'
+
+    multi_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    multi_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE sub_id IN %s HAVING video.video_title REGEXP %s'
+
+    if args:
+        if (args.get("search-term") != "") and args.get("filterID"):
+            multi_cursor.execute(multi_sql, [args.getlist("filterID")," ".join(args.get("search-term").split()).replace(" ", "|")])
+            results = multi_cursor.fetchall()
+            return render_template(page, title = title, results = results)
+
+        elif args.get("search-term") != "":
+            # Search OR keyword
+            key_cursor.execute(key_sql, (" ".join(args.get("search-term").split()).replace(" ", "|"),))
+            # Search And Keyword
+            # key_cursor.execute(key_sql, (" ".join(args.get("search-term").split()).replace(" ", "&"),))
+            results = key_cursor.fetchall()
+            return render_template(page, title = title, results=results)
+
+        elif args.get("filterID"):
+            filter_cursor.execute(filter_sql, [args.getlist("filterID")])
+            results = filter_cursor.fetchall()
+            return render_template(page, title = title, results=results)
+        
+        # TODO: determine if this can be avoided with regexp searching or parsing query string
+        elif args.get("search-term") == "":
+            key_cursor.execute('SELECT * FROM video',)
+            results = key_cursor.fetchall()
+            return render_template(page, title = "All Videos", results=results)
+
+    return render_template(page, title = title)
+
+@app.route('/advanced_search', methods = ['GET','POST'])
 def advanced_search():
     title = 'Advanced Search'
-    selected_term = ''
     # Populate dropdown menus from mysql
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     # Select everything alphabetically
@@ -171,22 +255,41 @@ def advanced_search():
     # TODO: These results should be filtered based category
     cursor.execute('SELECT * FROM Subcategory ORDER BY sub_name')
     subcategories = cursor.fetchall()
+
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
 
-@app.route('/filter', methods = ['POST', 'GET'])
-def filter():
-    filteredterm = 'Missing'
-    searchterm = request.form['searchterm']
-    category = request.form['category']
-    subcategory = request.form['subcategory']
-    if searchterm and category:
-        filteredterm = searchterm + ' ' + category
-    elif searchterm:
-        filteredterm = searchterm
-    elif category:
-        filteredterm = category
-    return jsonify({'filteredterm' : filteredterm})
-    
+
+
+# TODO: Delete this route, for testing only
+@app.route("/query")
+def query():
+    # Test String: /query?query_term=query+strings+with+flask&foo=steven&bar=weeeeeeebar&baz=baz
+    #check if args exist
+    if request.args:
+        print(request.query_string)
+        # parse query string and serialzise into immutable multi dictionary
+        args = request.args
+        if "query_term" in args:
+            qt = args.get("query_term")
+            print(f"QT: {qt}")
+        if "bar" in args:
+            bar = args["bar"]
+            print(bar)
+        if "baz" in args:
+            print(request.args.get("baz"))
+        for k, v in args.items():
+            if(k == "title"):
+                print(f"TITLE : {k} VALUE : {v}")
+            if("foo" in args):
+                foo = args.get("foo")
+                print(foo)
+            print(f"{k} : {v}")
+        #serialized strings and string interpolation
+        serialized = ", ".join(f"{k}: {v}" for k, v in args.items())
+        return f"(Query) {serialized}", 200
+
+    return "query received", 200
+
 
 
 ####

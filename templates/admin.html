@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+<body>
+{% block content %}
+{% if is_admin %}
+<p>Welcome, {{username}}</p>
+<ul>
+    <li>Approve videos</li>
+    <li>Suspend or ban user</li>
+    <li><a href="{{ url_for('add_admin') }}">Add new admin</a></li>
+</ul>
+{% else %}
+<p>You must be logged in on an admin account to view this page.</p>
+{% endif %}
+{% endblock content %}
+</body>

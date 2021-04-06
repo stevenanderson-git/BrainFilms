@@ -1,0 +1,36 @@
+https://www.youtube.com/watch?v=3dyyZ-sQZ1E&t=75s
+Introduction to INNER and OUTER JOINS - Querying Multiple Tables with MySQL Workbench
+
+https://www.youtube.com/watch?v=7S_tz1z_5bA
+MySQL Tutorial for Beginners [Full Course]
+
+
+select video.*
+from video, video_category
+where video_category.video_id = video.video_id
+;
+
+select video.*
+from video
+inner join video_category on video_category.video_id = video.video_id
+;
+
+select video.*
+from video
+join video_category using(video_id)
+;
+
+select video.*
+from video
+join video_category using(video_id)
+having video.video_title = 'tets'
+;
+
+select distinct video.*
+from video
+join video_category using(video_id)
+where video_category.sub_id in (3, 2, 8)
+having video.video_title regexp 'e'
+;
+
+SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE sub_id IN (2, 3, 8) HAVING video.video_title REGEXP 'e';
