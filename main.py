@@ -192,6 +192,12 @@ def search_results():
             filter_cursor.execute(filter_sql, [args.getlist("filterID")])
             results = filter_cursor.fetchall()
             return render_template(page, title = title, results=results)
+        
+        # TODO: determine if this can be avoided with regexp searching or parsing query string
+        elif args.get("search-term") == "":
+            key_cursor.execute('SELECT * FROM video',)
+            results = key_cursor.fetchall()
+            return render_template(page, title = "All Videos", results=results)
 
     return render_template(page, title = title)
 
