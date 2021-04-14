@@ -94,3 +94,11 @@ FROM userinfo where userinfo.username = 'root'
 ;
 
 
+CREATE TABLE IF NOT EXISTS Categories(
+category_id INT AUTO_INCREMENT PRIMARY KEY,
+category_name VARCHAR(20) NOT NULL,
+category_description TEXT,
+parent_category INT NULL,
+UNIQUE (category_name),
+FOREIGN KEY (parent_category) REFERENCES Categories(category_id)
+);
