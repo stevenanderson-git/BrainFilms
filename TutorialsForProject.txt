@@ -147,3 +147,11 @@ SQL search multiple values in same field
 Multiple WHERE with AND & OR Operators
 	https://www.brainbell.com/tutorials/MySQL/Combining_WHERE_Clauses.htm
 
+JQuery & AJAX
+	https://www.bogotobogo.com/python/Flask/Python_Flask_with_AJAX_JQuery.php
+
+JQuery & AJAX w3
+	https://www.w3schools.com/jquery/jquery_syntax.asp
+
+more AJAX
+	https://stackoverflow.com/questions/44646925/flask-dynamic-dependent-dropdown-list/44654011

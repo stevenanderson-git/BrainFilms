@@ -1,6 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_mysqldb import MySQL
 from datetime import datetime
+from flask_wtf import FlaskForm
+from wtforms import SelectField
 import MySQLdb.cursors
 import re
 
@@ -131,9 +133,17 @@ def profile(account):
 
 @app.route('/admin/dashboard', methods = ['GET', 'POST'])
 def admin():
+    #TODO: This is populating the dropdown currently. needs to be done dynamically
+    form = CategoryForm()
+    c1 = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
+    c1sql = "select category_id, category_name from categories where parent_category is null;"
+    c1.execute(c1sql,)
+    parents = c1.fetchall()
+    form.category.choices = [(k,v) for k,v in parents]
+
     admin_page_var = 'admin.html'
     if session.get('is_admin') and session['is_admin']:
-        return render_template(admin_page_var, username = session['username'], is_admin=True)
+        return render_template(admin_page_var, username = session['username'], is_admin=True, form=form)
     else:
         return render_template(admin_page_var, username=None, is_admin=False)
 
@@ -257,6 +267,40 @@ def advanced_search():
     subcategories = cursor.fetchall()
 
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
+
+
+
+
+# Function checks if a category exists in database already
+@app.route("/category_exists", methods=['POST'])
+def category_exists():
+    msg = ''
+    categoryname = request.form['category-name-field']
+    try:
+        cursorsearch = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        sql = "SELECT category_name FROM Categories WHERE category_name=%s"
+        cursorsearch.execute(sql, categoryname)
+        exists = cursorsearch.fetchone()
+        if exists:
+            msg = 'Category Exists'
+        else:
+            cursoradd = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursoradd.execute('INSERT INTO Categories (category_name, parent_category) VALUES (%s, %s)', (categoryname, 'null',))
+            mysql.connection.commit()
+            msg = 'Video Added!'
+        return jsonify({'result' : 'success'})
+
+    except Exception as e:
+        print(e)
+
+class CategoryForm(FlaskForm):
+    category = SelectField('category', choices=[])
+    category2 = SelectField('category2', choices=[])
+    category3 = SelectField('category3', choices=[])
+
+    
+
+
 
 
 
