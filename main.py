@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_mysqldb import MySQL
 from datetime import datetime
-from flask_wtf import FlaskForm
-from wtforms import SelectField
+from forms import AddCategoryForm, CategoryForm
 import MySQLdb.cursors
 import re
 
@@ -10,8 +9,9 @@ import re
 app = Flask(__name__)
 
 # Change this to your secret key (can be anything, it's for extra protection)
-# TODO: is secret key needed for this project?
-app.secret_key = 'your secret key'
+# Secret key is important for WTForms
+# TODO: Change to random characters for production
+app.config['SECRET_KEY'] = 'BrainLabsTemporary'
 # Enter your database connection details below
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
@@ -134,12 +134,12 @@ def profile(account):
 @app.route('/admin/dashboard', methods = ['GET', 'POST'])
 def admin():
     #TODO: This is populating the dropdown currently. needs to be done dynamically
-    form = CategoryForm()
-    c1 = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
-    c1sql = "select category_id, category_name from categories where parent_category is null;"
-    c1.execute(c1sql,)
-    parents = c1.fetchall()
-    form.category.choices = [(k,v) for k,v in parents]
+    form = AddCategoryForm()
+    primcursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
+    primsql = "select category_id, category_name from categories where parent_category is null;"
+    primcursor.execute(primsql,)
+    primary_tuples = primcursor.fetchall()
+    form.primary.choices = [(category_id, category_name) for category_id, category_name in primary_tuples]
 
     admin_page_var = 'admin.html'
     if session.get('is_admin') and session['is_admin']:
@@ -292,17 +292,6 @@ def category_exists():
 
     except Exception as e:
         print(e)
-
-class CategoryForm(FlaskForm):
-    category = SelectField('category', choices=[])
-    category2 = SelectField('category2', choices=[])
-    category3 = SelectField('category3', choices=[])
-
-    
-
-
-
-
 
 # TODO: Delete this route, for testing only
 @app.route("/query")
