@@ -135,11 +135,24 @@ def profile(account):
 def admin():
     #TODO: This is populating the dropdown currently. needs to be done dynamically
     form = AddCategoryForm()
+
     primcursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
     primsql = "select category_id, category_name from categories where parent_category is null;"
     primcursor.execute(primsql,)
     primary_tuples = primcursor.fetchall()
     form.primary.choices = [(category_id, category_name) for category_id, category_name in primary_tuples]
+    print(form.primary.choices)
+
+
+    secondcursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
+    #TODO: %s is list of parents
+    secondsql = "select category_id, category_name from categories where parent_category in %s"
+    
+    secondcursor.execute(secondsql, [(1, 2, 3)])
+    secondary_tuples = secondcursor.fetchall()
+    form.secondary.choices = [(category_id, category_name) for category_id, category_name in secondary_tuples]
+    print(form.secondary.choices)
+
 
     admin_page_var = 'admin.html'
     if session.get('is_admin') and session['is_admin']:
@@ -292,38 +305,6 @@ def category_exists():
 
     except Exception as e:
         print(e)
-
-# TODO: Delete this route, for testing only
-@app.route("/query")
-def query():
-    # Test String: /query?query_term=query+strings+with+flask&foo=steven&bar=weeeeeeebar&baz=baz
-    # https://www.youtube.com/watch?v=PL6wzmKrgRg
-    #check if args exist
-    if request.args:
-        print(request.query_string)
-        # parse query string and serialzise into immutable multi dictionary
-        args = request.args
-        if "query_term" in args:
-            qt = args.get("query_term")
-            print(f"QT: {qt}")
-        if "bar" in args:
-            bar = args["bar"]
-            print(bar)
-        if "baz" in args:
-            print(request.args.get("baz"))
-        for k, v in args.items():
-            if(k == "title"):
-                print(f"TITLE : {k} VALUE : {v}")
-            if("foo" in args):
-                foo = args.get("foo")
-                print(foo)
-            print(f"{k} : {v}")
-        #serialized strings and string interpolation
-        serialized = ", ".join(f"{k}: {v}" for k, v in args.items())
-        return f"(Query) {serialized}", 200
-
-    return "query received", 200
-
 
 
 ####

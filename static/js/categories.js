@@ -9,7 +9,9 @@ $(document).ready(function() {
     });
     $("#primary").on('change', function(){
         let selected = $("select[name=primary] option").filter(':selected').val();
-        if( selected == 8){
+        //this should ajax query and fill the secondary dropdown.
+
+        if( selected == 1){
             $(".secondary").show();
         }
         else{
@@ -24,6 +26,8 @@ $(document).ready(function() {
             $(".subcategory").show();
         }
     });
+
+    // not sure if this is needed or not.
     $("#add-category-form").on('submit', function(e){
         e.preventDefault();
         $.ajax({
