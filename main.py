@@ -264,6 +264,7 @@ def advanced_search():
 @app.route("/query")
 def query():
     # Test String: /query?query_term=query+strings+with+flask&foo=steven&bar=weeeeeeebar&baz=baz
+    # https://www.youtube.com/watch?v=PL6wzmKrgRg
     #check if args exist
     if request.args:
         print(request.query_string)
