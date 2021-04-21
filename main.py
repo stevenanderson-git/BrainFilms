@@ -334,31 +334,6 @@ def advanced_search():
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
 
 
-
-
-# Function checks if a category exists in database already
-@app.route("/category_exists", methods=['POST'])
-def category_exists():
-    msg = ''
-    categoryname = request.form['category-name-field']
-    try:
-        cursorsearch = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        sql = "SELECT category_name FROM Categories WHERE category_name=%s"
-        cursorsearch.execute(sql, categoryname)
-        exists = cursorsearch.fetchone()
-        if exists:
-            msg = 'Category Exists'
-        else:
-            cursoradd = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursoradd.execute('INSERT INTO Categories (category_name, parent_category) VALUES (%s, %s)', (categoryname, 'null',))
-            mysql.connection.commit()
-            msg = 'Video Added!'
-        return jsonify({'result' : 'success'})
-
-    except Exception as e:
-        print(e)
-
-
 ####
 # Bottom method of code
 if __name__ == '__main__':
