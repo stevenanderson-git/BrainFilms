@@ -13,7 +13,7 @@ class CategoryForm(FlaskForm):
 class AddCategoryForm(FlaskForm):
     categoryname = StringField('Category Name', validators=[DataRequired(), Length(min=2, max=20)])
     primarybool = BooleanField('Check if Primary Category')
-    primary = SelectField('Primary', choices=[])
+    primaryselect = SelectField('Primary', choices=[])
     secondarybool = BooleanField('Check if Subcategory')
-    secondary = SelectField('Secondary', choices=[])
+    secondaryselect = SelectField('Secondary', choices=[])
     addbutton = SubmitField('Add Category')

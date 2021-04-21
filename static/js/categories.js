@@ -6,14 +6,15 @@ $(document).ready(function() {
 
     $("#deletecategorybutton").on('click', function() {
         $("#add-category-div").hide();
-        $("#delete-category-div").show();
+        $("#remove-category-div").show();
     });
 
-    $("#primary").on('change', function(){
-        let optionId = $("select[name=primary] option").filter(':selected').val();
-        let optionText = $("select[name=primary] option").filter(':selected').html();
+    $("#primaryselect").on('change', function(){
+        let optionId = $("select[name=primaryselect] option").filter(':selected').val();
+        let optionText = $("select[name=primaryselect] option").filter(':selected').html();
         if(optionId == 0){
-            $(".secondary").hide();
+            $("#secondary-select-dropdown").hide();
+            $("#secondarybool").prop('checked', false);
         }
         else{
             $.ajax({
@@ -22,14 +23,18 @@ $(document).ready(function() {
                     'category_name': optionText
                 },
                 type: 'POST',
-                url: '/popsubcategory'
+                url: '/populatesubcategory'
             })
             .done(function(data){
-                $("#secondary").empty().append(new Option("---", 0))
-                $.each(data, function(index, category){
-                    $("#secondary").append(new Option(category.category_name, category.category_id));
-                });
-                $(".secondary").show();
+                $("#secondary-select-dropdown").hide();
+                $("#secondaryselect").empty().append(new Option("---", 0))
+                if(data){
+                    $.each(data, function(index, category){
+                        $("#secondaryselect").append(new Option(category.category_name, category.category_id));
+                    });
+                    $("#secondary-select-dropdown").show();
+                }
+
             });
             
         }
@@ -62,11 +67,18 @@ $(document).ready(function() {
 
         let category_name = $("#categoryname").val();
         let primarybool = $('#primarybool').is(':checked');
-        let primary_id = $("select[name=primary] option").filter(':selected').val();
-        let primary_name = $("select[name=primary] option").filter(':selected').html();
+        let primary_id = $("select[name=primaryselect] option").filter(':selected').val();
+        let primary_name = $("select[name=primaryselect] option").filter(':selected').html();
         let secondarybool = $('#secondarybool').is(':checked');
-        let secondary_id = $("select[name=secondary] option").filter(':selected').val();
-        let secondary_name = $("select[name=secondary] option").filter(':selected').html();
+        let secondary_id = $("select[name=secondaryselect] option").filter(':selected').val();
+        let secondary_name = $("select[name=secondaryselect] option").filter(':selected').html();
+        let postjson = {
+            category_name: category_name,
+            primarybool: primarybool,
+            secondarybool: secondarybool,
+            primary_id: primary_id,
+            secondary_id: secondary_id
+            };
 
         if(primarybool){
             okay = confirm("Create " + category_name + " as a primary category?");
@@ -75,29 +87,33 @@ $(document).ready(function() {
             okay = confirm("Create " + category_name + " as a subclass of " + primary_name + "?");
         }
         else if(!primarybool && !secondarybool){
-            if(primary_id == 0 || primary_id == 'undefined' || secondary_id == 'undefined' || secondary_id == 0){
+            if(primary_id == 0 || primary_id == 'undefined'){
                 alert("At least 1 option must be selected to create a category!");
+            }
+            else if(secondary_id == 'undefined' || secondary_id == 0){
+                alert("Choose a subcategory or check the box to create one!");
             }
             else{
                 okay = confirm("Create " + category_name + " as a subclass of " + primary_name + " and " + secondary_name + "?");
             }
         }
 
+        
         if(okay){
+            console.log(postjson);
+
             $.ajax({
                 type:'POST',
-                url:'/admin/dashboard',
-                data:{
-                    categoryname:$("#categoryname").val(),
-                    isparent:$("#parentbool").val(),
-                    primeparent:$("#primary").val(),
-                    secparent:$("#secondary").val()
-                },
-                dataType:'json',
-                success:function(){
-                    alert(data);
-                }
-              });
+                url:'/addcategorytodb',
+                data: JSON.stringify(postjson),
+                contentType: "application/json"
+            })
+            .done(function(returned){
+                $("#add-category-form").each(function(){this.reset();});
+                $(".subcategory").show();
+                $("#secondary-select-dropdown").hide();
+                alert(returned)
+            });
         }
     });
 

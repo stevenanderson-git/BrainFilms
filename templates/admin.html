@@ -31,23 +31,22 @@
                     <div class="subcategory">
                             <label>What category does it belong to?</label>
                             <div class="form-group primary" id="primary-select-dropdown">
-                                {{form.primary(class="form-control")}}
+                                {{form.primaryselect(class="form-control")}}
                             </div>
 
-                            <div class="form-group secondary" hidden>
+                            <div class="form-group secondary">
                                 <label>Choose a Subcategory or check to create a Subcategory</label>
                                 {{form.secondarybool(class="form-control")}}    
-                                <div class="form-group secondary" id="secondary-select-dropdown">
-                                    {{form.secondary(class="form-control")}}
+                                <div class="form-group secondary" id="secondary-select-dropdown" hidden>
+                                    {{form.secondaryselect(class="form-control")}}
                                 </div>
                             </div>
                     </div>
                     <br>
                     {{form.addbutton(class="form-control")}}
                 </form>
-                <label>AJAXBUTTONHERE</label>
             </div>
-            <div class="delete-category-div" id="delete-category-div" hidden>
+            <div class="remove-category-div" id="remove-category-div" hidden>
                 <label>Remove operation coming soon...</label>
             </div>
 

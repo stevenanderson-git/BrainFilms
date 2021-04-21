@@ -159,4 +159,6 @@ more AJAX
 Loop through JSON in ajax/JAVASCRIPT
 	https://forums.asp.net/t/2111929.aspx?how+to+loop+through+json+array+in+jquery+
 
+Create Json with ajax and POST
+	https://stackoverflow.com/questions/45949631/passing-json-data-to-the-flask-server-using-ajax
 

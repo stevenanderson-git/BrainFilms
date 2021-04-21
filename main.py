@@ -4,6 +4,7 @@ from datetime import datetime
 from forms import AddCategoryForm, CategoryForm
 import MySQLdb.cursors
 import re
+import json
 
 
 app = Flask(__name__)
@@ -133,20 +134,64 @@ def profile(account):
 
 
 
-@app.route('/popsubcategory', methods = ['POST'])
-def testiboi():
+@app.route('/populatesubcategory', methods = ['POST'])
+def populatesubcategory():
     if request.method == 'POST' and request.form['category_id'] != 0:
         tuple_cursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
         tc_sql = "select category_id, category_name from categories where parent_category = %s order by category_name asc"
-        tuple_cursor.execute(tc_sql, request.form['category_id'])
+        tuple_cursor.execute(tc_sql, (request.form['category_id'],))
         category_tuples = tuple_cursor.fetchall()
-        secondaryjson = [{'category_id': category_id, 'category_name': category_name} for category_id, category_name in category_tuples]
-        print(secondaryjson)
+        print(category_tuples)
+        if category_tuples:
+            secondaryjson = [{'category_id': category_id, 'category_name': category_name} for category_id, category_name in category_tuples]
+            print(secondaryjson)
+            return jsonify(secondaryjson)
+    return {'category_id': 0, 'category_name': None}
 
-        return jsonify(secondaryjson)
-    return "it is zero"
+@app.route('/addcategorytodb', methods=["POST"])
+def addcategorytodb():
+    newcategory = request.get_json()
+    # Spellchecking for uniform data
+    category_name = newcategory['category_name'].capitalize()
+    primary_id = newcategory['primary_id']
+    secondary_id = newcategory['secondary_id']
 
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    checksql = "select * from categories where category_name = %s"
+    insert_primary_sql = 'INSERT INTO Categories (category_name, parent_category) VALUES (%s, null)'
+    insert_subclass_sql = 'INSERT INTO Categories (category_name, parent_category) VALUES (%s, %s)'
+    cursor.execute(checksql, (category_name,))
+    # Duplicate check
+    dupe_exists = cursor.fetchone()
+    if dupe_exists:
+        return category_name + " already exists! Use a different Category Name."
+    # If duplicate passes
+    else:
+        # Create new Primary category
+        if request.method == 'POST' and newcategory['primarybool']:
+            cursor.execute(insert_primary_sql, (category_name,))
+            mysql.connection.commit()
+            msg = f"{category_name} created as a Primary Category!"
+            return msg
+        
+        # Create new Secondary category
+        if request.method == 'POST' and newcategory['secondarybool']:
+            cursor.execute(insert_subclass_sql, (category_name, primary_id,))
+            mysql.connection.commit()
+            msg = f"{category_name} created as a Secondary Category!"
+            return msg
 
+        # Create new Tertiary category
+        if request.method == 'POST' and newcategory['primary_id'] and newcategory['secondary_id']:
+            cursor.execute(insert_subclass_sql, (category_name, secondary_id,))
+            mysql.connection.commit()
+            msg = f"{category_name} created as a Tertiary Category!"
+            return msg
+
+    
+    
+
+    return 'Something went wrong!'
     
 
 
@@ -154,13 +199,15 @@ def testiboi():
 def admin():
     #TODO: This is populating the dropdown currently. needs to be done dynamically
     form = AddCategoryForm()
-
+    #TODO: move this to separate route for ajax query
     primcursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
     primsql = "select category_id, category_name from categories where parent_category is null order by category_name asc"
     primcursor.execute(primsql,)
     primary_tuples = primcursor.fetchall()
-    form.primary.choices = [(category_id, category_name) for category_id, category_name in primary_tuples]
-    form.primary.choices.insert(0, (0, "---"))
+    form.primaryselect.choices = [(category_id, category_name) for category_id, category_name in primary_tuples]
+    form.primaryselect.choices.insert(0, (0, "---"))
+
+
 
     admin_page_var = 'admin.html'
     if session.get('is_admin') and session['is_admin']:
