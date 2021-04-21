@@ -3,21 +3,40 @@ $(document).ready(function() {
         $("#remove-category-div").hide();
         $("#add-category-div").show();
     });
+
     $("#deletecategorybutton").on('click', function() {
         $("#add-category-div").hide();
         $("#delete-category-div").show();
     });
-    $("#primary").on('change', function(){
-        let selected = $("select[name=primary] option").filter(':selected').val();
-        //this should ajax query and fill the secondary dropdown.
 
-        if( selected == 1){
-            $(".secondary").show();
-        }
-        else{
+    $("#primary").on('change', function(){
+        let optionId = $("select[name=primary] option").filter(':selected').val();
+        let optionText = $("select[name=primary] option").filter(':selected').html();
+        if(optionId == 0){
             $(".secondary").hide();
         }
+        else{
+            $.ajax({
+                data:{
+                    'category_id': optionId,
+                    'category_name': optionText
+                },
+                type: 'POST',
+                url: '/popsubcategory'
+            })
+            .done(function(data){
+                $("#secondary").empty().append(new Option("---", 0))
+                $.each(data, function(index, category){
+                    $("#secondary").append(new Option(category.category_name, category.category_id));
+                });
+                $(".secondary").show();
+            });
+            
+        }
+        
+        
     });
+
     $("#parentbool").on('change', function(){
         if ($('#parentbool').is(':checked')) {
             $(".subcategory").hide();
@@ -34,11 +53,14 @@ $(document).ready(function() {
             type:'POST',
             url:'/admin/dashboard',
             data:{
-              todo:$("#categoryname").val()
+                categoryname:$("#categoryname").val(),
+                isparent:$("#parentbool").val(),
+                primeparent:$("#primary").val(),
+                secparent:$("#secondary").val()
             },
-            success:function()
-            {
-              alert('saved');
+            dataType:'json',
+            success:function(){
+                alert(data);
             }
           })
     });

@@ -155,3 +155,8 @@ JQuery & AJAX w3
 
 more AJAX
 	https://stackoverflow.com/questions/44646925/flask-dynamic-dependent-dropdown-list/44654011
+
+Loop through JSON in ajax/JAVASCRIPT
+	https://forums.asp.net/t/2111929.aspx?how+to+loop+through+json+array+in+jquery+
+
+

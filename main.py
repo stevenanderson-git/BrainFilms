@@ -131,28 +131,36 @@ def profile(account):
      password = account['password'],
      email=account['email'], creation_date=account['date'])
 
+
+
+@app.route('/popsubcategory', methods = ['POST'])
+def testiboi():
+    if request.method == 'POST' and request.form['category_id'] != 0:
+        tuple_cursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
+        tc_sql = "select category_id, category_name from categories where parent_category = %s order by category_name asc"
+        tuple_cursor.execute(tc_sql, request.form['category_id'])
+        category_tuples = tuple_cursor.fetchall()
+        secondaryjson = [{'category_id': category_id, 'category_name': category_name} for category_id, category_name in category_tuples]
+        print(secondaryjson)
+
+        return jsonify(secondaryjson)
+    return "it is zero"
+
+
+    
+
+
 @app.route('/admin/dashboard', methods = ['GET', 'POST'])
 def admin():
     #TODO: This is populating the dropdown currently. needs to be done dynamically
     form = AddCategoryForm()
 
     primcursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
-    primsql = "select category_id, category_name from categories where parent_category is null;"
+    primsql = "select category_id, category_name from categories where parent_category is null order by category_name asc"
     primcursor.execute(primsql,)
     primary_tuples = primcursor.fetchall()
     form.primary.choices = [(category_id, category_name) for category_id, category_name in primary_tuples]
-    print(form.primary.choices)
-
-
-    secondcursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
-    #TODO: %s is list of parents
-    secondsql = "select category_id, category_name from categories where parent_category in %s"
-    
-    secondcursor.execute(secondsql, [(1, 2, 3)])
-    secondary_tuples = secondcursor.fetchall()
-    form.secondary.choices = [(category_id, category_name) for category_id, category_name in secondary_tuples]
-    print(form.secondary.choices)
-
+    form.primary.choices.insert(0, (0, "---"))
 
     admin_page_var = 'admin.html'
     if session.get('is_admin') and session['is_admin']:

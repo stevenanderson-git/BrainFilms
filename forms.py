@@ -14,5 +14,6 @@ class AddCategoryForm(FlaskForm):
     categoryname = StringField('Category Name', validators=[DataRequired(), Length(min=2, max=20)])
     parentbool = BooleanField('Check if Parent')
     primary = SelectField('Primary', choices=[])
+    childbool = BooleanField('Check if Subcategory')
     secondary = SelectField('Secondary', choices=[])
     addbutton = SubmitField('Add Category')
