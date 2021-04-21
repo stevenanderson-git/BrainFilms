@@ -45,6 +45,14 @@ $(document).ready(function() {
             $(".subcategory").show();
         }
     });
+    $("#childbool").on('change', function(){
+        if ($('#childbool').is(':checked')) {
+            $("#secondary-select-dropdown").hide();
+        }
+        else {
+            $("#secondary-select-dropdown").show();
+        }
+    });
 
     // not sure if this is needed or not.
     $("#add-category-form").on('submit', function(e){
