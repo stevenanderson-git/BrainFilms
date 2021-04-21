@@ -133,29 +133,37 @@ def profile(account):
      email=account['email'], creation_date=account['date'])
 
 
+@app.route('/populateprimaryselect', methods = ['POST'])
+def populateprimaryselect():
+    tuple_cursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
+    tc_sql = "select category_id, category_name from categories where parent_category is null order by category_name asc"
+    tuple_cursor.execute(tc_sql,)
+    category_tuples = tuple_cursor.fetchall()
+    if category_tuples:
+        primaryjson = [{'category_id': category_id, 'category_name': category_name} for category_id, category_name in category_tuples]
+        return jsonify(primaryjson)
+    return {}
 
-@app.route('/populatesubcategory', methods = ['POST'])
-def populatesubcategory():
+
+
+@app.route('/populatesecondaryselect', methods = ['POST'])
+def populatesecondaryselect():
     if request.method == 'POST' and request.form['category_id'] != 0:
         tuple_cursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
         tc_sql = "select category_id, category_name from categories where parent_category = %s order by category_name asc"
         tuple_cursor.execute(tc_sql, (request.form['category_id'],))
         category_tuples = tuple_cursor.fetchall()
-        print(category_tuples)
         if category_tuples:
             secondaryjson = [{'category_id': category_id, 'category_name': category_name} for category_id, category_name in category_tuples]
-            print(secondaryjson)
             return jsonify(secondaryjson)
-    return {'category_id': 0, 'category_name': None}
+    return {}
 
 @app.route('/addcategorytodb', methods=["POST"])
 def addcategorytodb():
     newcategory = request.get_json()
     # Spellchecking for uniform data
     category_name = newcategory['category_name'].capitalize()
-    primary_id = newcategory['primary_id']
-    secondary_id = newcategory['secondary_id']
-
+    
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     checksql = "select * from categories where category_name = %s"
     insert_primary_sql = 'INSERT INTO Categories (category_name, parent_category) VALUES (%s, null)'
@@ -176,6 +184,7 @@ def addcategorytodb():
         
         # Create new Secondary category
         if request.method == 'POST' and newcategory['secondarybool']:
+            primary_id = newcategory['primary_id']
             cursor.execute(insert_subclass_sql, (category_name, primary_id,))
             mysql.connection.commit()
             msg = f"{category_name} created as a Secondary Category!"
@@ -183,35 +192,23 @@ def addcategorytodb():
 
         # Create new Tertiary category
         if request.method == 'POST' and newcategory['primary_id'] and newcategory['secondary_id']:
+            secondary_id = newcategory['secondary_id']
             cursor.execute(insert_subclass_sql, (category_name, secondary_id,))
             mysql.connection.commit()
             msg = f"{category_name} created as a Tertiary Category!"
             return msg
-
-    
-    
-
     return 'Something went wrong!'
     
 
 
 @app.route('/admin/dashboard', methods = ['GET', 'POST'])
 def admin():
-    #TODO: This is populating the dropdown currently. needs to be done dynamically
-    form = AddCategoryForm()
-    #TODO: move this to separate route for ajax query
-    primcursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
-    primsql = "select category_id, category_name from categories where parent_category is null order by category_name asc"
-    primcursor.execute(primsql,)
-    primary_tuples = primcursor.fetchall()
-    form.primaryselect.choices = [(category_id, category_name) for category_id, category_name in primary_tuples]
-    form.primaryselect.choices.insert(0, (0, "---"))
-
-
-
+    # Form created for tepmlating
+    add_category_form = AddCategoryForm()
+    
     admin_page_var = 'admin.html'
     if session.get('is_admin') and session['is_admin']:
-        return render_template(admin_page_var, username = session['username'], is_admin=True, form=form)
+        return render_template(admin_page_var, username = session['username'], is_admin=True, add_category_form=add_category_form)
     else:
         return render_template(admin_page_var, username=None, is_admin=False)
 

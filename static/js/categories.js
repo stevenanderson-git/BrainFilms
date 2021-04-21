@@ -1,4 +1,21 @@
+function populateprimaryselect(){
+    // Populate primary select dropdown
+    $.ajax({
+        type: 'POST',
+        url: 'populateprimaryselect'
+        }).done(function(data){
+            $("#primaryselect").empty().append(new Option("---", 0));
+            if(data){
+                $.each(data, function(index, category){
+                    $("#primaryselect").append(new Option(category.category_name, category.category_id));
+                });
+            }
+    });
+}
+
 $(document).ready(function() {
+
+
     $("#addcategorybutton").on('click', function() {
         $("#remove-category-div").hide();
         $("#add-category-div").show();
@@ -8,6 +25,9 @@ $(document).ready(function() {
         $("#add-category-div").hide();
         $("#remove-category-div").show();
     });
+
+    // Populate primary select dropdown
+    populateprimaryselect();
 
     $("#primaryselect").on('change', function(){
         let optionId = $("select[name=primaryselect] option").filter(':selected').val();
@@ -23,11 +43,12 @@ $(document).ready(function() {
                     'category_name': optionText
                 },
                 type: 'POST',
-                url: '/populatesubcategory'
+                url: '/populatesecondaryselect'
             })
             .done(function(data){
                 $("#secondary-select-dropdown").hide();
-                $("#secondaryselect").empty().append(new Option("---", 0))
+                $("#secondarybool").prop('checked', false);
+                $("#secondaryselect").empty().append(new Option("---", 0));
                 if(data){
                     $.each(data, function(index, category){
                         $("#secondaryselect").append(new Option(category.category_name, category.category_id));
@@ -112,6 +133,7 @@ $(document).ready(function() {
                 $("#add-category-form").each(function(){this.reset();});
                 $(".subcategory").show();
                 $("#secondary-select-dropdown").hide();
+                populateprimaryselect();
                 alert(returned)
             });
         }
