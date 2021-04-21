@@ -1,15 +1,18 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_mysqldb import MySQL
 from datetime import datetime
+from forms import AddCategoryForm, CategoryForm
 import MySQLdb.cursors
 import re
+import json
 
 
 app = Flask(__name__)
 
 # Change this to your secret key (can be anything, it's for extra protection)
-# TODO: is secret key needed for this project?
-app.secret_key = 'your secret key'
+# Secret key is important for WTForms
+# TODO: Change to random characters for production
+app.config['SECRET_KEY'] = 'BrainLabsTemporary'
 # Enter your database connection details below
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
@@ -129,11 +132,83 @@ def profile(account):
      password = account['password'],
      email=account['email'], creation_date=account['date'])
 
+
+@app.route('/populateprimaryselect', methods = ['POST'])
+def populateprimaryselect():
+    tuple_cursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
+    tc_sql = "select category_id, category_name from categories where parent_category is null order by category_name asc"
+    tuple_cursor.execute(tc_sql,)
+    category_tuples = tuple_cursor.fetchall()
+    if category_tuples:
+        primaryjson = [{'category_id': category_id, 'category_name': category_name} for category_id, category_name in category_tuples]
+        return jsonify(primaryjson)
+    return {}
+
+
+
+@app.route('/populatesecondaryselect', methods = ['POST'])
+def populatesecondaryselect():
+    if request.method == 'POST' and request.form['category_id'] != 0:
+        tuple_cursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
+        tc_sql = "select category_id, category_name from categories where parent_category = %s order by category_name asc"
+        tuple_cursor.execute(tc_sql, (request.form['category_id'],))
+        category_tuples = tuple_cursor.fetchall()
+        if category_tuples:
+            secondaryjson = [{'category_id': category_id, 'category_name': category_name} for category_id, category_name in category_tuples]
+            return jsonify(secondaryjson)
+    return {}
+
+@app.route('/addcategorytodb', methods=["POST"])
+def addcategorytodb():
+    newcategory = request.get_json()
+    # Spellchecking for uniform data
+    category_name = newcategory['category_name'].capitalize()
+    
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    checksql = "select * from categories where category_name = %s"
+    insert_primary_sql = 'INSERT INTO Categories (category_name, parent_category) VALUES (%s, null)'
+    insert_subclass_sql = 'INSERT INTO Categories (category_name, parent_category) VALUES (%s, %s)'
+    cursor.execute(checksql, (category_name,))
+    # Duplicate check
+    dupe_exists = cursor.fetchone()
+    if dupe_exists:
+        return category_name + " already exists! Use a different Category Name."
+    # If duplicate passes
+    else:
+        # Create new Primary category
+        if request.method == 'POST' and newcategory['primarybool']:
+            cursor.execute(insert_primary_sql, (category_name,))
+            mysql.connection.commit()
+            msg = f"{category_name} created as a Primary Category!"
+            return msg
+        
+        # Create new Secondary category
+        if request.method == 'POST' and newcategory['secondarybool']:
+            primary_id = newcategory['primary_id']
+            cursor.execute(insert_subclass_sql, (category_name, primary_id,))
+            mysql.connection.commit()
+            msg = f"{category_name} created as a Secondary Category!"
+            return msg
+
+        # Create new Tertiary category
+        if request.method == 'POST' and newcategory['primary_id'] and newcategory['secondary_id']:
+            secondary_id = newcategory['secondary_id']
+            cursor.execute(insert_subclass_sql, (category_name, secondary_id,))
+            mysql.connection.commit()
+            msg = f"{category_name} created as a Tertiary Category!"
+            return msg
+    return 'Something went wrong!'
+    
+
+
 @app.route('/admin/dashboard', methods = ['GET', 'POST'])
 def admin():
+    # Form created for tepmlating
+    add_category_form = AddCategoryForm()
+    
     admin_page_var = 'admin.html'
     if session.get('is_admin') and session['is_admin']:
-        return render_template(admin_page_var, username = session['username'], is_admin=True)
+        return render_template(admin_page_var, username = session['username'], is_admin=True, add_category_form=add_category_form)
     else:
         return render_template(admin_page_var, username=None, is_admin=False)
 
@@ -257,40 +332,6 @@ def advanced_search():
     subcategories = cursor.fetchall()
 
     return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
-
-
-
-# TODO: Delete this route, for testing only
-@app.route("/query")
-def query():
-    # Test String: /query?query_term=query+strings+with+flask&foo=steven&bar=weeeeeeebar&baz=baz
-    # https://www.youtube.com/watch?v=PL6wzmKrgRg
-    #check if args exist
-    if request.args:
-        print(request.query_string)
-        # parse query string and serialzise into immutable multi dictionary
-        args = request.args
-        if "query_term" in args:
-            qt = args.get("query_term")
-            print(f"QT: {qt}")
-        if "bar" in args:
-            bar = args["bar"]
-            print(bar)
-        if "baz" in args:
-            print(request.args.get("baz"))
-        for k, v in args.items():
-            if(k == "title"):
-                print(f"TITLE : {k} VALUE : {v}")
-            if("foo" in args):
-                foo = args.get("foo")
-                print(foo)
-            print(f"{k} : {v}")
-        #serialized strings and string interpolation
-        serialized = ", ".join(f"{k}: {v}" for k, v in args.items())
-        return f"(Query) {serialized}", 200
-
-    return "query received", 200
-
 
 
 ####
