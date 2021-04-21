@@ -37,16 +37,16 @@ $(document).ready(function() {
         
     });
 
-    $("#parentbool").on('change', function(){
-        if ($('#parentbool').is(':checked')) {
+    $("#primarybool").on('change', function(){
+        if ($('#primarybool').is(':checked')) {
             $(".subcategory").hide();
         }
         else {
             $(".subcategory").show();
         }
     });
-    $("#childbool").on('change', function(){
-        if ($('#childbool').is(':checked')) {
+    $("#secondarybool").on('change', function(){
+        if ($('#secondarybool').is(':checked')) {
             $("#secondary-select-dropdown").hide();
         }
         else {
@@ -57,20 +57,48 @@ $(document).ready(function() {
     // not sure if this is needed or not.
     $("#add-category-form").on('submit', function(e){
         e.preventDefault();
-        $.ajax({
-            type:'POST',
-            url:'/admin/dashboard',
-            data:{
-                categoryname:$("#categoryname").val(),
-                isparent:$("#parentbool").val(),
-                primeparent:$("#primary").val(),
-                secparent:$("#secondary").val()
-            },
-            dataType:'json',
-            success:function(){
-                alert(data);
+
+        let okay = false;
+
+        let category_name = $("#categoryname").val();
+        let primarybool = $('#primarybool').is(':checked');
+        let primary_id = $("select[name=primary] option").filter(':selected').val();
+        let primary_name = $("select[name=primary] option").filter(':selected').html();
+        let secondarybool = $('#secondarybool').is(':checked');
+        let secondary_id = $("select[name=secondary] option").filter(':selected').val();
+        let secondary_name = $("select[name=secondary] option").filter(':selected').html();
+
+        if(primarybool){
+            okay = confirm("Create " + category_name + " as a primary category?");
+        }
+        else if(secondarybool){
+            okay = confirm("Create " + category_name + " as a subclass of " + primary_name + "?");
+        }
+        else if(!primarybool && !secondarybool){
+            if(primary_id == 0 || primary_id == 'undefined' || secondary_id == 'undefined' || secondary_id == 0){
+                alert("At least 1 option must be selected to create a category!");
             }
-          })
+            else{
+                okay = confirm("Create " + category_name + " as a subclass of " + primary_name + " and " + secondary_name + "?");
+            }
+        }
+
+        if(okay){
+            $.ajax({
+                type:'POST',
+                url:'/admin/dashboard',
+                data:{
+                    categoryname:$("#categoryname").val(),
+                    isparent:$("#parentbool").val(),
+                    primeparent:$("#primary").val(),
+                    secparent:$("#secondary").val()
+                },
+                dataType:'json',
+                success:function(){
+                    alert(data);
+                }
+              });
+        }
     });
 
 });

@@ -26,17 +26,17 @@
                     </div>
                     <div class="form-group prime">
                         <label>Check if creating a new Primary Category</label>
-                        {{form.parentbool(class="form-control")}}
+                        {{form.primarybool(class="form-control")}}
                     </div>
                     <div class="subcategory">
                             <label>What category does it belong to?</label>
                             <div class="form-group primary" id="primary-select-dropdown">
                                 {{form.primary(class="form-control")}}
                             </div>
-                            
+
                             <div class="form-group secondary" hidden>
                                 <label>Choose a Subcategory or check to create a Subcategory</label>
-                                {{form.childbool(class="form-control")}}    
+                                {{form.secondarybool(class="form-control")}}    
                                 <div class="form-group secondary" id="secondary-select-dropdown">
                                     {{form.secondary(class="form-control")}}
                                 </div>
