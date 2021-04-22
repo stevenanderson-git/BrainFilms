@@ -1,9 +1,51 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{url_for('static', filename='/js/categories.js')}}"></script>
 {% extends "layout.html" %}
 
     <body>
         {% block content %}
         <div class = 'add-video'>
             <h1>Add New Video</h1>
+            <form method="POST" id="addvideoform" name="addvideoform" autocomplete="off">
+                {{addvideoform.csrf_token}}
+                <label>Video Name:</label>
+                {{addvideoform.video_title(class="form-control")}}
+                <label>Video URL:</label>
+                {{addvideoform.video_url(class="form-control")}}
+                
+                <div class="category-selectors">
+                    <label>Choose a category for the video to belong to.</label>
+                    
+                    <label>Primary</label>
+                    <div class="primary-selector-div">
+                        {{addvideoform.primaryselect(class="form-control", size=6)}}
+                    </div>
+
+                    <label>Choose a subcategory?</label>
+                    <input type="checkbox">
+                    <label>Check for NO</label>
+                    <div class="secondary-selector-div">
+                        {{addvideoform.secondaryselect(class="form-control", size=6)}}
+                    </div>
+
+                    <label>Filter Further?</label>
+                    <input type="checkbox">
+                    <label>Check for NO</label>
+                    <div class="tertiary-selector-div">
+                        {{addvideoform.tertiaryselect(class="form-control", size=6)}}
+                    </div>
+                    
+                </div>
+                {{addvideoform.videosubmitbutton(class="form-control")}}
+            </form>
+            <div class='msg'>{{msg}}</div>
+
+
+
+
+
+
+            <!--
             <form action = "{{url_for('add_new')}}" method = "post" autocomplete="off">
                 <label for='video_url'>
                     Video URL: 
@@ -15,7 +57,7 @@
                 </label>
                 <input type="text" name='video_title' id="video_title" required placeholder="Title goes Here">
 
-                <!--TODO: use jinja to make this block repeatable-->
+                
                 <div class = "form-row-label" for="categories">
                     Primary Category
                 </div>
@@ -45,7 +87,7 @@
 
                 <div class = 'msg'>{{msg}}</div>
                 <input type = 'submit' value = 'Add'>
-            </form>
+            </form>-->
         </div>
         
 

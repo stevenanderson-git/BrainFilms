@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_mysqldb import MySQL
 from datetime import datetime
-from forms import AddCategoryForm, CategoryForm
+from forms import AddCategoryForm, AddVideoForm
 import MySQLdb.cursors
 import re
 import json
@@ -146,8 +146,8 @@ def populateprimaryselect():
 
 
 
-@app.route('/populatesecondaryselect', methods = ['POST'])
-def populatesecondaryselect():
+@app.route('/populatefilteredselect', methods = ['POST'])
+def populatefilteredselect():
     if request.method == 'POST' and request.form['category_id'] != 0:
         tuple_cursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
         tc_sql = "select category_id, category_name from categories where parent_category = %s order by category_name asc"
@@ -157,6 +157,7 @@ def populatesecondaryselect():
             secondaryjson = [{'category_id': category_id, 'category_name': category_name} for category_id, category_name in category_tuples]
             return jsonify(secondaryjson)
     return {}
+
 
 @app.route('/addcategorytodb', methods=["POST"])
 def addcategorytodb():
@@ -239,17 +240,12 @@ def add_admin():
 
 @app.route('/add_new', methods=['GET', 'POST'])
 def add_new():
-    title = 'Add New'
-    # Populate dropdown menus from mysql
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    # Select everything alphabetically
-    cursor.execute('SELECT * FROM Category ORDER BY name')
-    categories = cursor.fetchall()
-    # TODO: These results should be filtered based category
-    cursor.execute('SELECT * FROM Subcategory ORDER BY sub_name')
-    subcategories = cursor.fetchall()
-    # error message
+    title = 'Add New Video'
+    page = 'add_new.html'
     msg = ''
+    # Populate with AJAX
+    addvideoform = AddVideoForm()
+
     if request.method == 'POST' and 'video_url' in request.form and 'video_title' in request.form:
         # Variables for video
         video_url = request.form['video_url']
@@ -263,18 +259,14 @@ def add_new():
 
         # If the video url is not unique, show errors:
         if video:
-            msg = 'Video with that url already exists!'
-            # TODO: possibly return the webpage for that video rating
-        elif not video_url or not video_title:
-            msg = 'Both url and video title need to be filled in!'
-        
+            msg = 'Video with that url already exists!'        
         # Add video to database
         else:
             cursor.execute('INSERT INTO Video (video_url, video_title, date_added) VALUES (%s, %s, %s)', (video_url, video_title, date_added,))
             mysql.connection.commit()
             msg = 'Video Added!'
 
-    return render_template('add_new.html', title = title, msg = msg, categories = categories, subcategories = subcategories)
+    return render_template(page, title = title, msg = msg, addvideoform=addvideoform)
 
 
 @app.route('/search_results', methods = ['GET', 'POST'])
