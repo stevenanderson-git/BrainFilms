@@ -3,18 +3,19 @@
     <body>
         {% block content %}
         <div class = 'add-video'>
-            <h1>Add New Video</h1>
+            <div class=addh1>Add New Video</div>
+            <div class=addh2>
             <form action = "{{url_for('add_new')}}" method = "post" autocomplete="off">
-                <label for='video_url'>
+                <label for='video_url' class='video'>
                     Video URL: 
                 </label>
-                <input type="text" name='video_url' id="video_url" required placeholder="http://www...">
+                <input type="text" name='video_url' id="video_url" required placeholder="http://www..." class=video_box>
 
-                <label for='video_title'>
-                    Video Title: 
+                <label for='video_title' class='video'>
+                    Video Title:
                 </label>
-                <input type="text" name='video_title' id="video_title" required placeholder="Title goes Here">
-
+                <input type="text" name='video_title' id="video_title" required placeholder="Title goes Here" class=video_box>
+            </div>
                 <!--TODO: use jinja to make this block repeatable-->
                 <div class = "form-row-label" for="categories">
                     Primary Category
@@ -44,7 +45,7 @@
 
 
                 <div class = 'msg'>{{msg}}</div>
-                <input type = 'submit' value = 'Add'>
+                <input type = 'submit' value = 'Add' class=button-adv-subm>
             </form>
         </div>
         

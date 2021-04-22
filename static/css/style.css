@@ -384,6 +384,36 @@ a.advanced-search-btn:hover, a.advanced-search-btnhover {
 	outline: none;
 	color: black;	
 }
+.addh1{
+	color: #620e0a;
+	width: 98.8%;
+	border-top: 3px solid #620e0a;
+	border-left: 3px solid #620e0a;
+	border-right: 3px solid #620e0a;
+	border-radius: 10px 10px 0px 0px;
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: bold;
+	background-color: #febac2;
+}
+.addh2{
+	color: #620e0a;
+	border: 3px solid #620e0a;
+	border-radius: 0px 0px 10px 10px;
+	font-weight: bold;
+	background-color: #febac2;
+}
+.video{
+	color: #620e0a;
+	text-transform: uppercase;
+	font-weight: bold;
+	background-color: #febac2;
+}
+.video_box{
+	color: #620e0a;
+	border-radius: 0px 0px 0px 0px;
+	background-color: #ffffff;
+}
 .filter-tag-button{
 	background-color:#febac2;
 	color:#620e0a;
