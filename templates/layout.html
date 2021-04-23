@@ -27,7 +27,7 @@
 			<div class='links'>
 				<a href="{{ url_for('login') }}" class='button'>Login</a>
                 {% if account==true %}<a href="{{ url_for('profile') }}" class='button'>Profile</a>
-                {% else %}<div class='profile-btn'>Profile</div>
+                {% else %}<a href="{{ url_for('login') }}" class='button'>Profile</a>
                 {% endif %}
                 <a href="{{url_for('index')}}" class = 'home-button'><input type="image" src="static\images\brain_films.png" ></a>
                                 <!--This is just a placeholder to center the logo if total layout buttons is an odd number-->
