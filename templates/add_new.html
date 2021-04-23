@@ -1,53 +1,43 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{url_for('static', filename='/js/add_new.js')}}"></script>
 {% extends "layout.html" %}
-
-    <body>
-        {% block content %}
+    {% block content %}
         <div class = 'add-video'>
             <h1>Add New Video</h1>
-            <form action = "{{url_for('add_new')}}" method = "post" autocomplete="off">
-                <label for='video_url'>
-                    Video URL: 
-                </label>
-                <input type="text" name='video_url' id="video_url" required placeholder="http://www...">
-
-                <label for='video_title'>
-                    Video Title: 
-                </label>
-                <input type="text" name='video_title' id="video_title" required placeholder="Title goes Here">
-
-                <!--TODO: use jinja to make this block repeatable-->
-                <div class = "form-row-label" for="categories">
-                    Primary Category
-                </div>
-                <div class = "form-row-content">
-                    <div class = "selector-categories-wraper">
-                        <select class ="adv-form-selector categories" id = "category-selector" size = "6" onchange="filter_sub(this);">
-                            {%for cat in categories%}
-                                <option>{{cat.name}}</option>
-                            {% endfor %} 
-                        </select>
+            <form method="POST" id="addvideoform" name="addvideoform" autocomplete="off">
+                {{addvideoform.csrf_token}}
+                <label>Video Title:</label>
+                {{addvideoform.video_title(class="form-control")}}
+                <label>Video URL:</label>
+                {{addvideoform.video_url(class="form-control")}}
+                
+                <div class="category-selectors">
+                    <label>Choose a category for the video to belong to.</label>
+                    <div class="primary-selector-div">
+                        {{addvideoform.primaryselect(class="form-control", size=6)}}
                     </div>
-                </div>
-
-                <div class = "form-row-label" for="subcategories">
-                    Subcategory
-                </div>
-                <div class = "form-row-content">
-                    <div class = "selector-subcategories-wraper">
-                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" id = "subcategory-selector" size = "6" onchange="add_to_filters(this);" required>
-                            {%for sub in subcategories%}
-                                <option>{{sub.sub_name}}</option>
-                            {% endfor %} 
-                        </select>
+                    <div id="choosesubdiv" hidden>
+                        <label>Choose a subcategory?</label>
+                        <input type="checkbox" id="showsubbool">
+                        <div id="subcategorydiv" hidden>
+                            <div class="secondary-selector-div">
+                                {{addvideoform.secondaryselect(class="form-control", size=6)}}
+                            </div>
+                        
+                            <div id="filterfurtherdiv" hidden>
+                                <label>Filter Further?</label>
+                                <input type="checkbox" id="filterfurtherbool">
+                                <div id="tertiary-selector-div" hidden>
+                                    {{addvideoform.tertiaryselect(class="form-control", size=6)}}
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    
+
                 </div>
-
-
-                <div class = 'msg'>{{msg}}</div>
-                <input type = 'submit' value = 'Add'>
+                {{addvideoform.videosubmitbutton(class="form-control")}}
             </form>
-        </div>
-        
 
-        {% endblock content %}
-    </body>
+        </div>
+    {% endblock content %}

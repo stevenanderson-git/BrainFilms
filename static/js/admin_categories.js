@@ -2,7 +2,7 @@ function populateprimaryselect(){
     // Populate primary select dropdown
     $.ajax({
         type: 'POST',
-        url: 'populateprimaryselect'
+        url: '/populateprimaryselect'
         }).done(function(data){
             $("#primaryselect").empty().append(new Option("---", 0));
             if(data){
@@ -31,7 +31,6 @@ $(document).ready(function() {
 
     $("#primaryselect").on('change', function(){
         let optionId = $("select[name=primaryselect] option").filter(':selected').val();
-        let optionText = $("select[name=primaryselect] option").filter(':selected').html();
         if(optionId == 0){
             $("#secondary-select-dropdown").hide();
             $("#secondarybool").prop('checked', false);
@@ -39,11 +38,10 @@ $(document).ready(function() {
         else{
             $.ajax({
                 data:{
-                    'category_id': optionId,
-                    'category_name': optionText
+                    'category_id': optionId
                 },
                 type: 'POST',
-                url: '/populatesecondaryselect'
+                url: '/populatefilteredselect'
             })
             .done(function(data){
                 $("#secondary-select-dropdown").hide();
@@ -121,8 +119,6 @@ $(document).ready(function() {
 
         
         if(okay){
-            console.log(postjson);
-
             $.ajax({
                 type:'POST',
                 url:'/addcategorytodb',
@@ -134,7 +130,7 @@ $(document).ready(function() {
                 $(".subcategory").show();
                 $("#secondary-select-dropdown").hide();
                 populateprimaryselect();
-                alert(returned)
+                alert(returned);
             });
         }
     });

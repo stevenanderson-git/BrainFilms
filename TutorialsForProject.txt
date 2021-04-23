@@ -162,3 +162,6 @@ Loop through JSON in ajax/JAVASCRIPT
 Create Json with ajax and POST
 	https://stackoverflow.com/questions/45949631/passing-json-data-to-the-flask-server-using-ajax
 
+SQL get last insert id
+	https://stackoverflow.com/questions/17112852/get-the-new-record-primary-key-id-from-mysql-insert-query
+

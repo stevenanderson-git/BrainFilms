@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_mysqldb import MySQL
 from datetime import datetime
-from forms import AddCategoryForm, CategoryForm
+from forms import AddCategoryForm, AddVideoForm, AdvancedSearchForm
 import MySQLdb.cursors
 import re
 import json
@@ -20,6 +20,8 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'mysql' # change this back to 'root' if changed
 # TODO: change database name for uniforimity in project.
 app.config['MYSQL_DB'] = 'braindb'
+# Datestring used mutliple times for formatting
+datestring = '%Y-%m-%d %H:%M:%S'
 
 # Intialize MySQL
 mysql = MySQL(app)
@@ -97,7 +99,7 @@ def register():
         password = request.form['password']
         email = request.form['email']
         # Formatted date for mysql entry
-        formatted_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        formatted_date = datetime.now().strftime(datestring)
 
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -146,8 +148,8 @@ def populateprimaryselect():
 
 
 
-@app.route('/populatesecondaryselect', methods = ['POST'])
-def populatesecondaryselect():
+@app.route('/populatefilteredselect', methods = ['POST'])
+def populatefilteredselect():
     if request.method == 'POST' and request.form['category_id'] != 0:
         tuple_cursor = mysql.connection.cursor(MySQLdb.cursors.SSCursor)
         tc_sql = "select category_id, category_name from categories where parent_category = %s order by category_name asc"
@@ -157,6 +159,7 @@ def populatesecondaryselect():
             secondaryjson = [{'category_id': category_id, 'category_name': category_name} for category_id, category_name in category_tuples]
             return jsonify(secondaryjson)
     return {}
+
 
 @app.route('/addcategorytodb', methods=["POST"])
 def addcategorytodb():
@@ -237,44 +240,41 @@ def add_admin():
     else:
         return render_template('admin.html', username=None, is_admin=False)
 
+
+
+
 @app.route('/add_new', methods=['GET', 'POST'])
 def add_new():
-    title = 'Add New'
-    # Populate dropdown menus from mysql
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    # Select everything alphabetically
-    cursor.execute('SELECT * FROM Category ORDER BY name')
-    categories = cursor.fetchall()
-    # TODO: These results should be filtered based category
-    cursor.execute('SELECT * FROM Subcategory ORDER BY sub_name')
-    subcategories = cursor.fetchall()
-    # error message
-    msg = ''
-    if request.method == 'POST' and 'video_url' in request.form and 'video_title' in request.form:
-        # Variables for video
-        video_url = request.form['video_url']
-        video_title = request.form['video_title']
-        date_added = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    title = 'Add New Video'
+    page = 'add_new.html'
+    addvideoform = AddVideoForm()
 
-        # Check if video exists using MySQL
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM Video WHERE video_url = %s', (video_url,))
-        video = cursor.fetchone()
+    if request.method == 'POST' and request.get_json():
+        newvideo = request.get_json()
 
-        # If the video url is not unique, show errors:
-        if video:
-            msg = 'Video with that url already exists!'
-            # TODO: possibly return the webpage for that video rating
-        elif not video_url or not video_title:
-            msg = 'Both url and video title need to be filled in!'
-        
-        # Add video to database
-        else:
-            cursor.execute('INSERT INTO Video (video_url, video_title, date_added) VALUES (%s, %s, %s)', (video_url, video_title, date_added,))
-            mysql.connection.commit()
-            msg = 'Video Added!'
+        video_title = newvideo['video_title']
+        video_url = newvideo['video_url']
+        category_id = newvideo['category_id']
+        category_name = newvideo['category_name']
+        date_added = datetime.now().strftime(datestring)
+        addvideosql = "INSERT INTO Video (video_url, video_title, date_added) VALUES (%s, %s, %s)"
+        addvideocategorysql = "INSERT INTO Video_Category (video_id, category_id) VALUES (LAST_INSERT_ID(), %s)"
 
-    return render_template('add_new.html', title = title, msg = msg, categories = categories, subcategories = subcategories)
+        if video_url:
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            # Duplicate Check
+            checksql = "select * from video where video_url = %s"
+            cursor.execute(checksql, (video_url,))
+            dupe_exists = cursor.fetchone()
+            if dupe_exists:
+                return f"A video with url: {video_url} already exists!"
+            else:
+                cursor.execute(addvideosql, (video_url, video_title, date_added,))
+                cursor.execute(addvideocategorysql, (category_id,))
+                mysql.connection.commit()
+                return f"New Video: {video_title} added under Category: {category_name}."
+
+    return render_template(page, title = title, addvideoform=addvideoform)
 
 
 @app.route('/search_results', methods = ['GET', 'POST'])
@@ -287,10 +287,10 @@ def search_results():
     key_sql = 'SELECT * FROM Video WHERE video_title REGEXP %s'
 
     filter_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    filter_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE sub_id IN %s'
+    filter_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE category_id IN %s'
 
     multi_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    multi_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE sub_id IN %s HAVING video.video_title REGEXP %s'
+    multi_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE category_id IN %s HAVING video.video_title REGEXP %s'
 
     if args:
         if (args.get("search-term") != "") and args.get("filterID"):
@@ -322,16 +322,10 @@ def search_results():
 @app.route('/advanced_search', methods = ['GET','POST'])
 def advanced_search():
     title = 'Advanced Search'
-    # Populate dropdown menus from mysql
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    # Select everything alphabetically
-    cursor.execute('SELECT * FROM Category ORDER BY name')
-    categories = cursor.fetchall()
-    # TODO: These results should be filtered based category
-    cursor.execute('SELECT * FROM Subcategory ORDER BY sub_name')
-    subcategories = cursor.fetchall()
+    advancedsearchform = AdvancedSearchForm()
+    #ajaxpopulate form
 
-    return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
+    return render_template('advanced_search.html', title = title, advancedsearchform = advancedsearchform)
 
 
 ####

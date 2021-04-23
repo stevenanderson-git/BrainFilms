@@ -1,11 +1,10 @@
 
-<script type="text/javascript" src="{{url_for('static', filename='/js/search.js')}}"></script>
-<!--Ignore errors in editor-->
-<script>var global_categories = {{ categories|tojson }};</script>
-<script>var global_sub = {{ subcategories|tojson }};</script>
+<script type="text/javascript" src="{{url_for('static', filename='/js/add_new.js')}}"></script>
+
 {% extends "layout.html" %}
     {% block content %}
     <form class = "form-layout advanced-search" method = "get" action="{{url_for('search_results')}}">
+        {{advancedsearchform.csrf_token}}
         <div class = "inner-form">
             <div class = "form-row">
                 <div class = "form-row-label" for="search-term">
@@ -22,7 +21,7 @@
                 <div class = "form-row-content">
                     <div class = "selector-categories-wraper">
                         <select class ="adv-form-selector categories" id = "category-selector" size = "6" onchange="filter_sub(this);">
-                            <!--Populated by JS-->
+                            
                         </select>
                     </div>
                 </div>
@@ -34,7 +33,7 @@
                 <div class = "form-row-content">
                     <div class = "selector-subcategories-wraper">
                         <select multiple = "multiple-sub" class ="adv-form-selector subcategories" id = "subcategory-selector" size = "6" onchange="add_to_filters(this);">
-                            <!--Populated from category slector option-->
+                            
                         </select>
                     </div>
                 </div>
@@ -44,9 +43,9 @@
                 <div class = "filter-selected-heading">
                     <h3>Filters Selected</h3>
                 </div>
-                <!--Use CSS to style and remove bullets-->
+                
                 <ul class="filter-list" id="filter-list">
-                    <!--JS populates items-->
+                    
                 </ul>
             </div>
             
@@ -59,8 +58,4 @@
             </div>
         </div>
     </form>
-
-    
-
-    <script type="text/javascript">init();</script>
     {% endblock content %}
