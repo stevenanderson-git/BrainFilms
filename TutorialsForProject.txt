@@ -165,3 +165,15 @@ Create Json with ajax and POST
 SQL get last insert id
 	https://stackoverflow.com/questions/17112852/get-the-new-record-primary-key-id-from-mysql-insert-query
 
+SQL run multiple queries
+	https://stackoverflow.com/questions/20518677/mysqldb-cursor-execute-cant-run-multiple-queries
+
+SQL date time
+	https://stackoverflow.com/questions/34329852/how-to-insert-date-values-into-table/34330258
+
+JQuery Undefined values
+	https://stackoverflow.com/questions/10653367/how-to-check-undefined-value-in-jquery
+
+WTForms URL field
+	https://stackoverflow.com/questions/33307888/flask-wtforms-field-required
+
