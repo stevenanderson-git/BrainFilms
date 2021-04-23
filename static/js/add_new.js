@@ -139,14 +139,18 @@ $(document).ready(function(){
         let secondarybool = $("#showsubbool").is(':checked');
         let tertiarybool = $('#filterfurtherbool').is(':checked');      
         let category_id = 0;
+        let category_name = '';
 
         if(tertiarybool){
             if(typeof tertiaryoptionId === "undefined" || tertiaryoptionId == 0){
                 alert("A category must be selected that is not None.")
             }
             else{
-                category_id = tertiaryoptionId;
                 okay = confirm("Add " + video_title + " under category " + tertiaryoptionname + "?");
+                if(okay){
+                    category_id = tertiaryoptionId;
+                    category_name = tertiaryoptionname;
+                }
             }
         }
         else if(secondarybool && !tertiarybool){
@@ -154,8 +158,11 @@ $(document).ready(function(){
                 alert("A category must be selected that is not None.")
             }
             else{
-                category_id = secondaryoptionId;
                 okay = confirm("Add " + video_title + " under category " + secondaryoptionname + "?");
+                if(okay){
+                    category_id = secondaryoptionId;
+                    category_name = secondaryoptionname;
+                }
             }
         }
         else if(!secondarybool && !tertiarybool){
@@ -163,32 +170,34 @@ $(document).ready(function(){
                 alert("A category must be selected that is not None.")
             }
             else{
-                category_id = primeoptionId;
                 okay = confirm("Add " + video_title + " under category " + primeoptionname + "?");
+                if(okay){
+                    category_id = primeoptionId;
+                    category_name = primeoptionname;
+                }
             }
         }
 
         let newVideoJson = {
             video_title: video_title,
             video_url: video_url,
-            category_id: category_id
+            category_id: category_id,
+            category_name: category_name
         }
 
         if(okay){
             console.log(newVideoJson);
             $.ajax({
                 type: 'POST',
-                url: '/addvideotodb',
+                url: '/add_new',
                 data: JSON.stringify(newVideoJson),
                 contentType: 'application/json'
             })
             .done(function(returned){
+                $("#addvideoform").each(function(){this.reset();});
+                resetonprimary();
                 alert(returned);
             });
         }
-
-
-
-
     });
 });

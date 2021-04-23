@@ -240,31 +240,6 @@ def add_admin():
     else:
         return render_template('admin.html', username=None, is_admin=False)
 
-@app.route('/addvideotodb', methods=['POST'])
-def addvideotodb():
-    newvideo = request.get_json()
-
-    video_title = newvideo['video_title']
-    video_url = newvideo['video_url']
-    category_id = newvideo['category_id']
-    date_added = datetime.now().strftime(datestring)
-    addvideosql = "INSERT INTO Video (video_url, video_title, date_added) VALUES (%s, %s, %s)"
-    addvideocategorysql = "INSERT INTO Video_Category (video_id, category_id) VALUES (LAST_INSERT_ID(), %s)"
-
-    if video_url:
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        # Duplicate Check
-        checksql = "select * from video where video_url = %s"
-        cursor.execute(checksql, (video_url,))
-        dupe_exists = cursor.fetchone()
-        if dupe_exists:
-            return "A video already exists with that URL!"
-        else:
-            cursor.execute(addvideosql, (video_url, video_title, date_added,))
-            cursor.execute(addvideocategorysql, (category_id,))
-            mysql.connection.commit()
-            return "added! (but not really)"
-    return {}
 
 
 
@@ -273,6 +248,32 @@ def add_new():
     title = 'Add New Video'
     page = 'add_new.html'
     addvideoform = AddVideoForm()
+
+    if request.method == 'POST' and request.get_json():
+        newvideo = request.get_json()
+
+        video_title = newvideo['video_title']
+        video_url = newvideo['video_url']
+        category_id = newvideo['category_id']
+        category_name = newvideo['category_name']
+        date_added = datetime.now().strftime(datestring)
+        addvideosql = "INSERT INTO Video (video_url, video_title, date_added) VALUES (%s, %s, %s)"
+        addvideocategorysql = "INSERT INTO Video_Category (video_id, category_id) VALUES (LAST_INSERT_ID(), %s)"
+
+        if video_url:
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            # Duplicate Check
+            checksql = "select * from video where video_url = %s"
+            cursor.execute(checksql, (video_url,))
+            dupe_exists = cursor.fetchone()
+            if dupe_exists:
+                return f"A video with url: {video_url} already exists!"
+            else:
+                cursor.execute(addvideosql, (video_url, video_title, date_added,))
+                cursor.execute(addvideocategorysql, (category_id,))
+                mysql.connection.commit()
+                return f"New Video: {video_title} added under Category: {category_name}."
+
     return render_template(page, title = title, addvideoform=addvideoform)
 
 
