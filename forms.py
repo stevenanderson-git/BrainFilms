@@ -22,3 +22,10 @@ class AddCategoryForm(FlaskForm):
     secondarybool = BooleanField('Check if Subcategory')
     secondaryselect = SelectField('Secondary', choices=[])
     addbutton = SubmitField('Add Category')
+
+class AdvancedSearchForm(FlaskForm):
+    searchterm = SelectField('Search Term')
+    primaryselect = SelectField('Primary', choices=[])
+    secondaryselect = SelectField('Secondary', choices=[])
+    tertiaryselect = SelectField('Tertiary', choices=[])
+    advancedsearchbutton = SubmitField('Search')

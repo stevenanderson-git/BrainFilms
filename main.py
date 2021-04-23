@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_mysqldb import MySQL
 from datetime import datetime
-from forms import AddCategoryForm, AddVideoForm
+from forms import AddCategoryForm, AddVideoForm, AdvancedSearchForm
 import MySQLdb.cursors
 import re
 import json
@@ -287,10 +287,10 @@ def search_results():
     key_sql = 'SELECT * FROM Video WHERE video_title REGEXP %s'
 
     filter_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    filter_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE sub_id IN %s'
+    filter_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE category_id IN %s'
 
     multi_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    multi_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE sub_id IN %s HAVING video.video_title REGEXP %s'
+    multi_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE category_id IN %s HAVING video.video_title REGEXP %s'
 
     if args:
         if (args.get("search-term") != "") and args.get("filterID"):
@@ -322,16 +322,10 @@ def search_results():
 @app.route('/advanced_search', methods = ['GET','POST'])
 def advanced_search():
     title = 'Advanced Search'
-    # Populate dropdown menus from mysql
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    # Select everything alphabetically
-    cursor.execute('SELECT * FROM Category ORDER BY name')
-    categories = cursor.fetchall()
-    # TODO: These results should be filtered based category
-    cursor.execute('SELECT * FROM Subcategory ORDER BY sub_name')
-    subcategories = cursor.fetchall()
+    advancedsearchform = AdvancedSearchForm()
+    #ajaxpopulate form
 
-    return render_template('advanced_search.html', title = title, categories = categories, subcategories = subcategories)
+    return render_template('advanced_search.html', title = title, advancedsearchform = advancedsearchform)
 
 
 ####
