@@ -119,8 +119,6 @@ $(document).ready(function() {
 
         
         if(okay){
-            console.log(postjson);
-
             $.ajax({
                 type:'POST',
                 url:'/addcategorytodb',
@@ -132,7 +130,7 @@ $(document).ready(function() {
                 $(".subcategory").show();
                 $("#secondary-select-dropdown").hide();
                 populateprimaryselect();
-                alert(returned)
+                alert(returned);
             });
         }
     });

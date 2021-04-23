@@ -20,6 +20,8 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'mysql' # change this back to 'root' if changed
 # TODO: change database name for uniforimity in project.
 app.config['MYSQL_DB'] = 'braindb'
+# Datestring used mutliple times for formatting
+datestring = '%Y-%m-%d %H:%M:%S'
 
 # Intialize MySQL
 mysql = MySQL(app)
@@ -97,7 +99,7 @@ def register():
         password = request.form['password']
         email = request.form['email']
         # Formatted date for mysql entry
-        formatted_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        formatted_date = datetime.now().strftime(datestring)
 
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -238,35 +240,40 @@ def add_admin():
     else:
         return render_template('admin.html', username=None, is_admin=False)
 
+@app.route('/addvideotodb', methods=['POST'])
+def addvideotodb():
+    newvideo = request.get_json()
+
+    video_title = newvideo['video_title']
+    video_url = newvideo['video_url']
+    category_id = newvideo['category_id']
+    date_added = datetime.now().strftime(datestring)
+    addvideosql = "INSERT INTO Video (video_url, video_title, date_added) VALUES (%s, %s, %s)"
+    addvideocategorysql = "INSERT INTO Video_Category (video_id, category_id) VALUES (LAST_INSERT_ID(), %s)"
+
+    if video_url:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        # Duplicate Check
+        checksql = "select * from video where video_url = %s"
+        cursor.execute(checksql, (video_url,))
+        dupe_exists = cursor.fetchone()
+        if dupe_exists:
+            return "A video already exists with that URL!"
+        else:
+            cursor.execute(addvideosql, (video_url, video_title, date_added,))
+            cursor.execute(addvideocategorysql, (category_id,))
+            mysql.connection.commit()
+            return "added! (but not really)"
+    return {}
+
+
+
 @app.route('/add_new', methods=['GET', 'POST'])
 def add_new():
     title = 'Add New Video'
     page = 'add_new.html'
-    msg = ''
-    # Populate with AJAX
     addvideoform = AddVideoForm()
-
-    if request.method == 'POST' and 'video_url' in request.form and 'video_title' in request.form:
-        # Variables for video
-        video_url = request.form['video_url']
-        video_title = request.form['video_title']
-        date_added = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-        # Check if video exists using MySQL
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM Video WHERE video_url = %s', (video_url,))
-        video = cursor.fetchone()
-
-        # If the video url is not unique, show errors:
-        if video:
-            msg = 'Video with that url already exists!'        
-        # Add video to database
-        else:
-            cursor.execute('INSERT INTO Video (video_url, video_title, date_added) VALUES (%s, %s, %s)', (video_url, video_title, date_added,))
-            mysql.connection.commit()
-            msg = 'Video Added!'
-
-    return render_template(page, title = title, msg = msg, addvideoform=addvideoform)
+    return render_template(page, title = title, addvideoform=addvideoform)
 
 
 @app.route('/search_results', methods = ['GET', 'POST'])

@@ -2,13 +2,14 @@ from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField, PasswordField, SubmitField
 from wtforms import validators
 from wtforms.fields.core import BooleanField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, email_validator, URL
+from wtforms.fields.html5 import URLField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, email_validator
 
 # https://www.youtube.com/watch?v=UIJKdCIEXUQ&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&index=3
 
 class AddVideoForm(FlaskForm):
     video_title = StringField('Video Title', validators=[DataRequired(), Length(min=2, max=20)])
-    video_url = StringField('Video URL', validators=[DataRequired(), URL()])
+    video_url = URLField('Video URL', validators=[DataRequired()])
     primaryselect = SelectField('Primary', choices=[])
     secondaryselect = SelectField('Secondary', choices=[])
     tertiaryselect = SelectField('Tertiary', choices=[])
