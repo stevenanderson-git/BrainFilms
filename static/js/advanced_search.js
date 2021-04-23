@@ -1,7 +1,107 @@
-// Populates selector options
-function init(){
-    populate_primary();
+function populateprimaryselect(){
+    // Populate primary select dropdown
+    $.ajax({
+        type: 'POST',
+        url: 'populateprimaryselect'
+        }).done(function(data){
+            $("#primaryselect").empty().append(new Option("None", 0));
+            if(data){
+                $.each(data, function(index, category){
+                    $("#primaryselect").append(new Option(category.category_name, category.category_id));
+                });
+            }
+    });
 }
+
+function populatesecondaryselect(optionId){
+    $.ajax({
+        data:{
+            'category_id': optionId
+        },
+        type: 'POST',
+        url: '/populatefilteredselect'
+    })
+    .done(function(data){
+        $("#secondaryselect").empty().append(new Option("None", 0));
+        if(data){
+            $.each(data, function(index, category){
+                $("#secondaryselect").append(new Option(category.category_name, category.category_id));
+            });
+        }
+    });
+}
+
+function populatetertiaryselect(optionId){
+    $.ajax({
+        data:{
+            'category_id': optionId
+        },
+        type: 'POST',
+        url: '/populatefilteredselect'
+    })
+    .done(function(data){
+        $("#tertiaryselect").empty().append(new Option("None", 0));
+        if(data){
+            $.each(data, function(index, category){
+                $("#tertiaryselect").append(new Option(category.category_name, category.category_id));
+            });
+        }
+    });
+}
+
+function secondaryfiltertoggle(){
+    $("#secondaryfilterbool").on('change', function(){
+        if ($("#secondaryfilterbool").is(':checked')) {
+            $(".secondary-wraper").show();
+        }
+        else {
+            $(".secondary-wraper").hide();
+        }
+    });
+}
+
+function tertiaryfiltertoggle(){
+    $("#tertiaryfilterbool").on('change', function(){
+        if ($("#tertiaryfilterbool").is(':checked')) {
+            $(".tertiary-wraper").show();
+        }
+        else {
+            $(".tertiary-wraper").hide();
+        }
+    });
+}
+
+
+$(document).ready(function(){
+    populateprimaryselect();
+    secondaryfiltertoggle();
+    tertiaryfiltertoggle();
+
+    $("#primaryselect").on('change', function(){
+        let primeoptionId = $("select[name=primaryselect] option").filter(':selected').val();
+        if(primeoptionId == 0){
+            $("#secondary-form-row").hide();
+        }
+        else{
+            populatesecondaryselect(primeoptionId);
+            $("#secondary-form-row").show();
+        }
+    });
+
+    $("#secondaryselect").on('change', function(){
+        let secondaryoptionId = $("select[name=secondaryselect] option").filter(':selected').val();
+        if(secondaryoptionId == 0){
+            console.log('0');
+        }
+        else{
+            populatetertiaryselect(secondaryoptionId);
+            $("#tertiary-form-row").show();
+        }
+    });
+
+});
+
+
 // Populate options in primary selector
 function populate_primary(){
     var catetory_selector = document.getElementById("category-selector");

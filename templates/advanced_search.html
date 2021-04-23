@@ -1,5 +1,5 @@
-
-<script type="text/javascript" src="{{url_for('static', filename='/js/add_new.js')}}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{url_for('static', filename='/js/advanced_search.js')}}"></script>
 
 {% extends "layout.html" %}
     {% block content %}
@@ -11,34 +11,44 @@
                     Search Term
                 </div>
                 <div class = "form-row-content">
-                    <input type="text" name = "search-term" id = "search-term" placeholder = "Enter term to narrow results" pattern="[A-Za-z0-9 ]+">
+                    {{advancedsearchform.searchterm(class="form-control")}}
                 </div>
             </div>
-            <div class = "form-row">
-                <div class = "form-row-label" for="categories">
-                    Primary Category
+            <div class = "form-row" id="primary-form-row">
+                <div class = "form-row-label">
+                    <label>Primary Category</label>
                 </div>
                 <div class = "form-row-content">
-                    <div class = "selector-categories-wraper">
-                        <select class ="adv-form-selector categories" id = "category-selector" size = "6" onchange="filter_sub(this);">
-                            
-                        </select>
+                    <div class = "selector-categories-wraper primary-wraper">
+                        {{advancedsearchform.primaryselect(class="form-control", size='6')}}
                     </div>
                 </div>
             </div>
-            <div class = "form-row">
-                <div class = "form-row-label" for="subcategories">
-                    Subcategory
+
+            <div class = "form-row" id="secondary-form-row" hidden>
+                <div class = "form-row-label">
+                    <label>Use Secondary Filter</label>
+                    <input type="checkbox" id="secondaryfilterbool">
                 </div>
                 <div class = "form-row-content">
-                    <div class = "selector-subcategories-wraper">
-                        <select multiple = "multiple-sub" class ="adv-form-selector subcategories" id = "subcategory-selector" size = "6" onchange="add_to_filters(this);">
-                            
-                        </select>
+                    <div class = "selector-categories-wraper secondary-wraper" hidden>
+                        {{advancedsearchform.secondaryselect(class="form-control", size='6')}}
                     </div>
                 </div>
             </div>
-            
+
+            <div class = "form-row" id="tertiary-form-row" hidden>
+                <div class = "form-row-label">
+                    <label>Use Tertiary Filter?</label>
+                    <input type="checkbox" id="tertiaryfilterbool">
+                </div>
+                <div class = "form-row-content">
+                    <div class = "selector-categories-wraper tertiary-wraper" hidden>
+                        {{advancedsearchform.tertiaryselect(class="form-control" ,size='6')}}
+                    </div>
+                </div>
+            </div>
+
             <div class = "filter-selected-wrapper">
                 <div class = "filter-selected-heading">
                     <h3>Filters Selected</h3>
@@ -50,11 +60,8 @@
             </div>
             
             <br><br>
-            <div class = "form-row advanced-search-submit-button">
-                <div class = "form-row-label"></div>
-                <button type = "submit" class = "button-adv-subm">
-                    Search with filters
-                </button>
+            <div class = "form-row-search-button">
+                {{advancedsearchform.advancedsearchbutton(class="form-control")}}
             </div>
         </div>
     </form>

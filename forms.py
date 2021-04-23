@@ -24,7 +24,7 @@ class AddCategoryForm(FlaskForm):
     addbutton = SubmitField('Add Category')
 
 class AdvancedSearchForm(FlaskForm):
-    searchterm = SelectField('Search Term')
+    searchterm = StringField('Search Term')
     primaryselect = SelectField('Primary', choices=[])
     secondaryselect = SelectField('Secondary', choices=[])
     tertiaryselect = SelectField('Tertiary', choices=[])

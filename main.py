@@ -160,7 +160,6 @@ def populatefilteredselect():
             return jsonify(secondaryjson)
     return {}
 
-
 @app.route('/addcategorytodb', methods=["POST"])
 def addcategorytodb():
     newcategory = request.get_json()
