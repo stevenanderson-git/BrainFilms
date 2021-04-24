@@ -177,3 +177,13 @@ JQuery Undefined values
 WTForms URL field
 	https://stackoverflow.com/questions/33307888/flask-wtforms-field-required
 
+Ignore submissions on forum
+	https://stackoverflow.com/questions/10775276/how-can-i-manipulate-a-form-inputs-to-be-ignored-when-a-form-is-submitted
+
+WTF at least one field
+	https://stackoverflow.com/questions/64222815/flask-wtforms-validation-inputrequired-for-at-least-one-field
+
+Excellent REGEXP
+	https://stackoverflow.com/questions/576196/regular-expression-allow-letters-numbers-and-spaces-with-at-least-one-letter
+
+
