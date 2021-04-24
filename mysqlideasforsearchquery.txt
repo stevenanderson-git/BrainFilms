@@ -35,8 +35,3 @@ having video.video_title regexp 'e'
 
 SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE sub_id IN (2, 3, 8) HAVING video.video_title REGEXP 'e';
 
-
-
-action="{{url_for('search_results')}}"
-
-multi_cursor.execute(multi_sql, [args.getlist("filterID")," ".join(args.get("searchterm").split()).replace(" ", "|")])
