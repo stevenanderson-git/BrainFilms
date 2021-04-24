@@ -4,7 +4,7 @@
 	<div class='index-content'>
 		<div class = 'search-wrap'>
 			<form class="search" method = 'GET' action="{{url_for('search_results')}}">
-				
+				{{indexsearchbar.csrf_token}}
 				{{indexsearchbar.searchterm(class="search-term", placeholder="Search Videos", pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")}}
 				<button type = "submit" class="search-btn">
 					<i class="fas fa-search"></i>
