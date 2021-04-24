@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_mysqldb import MySQL
 from datetime import datetime
-from forms import AddCategoryForm, AddVideoForm, AdvancedSearchForm
+from forms import AddCategoryForm, AddVideoForm, AdvancedSearchForm, IndexSearchBar
 import MySQLdb.cursors
 import re
 import json
@@ -33,7 +33,9 @@ mysql = MySQL(app)
 def index():
     # Webpage Title
     title = 'Brainfilms - Home'
-    return render_template('index.html', title = title)
+    indexsearchbar = IndexSearchBar()
+
+    return render_template('index.html', title = title, indexsearchbar = indexsearchbar)
 
 # renamed from / to /login as it is no longer splash page
 @app.route('/login', methods=['GET', 'POST'])
@@ -275,46 +277,48 @@ def add_new():
 
     return render_template(page, title = title, addvideoform=addvideoform)
 
+# Helper for search_results() to query db with id of a category and a regexp searchterm
+def dbsearch(selectid, searchterm):
+    category_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    category_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE category_id IN %s'
 
-@app.route('/search_results', methods = ['GET', 'POST'])
+    term_category_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    tcsql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE category_id IN %s HAVING video.video_title REGEXP %s'
+
+    if searchterm != "":
+        term_category_cursor.execute(tcsql, [selectid, searchterm],)
+        results = term_category_cursor.fetchall()
+    else:
+        category_cursor.execute(category_sql, [(selectid, )])
+        results = category_cursor.fetchall()
+    
+    return results
+
+@app.route('/search_results', methods = ['GET'])
 def search_results():
     args = request.args
     title = "Search Results"
     page = 'search_results.html'
-    # TODO: remove test prints
-    key_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    key_sql = 'SELECT * FROM Video WHERE video_title REGEXP %s'
-
-    filter_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    filter_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE category_id IN %s'
-
-    multi_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    multi_sql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE category_id IN %s HAVING video.video_title REGEXP %s'
 
     if args:
-        if (args.get("search-term") != "") and args.get("filterID"):
-            multi_cursor.execute(multi_sql, [args.getlist("filterID")," ".join(args.get("search-term").split()).replace(" ", "|")])
-            results = multi_cursor.fetchall()
-            return render_template(page, title = title, results = results)
+        searchterm = '|'.join(args.get('searchterm').split())
 
-        elif args.get("search-term") != "":
-            # Search OR keyword
-            key_cursor.execute(key_sql, (" ".join(args.get("search-term").split()).replace(" ", "|"),))
-            # Search And Keyword
-            # key_cursor.execute(key_sql, (" ".join(args.get("search-term").split()).replace(" ", "&"),))
-            results = key_cursor.fetchall()
-            return render_template(page, title = title, results=results)
+        if args.get("tertiaryfilterbool") == 'y':
+            results = dbsearch(args.get('tertiaryselect'), searchterm)
 
-        elif args.get("filterID"):
-            filter_cursor.execute(filter_sql, [args.getlist("filterID")])
-            results = filter_cursor.fetchall()
-            return render_template(page, title = title, results=results)
+        elif args.get("secondaryfilterbool") == 'y':
+            results = dbsearch(args.get('secondaryselect'), searchterm)
+
+        elif args.get("primaryselect"):
+            results = dbsearch(args.get('primaryselect'), searchterm)
         
-        # TODO: determine if this can be avoided with regexp searching or parsing query string
-        elif args.get("search-term") == "":
-            key_cursor.execute('SELECT * FROM video',)
-            results = key_cursor.fetchall()
-            return render_template(page, title = "All Videos", results=results)
+        elif searchterm != "":
+            term_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            term_sql = 'SELECT * FROM Video WHERE video_title REGEXP %s'
+            term_cursor.execute(term_sql, searchterm,)
+            results = term_cursor.fetchall()
+        
+        return render_template(page, title = title, results=results)
 
     return render_template(page, title = title)
 
@@ -322,7 +326,6 @@ def search_results():
 def advanced_search():
     title = 'Advanced Search'
     advancedsearchform = AdvancedSearchForm()
-    #ajaxpopulate form
 
     return render_template('advanced_search.html', title = title, advancedsearchform = advancedsearchform)
 

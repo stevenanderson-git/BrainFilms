@@ -4,7 +4,7 @@ function populateprimaryselect(){
         type: 'POST',
         url: 'populateprimaryselect'
         }).done(function(data){
-            $("#primaryselect").empty().append(new Option("None", 0));
+            $("#primaryselect").empty();
             if(data){
                 $.each(data, function(index, category){
                     $("#primaryselect").append(new Option(category.category_name, category.category_id));
@@ -22,7 +22,7 @@ function populatesecondaryselect(optionId){
         url: '/populatefilteredselect'
     })
     .done(function(data){
-        $("#secondaryselect").empty().append(new Option("None", 0));
+        $("#secondaryselect").empty();
         if(data){
             $.each(data, function(index, category){
                 $("#secondaryselect").append(new Option(category.category_name, category.category_id));
@@ -40,7 +40,7 @@ function populatetertiaryselect(optionId){
         url: '/populatefilteredselect'
     })
     .done(function(data){
-        $("#tertiaryselect").empty().append(new Option("None", 0));
+        $("#tertiaryselect").empty();
         if(data){
             $.each(data, function(index, category){
                 $("#tertiaryselect").append(new Option(category.category_name, category.category_id));
@@ -53,9 +53,16 @@ function secondaryfiltertoggle(){
     $("#secondaryfilterbool").on('change', function(){
         if ($("#secondaryfilterbool").is(':checked')) {
             $(".secondary-wraper").show();
+            $("#secondaryselect").prop('disabled', false);
+            $("#tertiary-form-row").show();
         }
         else {
             $(".secondary-wraper").hide();
+            $("#secondaryselect").prop('disabled', false);
+            $("#tertiary-form-row").hide();
+            $(".tertiary-wraper").hide();
+            $("#tertiaryfilterbool").prop("checked", false);
+            $("#tertiaryselect").prop('disabled', true);
         }
     });
 }
@@ -64,9 +71,11 @@ function tertiaryfiltertoggle(){
     $("#tertiaryfilterbool").on('change', function(){
         if ($("#tertiaryfilterbool").is(':checked')) {
             $(".tertiary-wraper").show();
+            $("#tertiaryselect").prop('disabled', false);
         }
         else {
             $(".tertiary-wraper").hide();
+            $("#tertiaryselect").prop('disabled', true);
         }
     });
 }
@@ -79,81 +88,21 @@ $(document).ready(function(){
 
     $("#primaryselect").on('change', function(){
         let primeoptionId = $("select[name=primaryselect] option").filter(':selected').val();
-        if(primeoptionId == 0){
-            $("#secondary-form-row").hide();
-        }
-        else{
-            populatesecondaryselect(primeoptionId);
-            $("#secondary-form-row").show();
-        }
+        populatesecondaryselect(primeoptionId);
+        $("#secondary-form-row").show();
+        $("#tertiary-form-row").hide();
+        $(".tertiary-wraper").hide();
+        $("#tertiaryfilterbool").prop("checked", false);
     });
 
     $("#secondaryselect").on('change', function(){
         let secondaryoptionId = $("select[name=secondaryselect] option").filter(':selected').val();
-        if(secondaryoptionId == 0){
-            console.log('0');
-        }
-        else{
-            populatetertiaryselect(secondaryoptionId);
-            $("#tertiary-form-row").show();
-        }
+        populatetertiaryselect(secondaryoptionId);
+        $("#tertiary-form-row").show();
     });
 
 });
 
-
-// Populate options in primary selector
-function populate_primary(){
-    var catetory_selector = document.getElementById("category-selector");
-    catetory_selector.options.length = 0; // clear any data in selector
-    let category_option = document.createElement("option");
-    // Create blank option
-    category_option.value = "0";
-    category_option.text = "Show All";
-    category_option.selected = true;
-    catetory_selector.add(category_option);
-    // Loop to populate from json
-    for (var i = 0; i < global_categories.length; i++){
-        category_option = document.createElement("option");
-        category_option.value = global_categories[i]['cat_id'];
-        category_option.text = global_categories[i]['name'];
-        catetory_selector.add(category_option);
-    }
-    // Populates the subcategories with all elements
-    populate_sub(0);
-}
-// Populate subcategory
-function populate_sub(category_id){
-    var sub_selector = document.getElementById("subcategory-selector");
-    sub_selector.options.length = 0; // clear any data in selector
-    // if id = star, show all
-    if(category_id === 0){
-        // Loop to populate from json
-        for (var i = 0; i < global_sub.length; i++){
-            let category_option = document.createElement("option");
-            category_option.value = global_sub[i]['sub_id'];
-            category_option.text = global_sub[i]['sub_name'];
-            sub_selector.add(category_option);
-        }
-    }
-    // else show by the filtered id
-    else{
-        for (i = 0; i < global_sub.length; i++){
-            // Check if selected category matches the parent category
-            if(category_id === Number(global_sub[i]['parent_category'])){
-                let category_option = document.createElement("option");
-                category_option.value = global_sub[i]['sub_id'];
-                category_option.text = global_sub[i]['sub_name'];
-                sub_selector.add(category_option);
-            }
-        }
-    }
-}
-// Filters the subcategory
-function filter_sub(selected){
-    let category_value = Number(selected.options[selected.selectedIndex].value);
-    populate_sub(category_value);
-}
 // Add filters to list
 // TODO: add check to prevent multiple additions
 function add_to_filters(selected){
