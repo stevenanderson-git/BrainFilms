@@ -286,7 +286,7 @@ def dbsearch(selectid, searchterm):
     tcsql = 'SELECT DISTINCT video.* FROM video JOIN video_category using(video_id) WHERE category_id IN %s HAVING video.video_title REGEXP %s'
 
     if searchterm != "":
-        term_category_cursor.execute(tcsql, [selectid, searchterm],)
+        term_category_cursor.execute(tcsql, [(selectid,), searchterm])
         results = term_category_cursor.fetchall()
     else:
         category_cursor.execute(category_sql, [(selectid, )])
@@ -315,7 +315,7 @@ def search_results():
         elif searchterm != "":
             term_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             term_sql = 'SELECT * FROM Video WHERE video_title REGEXP %s'
-            term_cursor.execute(term_sql, searchterm,)
+            term_cursor.execute(term_sql, (searchterm,))
             results = term_cursor.fetchall()
         
         return render_template(page, title = title, results=results)
