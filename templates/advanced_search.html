@@ -4,7 +4,7 @@
 {% extends "layout.html" %}
     {% block content %}
     <form class = "form-layout advanced-search" method = 'GET' action="{{url_for('search_results')}}">
-        
+        {{advancedsearchform.csrf_token}}
         <div class = "inner-form">
             <div class = "form-row">
                 <div class = "form-row-label" for="search-term">
