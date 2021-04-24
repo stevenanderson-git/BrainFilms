@@ -312,11 +312,17 @@ def search_results():
         elif args.get("primaryselect"):
             results = dbsearch(args.get('primaryselect'), searchterm)
         
-        elif searchterm != "":
-            term_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            term_sql = 'SELECT * FROM Video WHERE video_title REGEXP %s'
-            term_cursor.execute(term_sql, (searchterm,))
-            results = term_cursor.fetchall()
+        else:
+            if searchterm != '':
+                term_cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                term_sql = 'SELECT * FROM Video WHERE video_title REGEXP %s'
+                term_cursor.execute(term_sql, (searchterm,))
+                results = term_cursor.fetchall()
+            else:
+                nullsearch = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                selectallsql = 'SELECT * FROM Video'
+                nullsearch.execute(selectallsql,)
+                results = nullsearch.fetchall()
         
         return render_template(page, title = title, results=results)
 
