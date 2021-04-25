@@ -11,8 +11,7 @@
                     Search Term
                 </div>
                 <div class = "form-row-content">
-                    <input type="text" class = "adv-search-term" name = "adv-search-term" placeholder = "Enter term to narrow results" pattern="[A-Za-z0-9 ]+">
-                    {{advancedsearchform.searchterm(class="form-control", pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")}}
+                    {{advancedsearchform.searchterm(class="form-control adv-search-term", pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")}}
                 </div>
                 <br><br>
             </div>
@@ -22,7 +21,7 @@
                 </div>
                 <div class = "form-row-content">
                     <div class = "selector-categories-wraper primary-wraper">
-                        {{advancedsearchform.primaryselect(class="form-control", size='6')}}
+                        {{advancedsearchform.primaryselect(class="form-control adv-form-selector", size='6')}}
                     </div>
                 </div>
             </div>
@@ -34,7 +33,7 @@
                 </div>
                 <div class = "form-row-content">
                     <div class = "selector-categories-wraper secondary-wraper" hidden>
-                        {{advancedsearchform.secondaryselect(class="form-control", size='6')}}
+                        {{advancedsearchform.secondaryselect(class="form-control adv-form-selector", size='6')}}
                     </div>
                 </div>
             </div>
@@ -46,20 +45,11 @@
                 </div>
                 <div class = "form-row-content">
                     <div class = "selector-categories-wraper tertiary-wraper" hidden>
-                        {{advancedsearchform.tertiaryselect(class="form-control" ,size='6')}}
+                        {{advancedsearchform.tertiaryselect(class="form-control adv-form-selector" ,size='6')}}
                     </div>
                 </div>
             </div>
 
-            <div class = "filter-selected-wrapper">
-                <div class = "filter-selected-heading">
-                    <h3>Filters Selected</h3>
-                </div>
-                
-                <ul class="filter-list" id="filter-list">
-                    
-                </ul>
-            </div>
             
             <br><br>
             <div class = "form-row-search-button">

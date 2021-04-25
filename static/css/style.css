@@ -168,6 +168,10 @@
   	margin: 0 auto;
 }
 
+.result-container{
+	display: inline-block;
+}
+
 .result-box{
 	float:right;
 }
