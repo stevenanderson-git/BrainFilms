@@ -476,3 +476,41 @@ a.advanced-search-btn:hover, a.advanced-search-btnhover {
     color: blue;
     text-align: center;
 }
+
+.add-video-button{
+	background-color:#febac2;
+	color:#620e0a;
+	padding: 5px 5px;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 5px 5px #423133;
+	margin: auto;
+	border-radius: 5px 5px 5px 5px;
+	width: 100px;
+
+}
+.add-video-button:hover{
+	background-color:#febac2;
+	color:#ffffff;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 10px 10px #423133;
+	margin: auto;
+	border-radius: 5px 5px 5px 5px;
+  	transition: background-color 0.2s;
+}
+
+.add-new-text-field{
+	width: 100%;
+	border: 3px solid #620e0a;
+	padding: 5px;
+	height: 25px;
+	border-radius: 0px 0px 10px 10px;
+	outline: none;
+	color: black;	
+}
+

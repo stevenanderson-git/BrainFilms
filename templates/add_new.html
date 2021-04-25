@@ -4,32 +4,49 @@
     {% block content %}
     {% if loggedin %}
         <div class = 'add-video'>
-            <h1>Add New Video</h1>
+
             <form method="POST" id="addvideoform" name="addvideoform" autocomplete="off">
-                {{addvideoform.csrf_token}}
-                <label>Video Title:</label>
-                {{addvideoform.video_title(class="form-control")}}
-                <label>Video URL:</label>
-                {{addvideoform.video_url(class="form-control")}}
                 
-                <div class="category-selectors">
-                    <label>Choose a category for the video to belong to.</label>
-                    <div class="primary-selector-div">
-                        {{addvideoform.primaryselect(class="form-control", size=6)}}
+                {{addvideoform.csrf_token}}
+                <div class="form-row">
+                    <div class="form-row-label">
+                        <label>Video Title:</label>
                     </div>
+                    {{addvideoform.video_title(class="form-control add-new-text-field")}}
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="form-row-label">
+                        <label>Video URL:</label>
+                    </div>
+                    {{addvideoform.video_url(class="form-control add-new-text-field")}}
+                </div>
+                <br>
+                <div class="category-selectors">
+                    <div class="form-row-label">
+                        <label>Choose a category for the video to belong to.</label>
+                    </div>
+                    <div class="primary-selector-div">
+                        {{addvideoform.primaryselect(class="form-control adv-form-selector", size=6)}}
+                    </div>
+                    <br>
                     <div id="choosesubdiv" hidden>
-                        <label>Choose a subcategory?</label>
-                        <input type="checkbox" id="showsubbool">
+                        <div class="form-row-label"> 
+                            <label>Choose a subcategory?</label>
+                            <input type="checkbox" id="showsubbool">
+                        </div>
                         <div id="subcategorydiv" hidden>
                             <div class="secondary-selector-div">
-                                {{addvideoform.secondaryselect(class="form-control", size=6)}}
+                                {{addvideoform.secondaryselect(class="form-control adv-form-selector", size=6)}}
                             </div>
-                        
+                            <br>
                             <div id="filterfurtherdiv" hidden>
-                                <label>Filter Further?</label>
-                                <input type="checkbox" id="filterfurtherbool">
+                                <div class="form-row-label">
+                                    <label>Filter Further?</label>
+                                    <input type="checkbox" id="filterfurtherbool">
+                                </div>
                                 <div id="tertiary-selector-div" hidden>
-                                    {{addvideoform.tertiaryselect(class="form-control", size=6)}}
+                                    {{addvideoform.tertiaryselect(class="form-control adv-form-selector", size=6)}}
                                 </div>
                             </div>
                         </div>
@@ -37,7 +54,8 @@
                     
 
                 </div>
-                {{addvideoform.videosubmitbutton(class="form-control")}}
+                <br>
+                {{addvideoform.videosubmitbutton(class="form-control add-video-button")}}
             </form>
         </div>
     {% else %}
