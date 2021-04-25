@@ -189,4 +189,7 @@ Excellent REGEXP
 CSS Inherit Action Styling
 	https://css-tricks.com/almanac/properties/a/all/
 
+Password REGEX
+	https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
+
 
