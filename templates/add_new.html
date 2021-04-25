@@ -2,6 +2,7 @@
 <script type="text/javascript" src="{{url_for('static', filename='/js/add_new.js')}}"></script>
 {% extends "layout.html" %}
     {% block content %}
+    {% if loggedin %}
         <div class = 'add-video'>
             <h1>Add New Video</h1>
             <form method="POST" id="addvideoform" name="addvideoform" autocomplete="off">
@@ -38,6 +39,8 @@
                 </div>
                 {{addvideoform.videosubmitbutton(class="form-control")}}
             </form>
-
         </div>
+    {% else %}
+        <p><a href="{{ url_for('login') }}" class='comment-register-login'>Register or Login to Add New Videos</a></p>
+    {% endif %}
     {% endblock content %}
