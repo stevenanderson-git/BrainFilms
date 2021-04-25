@@ -35,7 +35,7 @@ def index():
     title = 'Brainfilms - Home'
     indexsearchbar = IndexSearchBar()
 
-    return render_template('index.html', title = title, indexsearchbar = indexsearchbar, loggedin = validate_login())
+    return render_template('index.html', title = title, indexsearchbar = indexsearchbar, loggedin = validate_login(), is_admin = validate_admin())
 
 # renamed from / to /login as it is no longer splash page
 @app.route('/login', methods=['GET', 'POST'])
@@ -66,17 +66,16 @@ def login():
             is_admin = cursor.fetchone()
             if is_admin:
                 session['is_admin'] = True
-                return admin()
             else:
                 session['is_admin'] = False
 
             # Go to Profile page
-            return profile()
+            return redirect(url_for('profile'))
         else:
             # Account doesnt exist or username/password incorrect
             msg = 'Incorrect username/password!'
     # Show the login form with message (if any)
-    return render_template('login.html', title = title, msg=msg, loggedin = validate_login())
+    return render_template('login.html', title = title, msg=msg, loggedin = validate_login(), is_admin = validate_admin())
 
 # TODO: Logout not currently used
 @app.route('/logout')
@@ -128,7 +127,7 @@ def register():
         # Form is empty... (no POST data)
         msg = 'Please fill out the form!'
     # Show registration form with message (if any)
-    return render_template('register.html', title = title, msg=msg, loggedin = validate_login())
+    return render_template('register.html', title = title, msg=msg, loggedin = validate_login(), is_admin = validate_admin())
 
 # Profile Page - Implemented as part of Lab 2
 @app.route('/profile', methods = ['GET', 'POST'])
@@ -143,8 +142,12 @@ def profile():
          password = account['password'], liked_videos=liked_videos,
          email=account['email'], creation_date=account['date'], is_admin = validate_admin(), loggedin = validate_login())
     else:
-        return render_template('login.html', title = 'Profile Login', msg='Please login', loggedin = validate_login())
+        return render_template('login.html', title = 'Profile Login', msg='Please login',
+                               loggedin = validate_login(), is_admin = validate_admin())
 
+@app.route('/admin_dashboard')
+def admin():
+    return profile()
 
 @app.route('/populateprimaryselect', methods = ['POST'])
 def populateprimaryselect():
@@ -214,18 +217,6 @@ def addcategorytodb():
     
 
 
-@app.route('/admin_dashboard', methods = ['GET', 'POST'])
-def admin():
-    # Form created for tepmlating
-    add_category_form = AddCategoryForm()
-    
-    admin_page_var = 'admin.html'
-    if validate_admin():
-        return render_template(admin_page_var, username = session['username'], loggedin = validate_login(),
-                               is_admin=True, add_category_form=add_category_form)
-    else:
-        return render_template(admin_page_var, username=None, is_admin=False, loggedin = validate_login())
-
 @app.route('/admin_add', methods = ['GET', 'POST'])
 def add_admin():
     if validate_admin():
@@ -247,7 +238,7 @@ def add_admin():
                     msg = 'User successfully added'
             else:
                 msg = 'User not found'
-        return render_template('add_admin.html', msg=msg, loggedin = validate_login())
+        return render_template('add_admin.html', msg=msg, loggedin = validate_login(), is_admin = validate_admin())
     else:
         return render_template('admin.html', username=None, is_admin=False, loggedin = validate_login())
 
@@ -266,8 +257,65 @@ def video_approval():
             mysql.connection.commit()
         cursor.execute('SELECT * FROM Pending_Videos Inner Join Video On Pending_videos.video_id = video.video_id')
         pending_videos = cursor.fetchall()
-        return render_template('pending_videos.html', videos = pending_videos , loggedin = validate_login())
+        return render_template('pending_videos.html', videos = pending_videos , loggedin = validate_login(), is_admin = validate_admin())
+    else:
+        return render_template('admin.html', username=None, is_admin=False, loggedin = validate_login())
 
+@app.route('/admin_add_category', methods=['GET', 'POST'])
+def add_category():
+    if validate_admin():
+        # Form created for tepmlating
+        add_category_form = AddCategoryForm()
+        return render_template('add_category.html', add_category_form=add_category_form, loggedin=validate_login(), is_admin = validate_admin())
+    return render_template('admin.html', username=None, is_admin=False, loggedin=validate_login())
+
+@app.route('/admin_remove_category', methods=['GET', 'POST'])
+def remove_category():
+    if validate_admin():
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        if request.method == 'POST':
+            if 'primary_removal' in request.form:
+                cursor.execute(f'Select * from Categories where parent_category = {request.form["primary_removal"]}')
+                secondaries_to_delete = cursor.fetchall()
+                for secondary in secondaries_to_delete:
+                    category_id = secondary['category_id']
+                    cursor.execute(f'Select * from Categories where parent_category = {category_id}')
+                    tertiaries_to_delete = cursor.fetchall()
+                    for tertiary in tertiaries_to_delete:
+                        tertiary_id = tertiary['category_id']
+                        cursor.execute(f'Delete from video_category where category_id = {tertiary_id}')
+                        cursor.execute(f'Delete from categories where category_id = {tertiary_id}')
+                        mysql.connection.commit()
+                    cursor.execute(f'Delete from video_category where category_id = {category_id}')
+                    cursor.execute(f'Delete from categories where category_id = {category_id}')
+                    mysql.connection.commit()
+                cursor.execute(f'Delete from video_category where category_id = {request.form["primary_removal"]}')
+                cursor.execute(f'Delete from categories where category_id = {request.form["primary_removal"]}')
+                mysql.connection.commit()
+            if 'secondary_removal' in request.form:
+                cursor.execute(f'Select * from Categories where parent_category = {request.form["secondary_removal"]}')
+                tertiaries_to_delete = cursor.fetchall()
+                for tertiary in tertiaries_to_delete:
+                    tertiary_id = tertiary['category_id']
+                    cursor.execute(f'Delete from video_category where category_id = {tertiary_id}')
+                    cursor.execute(f'Delete from categories where category_id = {tertiary_id}')
+                    mysql.connection.commit()
+                cursor.execute(f'Delete from video_category where category_id = {request.form["secondary_removal"]}')
+                cursor.execute(f'Delete from categories where category_id = {request.form["secondary_removal"]}')
+                mysql.connection.commit()
+            if 'tertiary_removal' in request.form:
+                cursor.execute(f'Delete from video_category where category_id = {request.form["tertiary_removal"]}')
+                cursor.execute(f'Delete from categories where category_id = {request.form["tertiary_removal"]}')
+                mysql.connection.commit()
+        cursor.execute('Select * from Categories where parent_category is null')
+        primary_categories = cursor.fetchall()
+        cursor.execute('select * from (select * from categories) s inner join (select * from categories where parent_category is null) p on s.parent_category = p.category_id')
+        secondary_categories = cursor.fetchall()
+        cursor.execute('Select distinct s.category_id, s.category_name from Categories s inner join Categories t on s.parent_category = t.category_id where t.parent_category is not null')
+        tertiary_categories = cursor.fetchall()
+        return render_template('remove_category.html', loggedin=validate_login(), secondary_categories=secondary_categories,
+                               is_admin=validate_admin(), primary_categories = primary_categories, tertiary_categories = tertiary_categories)
+    return render_template('admin.html', username=None, is_admin=False, loggedin=validate_login())
 
 
 @app.route('/add_new', methods=['GET', 'POST'])
@@ -305,7 +353,7 @@ def add_new():
                 mysql.connection.commit()
                 return f"New Video: {video_title} added under Category: {category_name}."
 
-    return render_template(page, title = title, addvideoform=addvideoform, loggedin = validate_login())
+    return render_template(page, title = title, addvideoform=addvideoform, loggedin = validate_login(), is_admin = validate_admin())
 
 # Helper for search_results() to query db with id of a category and a regexp searchterm
 def dbsearch(selectid, searchterm):
@@ -355,16 +403,16 @@ def search_results():
                 results = nullsearch.fetchall()
 
         
-        return render_template(page, title = title, results=results, loggedin = validate_login())
+        return render_template(page, title = title, results=results, loggedin = validate_login(), is_admin = validate_admin())
 
-    return render_template(page, title = title, loggedin = validate_login())
+    return render_template(page, title = title, loggedin = validate_login(), is_admin = validate_admin())
 
 @app.route('/advanced_search', methods = ['GET','POST'])
 def advanced_search():
     title = 'Advanced Search'
     advancedsearchform = AdvancedSearchForm()
 
-    return render_template('advanced_search.html', title = title, advancedsearchform = advancedsearchform, loggedin = validate_login())
+    return render_template('advanced_search.html', title = title, advancedsearchform = advancedsearchform, loggedin = validate_login(), is_admin = validate_admin())
 
 @app.route('/video-<video_id>', methods = ['GET', 'POST'])
 def comments(video_id):
@@ -374,7 +422,7 @@ def comments(video_id):
     results = None
     if not video_found:
         msg = 'Video not found'
-        return render_template('comments.html', msg = msg, loggedin = validate_login())
+        return render_template('comments.html', msg = msg, loggedin = validate_login(), is_admin = validate_admin())
     else:
         if request.method == 'POST':
             if 'comment' in request.form:
@@ -409,7 +457,6 @@ def comments(video_id):
                                date_added = video_found['date_added'], is_admin = validate_admin(),
                                rating=rating, liked=liked
                                )
-
 
 def validate_login():
     if session.get('loggedin') and session['loggedin']:

@@ -2,7 +2,15 @@
     <body>
 		{% block content %}
         {% if is_admin %}
-        <a href="{{url_for('admin')}}"><h1 style="font-size: 60px;">Admin Dashboard</h1></a>
+            <div id="admin_dashboard">
+            <ul id="admin_dashboard_options">
+                <li><a href="{{url_for('video_approval')}}">Videos pending for approval</a></li>
+                <li><a href="{{ url_for('add_admin') }}">Add new admin</a></li>
+                <li><a href="{{url_for('add_category') }}">Add categories</a></li>
+                <li><a href="{{url_for('remove_category')}}">Remove categories</a></li>
+            </ul>
+                <h1 id="admin_dashboard_title">Admin Dashboard</h1>
+            </div>
         {% endif %}
        <div class="profile">
             <h1>Profile</h1>
