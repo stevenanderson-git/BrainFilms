@@ -6,7 +6,7 @@
             {% for result in results %}
             <div class = 'result-box'>
                 <div>
-                    <h1 class = 'video-title'>{{result.video_title}}</h1>
+                    <h1 class = 'video-title'><a class = "title-more-options" href="/video-{{result.video_id}}">{{result.video_title}}</a></h1>
                 </div>
                 <div>
                     <a class = "video-url" href="{{result.video_url}}" target="_blank">{{result.video_url}}</a>
@@ -15,9 +15,8 @@
                     <p class = 'video-date'>{{result.date_added}}</p>
                 </div>
                 <div>
-                    <a class = "video-more-options" href="/video-{{result.video_id}}">View more options</a>
+                    <a class = "video-more-options" href="/video-{{result.video_id}}">More Options</a>
                 </div>
-
             </div>
             <br>
             {% endfor %}

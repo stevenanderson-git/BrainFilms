@@ -302,3 +302,7 @@ a.advanced-search-btn:hover, a.advanced-search-btnhover {
 	transform: translate(-50%, -50%);
 }
 
+/*Search result title link will inherit from all css applied directly to title*/
+.title-more-options{
+	all: inherit;
+}
