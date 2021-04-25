@@ -253,6 +253,8 @@ def video_approval():
             removal = request.form['remove_video']
             cursor.execute(f'DELETE FROM PENDING_VIDEOS WHERE VIDEO_ID = {removal}')
             cursor.execute(f'DELETE FROM Video_Category WHERE VIDEO_ID = {removal}')
+            cursor.execute(f'DELETE FROM User_Liked_Videos WHERE VIDEO_ID = {removal}')
+            cursor.execute(f'DELETE FROM User_Rated_videos WHERE VIDEO_ID = {removal}')
             cursor.execute(f'DELETE FROM VIDEO WHERE VIDEO_ID = {removal}')
             mysql.connection.commit()
         cursor.execute('SELECT * FROM Pending_Videos Inner Join Video On Pending_videos.video_id = video.video_id')
