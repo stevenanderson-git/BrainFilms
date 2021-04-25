@@ -16,6 +16,8 @@
         {% else %}
             <title>Brainlabs</title>
         {% endif %}-->
+        <!--TODO:Create actual favicon-->
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <!--Link for javascript-->
         <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
         <!--Link for Bootstrap goes here if used-->
@@ -25,11 +27,13 @@
         <!--This navbar should show on all pages-->
 		<header class='Site-header'>
 			<div class='links'>
+                {% if loggedin %}
+                <a href="{{url_for('logout')}}" class="button">Logout</a>
+                {% else %}
 				<a href="{{ url_for('login') }}" class='button'>Login</a>
-                {% if account==true %}<a href="{{ url_for('profile') }}" class='button'>Profile</a>
-                {% else %}<a href="{{ url_for('login') }}" class='button'>Profile</a>
                 {% endif %}
-                <a href="{{url_for('index')}}" class = 'home-button'><input type="image" src="static\images\brain_films.png" ></a>
+                <a href="{{ url_for('profile') }}" class='button'>Profile</a> 
+                <a href="{{url_for('index')}}" class = 'home-button'><input type="image" src="static\images\brain_films.png" value="Home"></a>
                                 <!--This is just a placeholder to center the logo if total layout buttons is an odd number-->
                                 <a href="{{ url_for('add_new')}}" class='button4'></a>
 				<a href="{{ url_for('add_new')}}" class='button'>Add ​​​‏‏‎‎New</a>

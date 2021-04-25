@@ -446,4 +446,8 @@ a.advanced-search-btn:hover, a.advanced-search-btnhover {
 	margin: auto;
 	border-radius: 5px 5px 5px 5px;
   	transition: background-color 0.2s;
+
+/*Search result title link will inherit from all css applied directly to title*/
+.title-more-options{
+	all: inherit;
 }

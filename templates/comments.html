@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    {% if msg %}
+        <p>{{msg}}</p>
+    {% else %}
+        <h2>{{video_title}}<br>{{date_added}}</h2>
+        {% if loggedin %}
+            {% if liked %}
+            <form action="/video-{{video_id}}" method="post">
+                <input name="unliked" type="hidden">
+                <input type="submit" value="Unlike Video">
+            </form>
+            <br>
+            {% else %}
+            <form action="/video-{{video_id}}" method="post">
+                <input name="liked" type="hidden">
+                <input type="submit" value="Like Video">
+            </form>
+            <br>
+            {% endif %}
+            {% if rating %}
+                <p>You gave this video a rating of {{rating}}</p>
+            {% else %}
+                <form action="/video-{{video_id}}" method="post">
+                <input type="number" name="rating" size="2" min="1" max="10">
+                <input type="submit" value="Submit rating">
+                </form>
+                <br>
+            {% endif %}
+         <form action="/video-{{video_id}}" method="post">
+            <textarea name="comment" placeholder="Enter comment here" id="comment" required></textarea>
+            <br><input type="submit" value="Add Comment">
+        </form>
+        {% else %}
+            <p><a href="{{ url_for('login') }}" class='comment-register-login'>Register or Login to Rate or add Comments</a></p>
+        {% endif %}
+        {% if results %}
+            {% for result in results %}
+                <br>
+                {% if result.username == user or is_admin %}
+                <form action="/video-{{video_id}}" method="post">
+                    {{result.username}}<br>
+                    {{result.timestamp}}<br>
+                    {{result.comment}}
+                    <input name="username" value="{{result.username}}" type="hidden">
+                    <input name="timestamp" value="{{result.timestamp}}" type="hidden">
+                    <input type="submit" value="Delete Comment">
+                </form>
+                {% else %}
+                <p>{{result.username}}<br>
+                    {{result.timestamp}}<br>
+                    {{result.comment}}
+                </p>
+                {% endif %}
+            {% endfor %}
+
+        {% else %}
+            <p>No comments have been added.</p>
+        {% endif %}
+    {% endif %}
+
+
+{% endblock content %}

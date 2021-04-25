@@ -7,7 +7,22 @@ username VARCHAR(20) not null,
 email VARCHAR(20),
 date date,
 password varchar(20) not null,
-Unique (username));
+Unique (username)
+);
+
+
+CREATE TABLE IF NOT EXISTS Admin(
+id int(11) not null primary key,
+FOREIGN KEY (id) REFERENCES UserInfo(id)
+);
+
+INSERT INTO Userinfo(username, email, date, password)
+VALUES ('root', 'root@brainfilms.com', '2021-04-02', 'root');
+
+INSERT INTO Admin(id)
+SELECT userinfo.id
+FROM userinfo where userinfo.username = 'root'
+;
 
 CREATE TABLE IF NOT EXISTS Video(
 video_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -17,80 +32,53 @@ date_added date,
 UNIQUE KEY unique_url (video_url)
 );
 
-INSERT INTO Video (video_url, video_title, date_added) values
-('www.dumb.com', 'Dumb Video Website', '2001-08-06'),
-('www.IEDK.com', 'Its cool', '2003-07-30'),
-('www.website3.com', 'just more datae', '2025-04-16')
-;
-
-CREATE TABLE IF NOT EXISTS Category(
-cat_id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(20) not null,
-description VARCHAR(100),
-UNIQUE (name)
+CREATE TABLE IF NOT EXISTS Categories(
+category_id INT AUTO_INCREMENT PRIMARY KEY,
+category_name VARCHAR(20) NOT NULL,
+category_description TEXT,
+parent_category INT NULL,
+UNIQUE (category_name),
+FOREIGN KEY (parent_category) REFERENCES Categories(category_id)
 );
-
-CREATE TABLE IF NOT EXISTS Subcategory(
-sub_id INT AUTO_INCREMENT PRIMARY KEY,
-sub_name VARCHAR(20) not null,
-parent_category INT not null,
-description VARCHAR(100),
-UNIQUE (sub_name),
-CONSTRAINT FOREIGN KEY (parent_category) REFERENCES Category (cat_id)
-);
-
-INSERT INTO Category (name) values
-('Other'), ('Agriculture'), ('Animals'), ('Anthropology'), ('Archaeology'), ('Architecture'), ('Art'),
-('Biology'), ('Chemistry'), ('Computer Science'), ('Development'), ('Zoology'), ('Quest'), ('Wildlife')
-;
-
-INSERT INTO Subcategory (sub_name, parent_category) values
-('DIY & How-To', '1'),
-('Economics', '11'),
-('Education', '3'),
-('Engineering', '9'),
-('Environment', '8'),
-('Film & Media', '7'),
-('Food & Cooking', '4'),
-('Geography', '5'),
-('Geology & Earth', '5'),
-('Health', '8'),
-('History', '1'),
-('Language', '4'),
-('Law', '3'),
-('Literature', '7'),
-('Marketing', '10'),
-('Amazon', '12'),
-('Zumba', '13')
-;
 
 CREATE TABLE IF NOT EXISTS Video_Category(
-    video_id int not null,
-    sub_id int not null,
-    FOREIGN KEY (video_id) REFERENCES Video(video_id),
-    FOREIGN KEY (sub_id) REFERENCES Subcategory(sub_id)
+  video_id INT,
+  category_id INT,
+  PRIMARY KEY (video_id, category_id),
+  FOREIGN KEY (video_id) REFERENCES Video(video_id),
+  FOREIGN KEY (category_id) REFERENCES Categories(category_id)
 );
 
-INSERT INTO Video_Category(video_id, sub_id) values
-(1, 3), (2, 8), (3, 7), (1, 7), (2, 7), (2, 11)
-;
-
-CREATE TABLE IF NOT EXISTS Admin(
-    id int(11) not null primary key,
-    FOREIGN KEY (id) REFERENCES UserInfo(id)
+CREATE TABLE IF NOT EXISTS Video_Comments(
+video_id INT,
+username VARCHAR(20),
+timestamp datetime,
+comment TEXT,
+primary key (video_id, username, timestamp),
+foreign key (video_id) references video(video_id),
+foreign key (username) references userinfo(username)
 );
 
-INSERT INTO Userinfo(username, email, date, password)
-VALUES
-  ('root', 'root@brainfilms.com', '2021-04-02', 'root'),
-  ('a', 'a@a.com', '2021-04-02', 'a'),
-  ('b', 'b@b.com', '2021-04-02', 'b'),
-  ('c', 'c@c.com', '2021-04-02', 'c')
-;
+CREATE TABLE IF NOT EXISTS Pending_Videos(
+video_id INT,
+primary key (video_id),
+foreign key (video_id) references video(video_id)
+);
 
-INSERT INTO Admin(id)
-SELECT userinfo.id
-FROM userinfo where userinfo.username = 'root'
-;
+CREATE TABLE IF NOT EXISTS User_Liked_Videos(
+video_id INT,
+username VARCHAR(20),
+primary key (video_id, username),
+foreign key (video_id) references video(video_id),
+foreign key (username) references userinfo(username)
+);
 
+CREATE TABLE IF NOT EXISTS User_Rated_Videos(
+video_id INT,
+username VARCHAR(20),
+rating INT,
+primary key (video_id, username),
+foreign key (video_id) references video(video_id),
+foreign key (username) references userinfo(username)
+);
 

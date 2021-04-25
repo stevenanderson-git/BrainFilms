@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    {% if videos %}
+        {% for video in videos %}
+            <p>{{video['video_title']}}<br>
+                {{video['video_url']}}<br>
+                {{video['date_added']}}
+            </p>
+            <form action="{{url_for('video_approval')}}" method="post">
+                <input name="approve_video" value="{{video['video_id']}}" type="hidden">
+                <input type="Submit" value="Approve video">
+            </form>
+            <form action="{{url_for('video_approval')}}" method="post">
+                <input name="remove_video" value="{{video['video_id']}}" type="hidden">
+                <input type="Submit" value="Remove video">
+            </form>
+        {% endfor %}
+    {% else %}
+        <p>There are no pending videos for approval.</p>
+    {% endif %}
+
+{% endblock content %}
