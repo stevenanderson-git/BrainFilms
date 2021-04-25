@@ -4,7 +4,7 @@ function populateprimaryselect(){
         type: 'POST',
         url: 'populateprimaryselect'
         }).done(function(data){
-            $("#primaryselect").empty();
+            $("#primaryselect").empty().append(new Option("---", 0));
             if(data){
                 $.each(data, function(index, category){
                     $("#primaryselect").append(new Option(category.category_name, category.category_id));
@@ -22,7 +22,7 @@ function populatesecondaryselect(optionId){
         url: '/populatefilteredselect'
     })
     .done(function(data){
-        $("#secondaryselect").empty();
+        $("#secondaryselect").empty().append(new Option("---", 0));
         if(data){
             $.each(data, function(index, category){
                 $("#secondaryselect").append(new Option(category.category_name, category.category_id));
@@ -40,7 +40,7 @@ function populatetertiaryselect(optionId){
         url: '/populatefilteredselect'
     })
     .done(function(data){
-        $("#tertiaryselect").empty();
+        $("#tertiaryselect").empty().append(new Option("---", 0));
         if(data){
             $.each(data, function(index, category){
                 $("#tertiaryselect").append(new Option(category.category_name, category.category_id));
