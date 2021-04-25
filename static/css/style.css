@@ -49,7 +49,7 @@
 	box-shadow: 5px 5px #423133;
 	margin: auto;
 	border-radius: 5px 5px 5px 5px;
-	width: 80px;
+	width: auto;
 }
 .Site-header a.button:hover, .Site-header a.button:hover {
 	background-color:#febac2;
@@ -305,4 +305,37 @@ a.advanced-search-btn:hover, a.advanced-search-btnhover {
 /*Search result title link will inherit from all css applied directly to title*/
 .title-more-options{
 	all: inherit;
+}
+
+
+#admin_dashboard_options{
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+}
+
+#admin_dashboard_options a{
+    background-color: darkblue;
+	color: white;
+    padding: 5px 5px;
+	text-align: center;
+	text-decoration: none;
+	margin: 10px;
+	border-radius: 5px 5px 5px 5px;
+	box-shadow: 5px 5px #423133;
+}
+
+#admin_dashboard_options a:hover{
+	background-color:gray;
+	color:darkblue;
+	text-align: center;
+	text-decoration: none;
+	box-shadow: 10px 10px #423133;
+	margin: 10px;
+	border-radius: 5px 5px 5px 5px;
+}
+
+#admin_dashboard_title {
+    color: blue;
+    text-align: center;
 }

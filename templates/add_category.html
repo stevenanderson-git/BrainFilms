@@ -1,0 +1,41 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{url_for('static', filename='/js/admin_categories.js')}}"></script>
+{% extends "layout.html" %}
+
+{% block content %}
+        <div class="category-editor">
+            <br>
+            <div class="add-category-div" id="add-category-div">
+                <label><h4>Create New Category</h4></label>
+                <form method="POST" id="add-category-form" name="add-category-form">
+                    {{add_category_form.csrf_token}}
+                    <div class="form-group prime">
+                        <label>Category Name</label>
+                        {{add_category_form.categoryname(class="form-control")}}
+                    </div>
+                    <div class="form-group prime">
+                        <label>Check if creating a new Primary Category</label>
+                        {{add_category_form.primarybool(class="form-control")}}
+                    </div>
+                    <div class="subcategory">
+                            <label>What category does it belong to?</label>
+                            <div class="form-group primary" id="primary-select-dropdown">
+                                {{add_category_form.primaryselect(class="form-control")}}
+                            </div>
+
+                            <div class="form-group secondary">
+                                <label>Choose a Subcategory or check to create a Subcategory</label>
+                                {{add_category_form.secondarybool(class="form-control")}}
+                                <div class="form-group secondary" id="secondary-select-dropdown" hidden>
+                                    {{add_category_form.secondaryselect(class="form-control")}}
+                                </div>
+                            </div>
+                    </div>
+                    <br>
+                    {{add_category_form.addbutton(class="form-control")}}
+                </form>
+            </div>
+        </div>
+
+
+{% endblock content %}

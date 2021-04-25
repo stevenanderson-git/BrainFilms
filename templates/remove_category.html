@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Primary categories</h1>
+    {% if primary_categories %}
+        {% for primary in primary_categories %}
+            <form action="{{url_for('remove_category')}}" method="post">
+                <input name="primary_removal" value="{{primary['category_id']}}" type="hidden">
+                <input type="submit" value="Remove category '{{primary['category_name']}}' (warning: also deletes any secondary categories)">
+            </form>
+        {% endfor %}
+        <h1>Secondary categories</h1>
+        {% if secondary_categories %}
+            {% for secondary in secondary_categories %}
+                 <form action="{{url_for('remove_category')}}" method="post">
+                    <input name="secondary_removal" value="{{secondary['category_id']}}" type="hidden">
+                    <input type="submit" value="Remove '{{secondary['category_name']}}'">
+                </form>
+            {% endfor %}
+           <h1>Tertiary categories</h1>
+            {% if tertiary_categories %}
+                {% for tertiary in tertiary_categories %}
+                     <form action="{{url_for('remove_category')}}" method="post">
+                        <input name="tertiary_removal" value="{{tertiary['category_id']}}" type="hidden">
+                        <input type="submit" value="Remove '{{tertiary['category_name']}}'">
+                    </form>
+                {% endfor %}
+            {% else %}
+            <p>No tertiary categories exist.</p>
+            {% endif %}
+        {% else %}
+            <p>No secondary categories exist.</p>
+        {% endif %}
+    {% else %}
+        <p>No categories exist.</p>
+    {% endif %}
+
+{% endblock content %}
+
