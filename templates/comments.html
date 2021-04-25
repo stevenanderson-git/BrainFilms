@@ -33,7 +33,7 @@
             <br><input type="submit" value="Add Comment">
         </form>
         {% else %}
-        <p><a href="{{ url_for('login') }}" class='comment-register-login'>Register or Login to Rate or add Comments</a></p>
+            <p><a href="{{ url_for('login') }}" class='comment-register-login'>Register or Login to Rate or add Comments</a></p>
         {% endif %}
         {% if results %}
             {% for result in results %}
