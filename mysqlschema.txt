@@ -48,3 +48,37 @@ CREATE TABLE IF NOT EXISTS Video_Category(
   FOREIGN KEY (video_id) REFERENCES Video(video_id),
   FOREIGN KEY (category_id) REFERENCES Categories(category_id)
 );
+
+CREATE TABLE IF NOT EXISTS Video_Comments(
+video_id INT,
+username VARCHAR(20),
+timestamp datetime,
+comment TEXT,
+primary key (video_id, username, timestamp),
+foreign key (video_id) references video(video_id),
+foreign key (username) references userinfo(username)
+);
+
+CREATE TABLE IF NOT EXISTS Pending_Videos(
+video_id INT,
+primary key (video_id),
+foreign key (video_id) references video(video_id)
+);
+
+CREATE TABLE IF NOT EXISTS User_Liked_Videos(
+video_id INT,
+username VARCHAR(20),
+primary key (video_id, username),
+foreign key (video_id) references video(video_id),
+foreign key (username) references userinfo(username)
+);
+
+CREATE TABLE IF NOT EXISTS User_Rated_Videos(
+video_id INT,
+username VARCHAR(20),
+rating INT,
+primary key (video_id, username),
+foreign key (video_id) references video(video_id),
+foreign key (username) references userinfo(username)
+);
+
