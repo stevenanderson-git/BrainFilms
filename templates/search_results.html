@@ -4,21 +4,29 @@
         <!--Print results from search-->
         {% if results %}
             {% for result in results %}
-            <div class = 'result-box'>
-                <div>
-                    <h1 class = 'video-title'><a class = "title-more-options" href="/video-{{result.video_id}}">{{result.video_title}}</a></h1>
+            <div class='result-container'>
+                <div class="video-thumbnail">
+                    <img src="..\static\images\tempicon.jpg">
                 </div>
-                <div>
-                    <a class = "video-url" href="{{result.video_url}}" target="_blank">{{result.video_url}}</a>
-                </div>
-                <div>
-                    <p class = 'video-date'>{{result.date_added}}</p>
-                </div>
-                <div>
-                    <a class = "video-more-options" href="/video-{{result.video_id}}">More Options</a>
+                <div class = 'result-box'>
+                    <div>
+                        <h1 class = 'video-title'><a class = "title-more-options" href="/video-{{result.video_id}}">{{result.video_title}}</a></h1>
+                    </div>
+                    <div>
+                        <a class = "video-url" href="{{result.video_url}}" target="_blank">{{result.video_url}}</a>
+                    </div>
+                    <div>
+                        <p class = 'video-date'>{{result.date_added}}</p>
+                    </div>
+                    <div>
+                        <a class = "video-more-options" href="/video-{{result.video_id}}">More Options</a>
+                    </div>
                 </div>
             </div>
             <br>
+            <br>
+            <br>
+
             {% endfor %}
         {% else %}
             <div class = 'result-box'>

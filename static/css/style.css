@@ -34,10 +34,10 @@
 /*Button margins added to keep img size stable while maintaining proper button size*/
 .Site-header a.home-button{
   height: 100%;
-  justify-content: center;
-  align-items: center;
+  left: 6%;
   position: relative;
 }
+
 .Site-header a.button{
 	background-color:#febac2;
 	color:#620e0a;
@@ -49,7 +49,8 @@
 	box-shadow: 5px 5px #423133;
 	margin: auto;
 	border-radius: 5px 5px 5px 5px;
-	width: auto;
+	width: 100px;
+
 }
 .Site-header a.button:hover, .Site-header a.button:hover {
 	background-color:#febac2;
@@ -168,6 +169,19 @@
   	margin: 0 auto;
 }
 
+.result-container{
+	display: inline-block;
+}
+
+.result-box{
+	float:right;
+}
+
+.video-thumbnail{
+	float: left;
+
+}
+
 .content h2 {
   	margin: 0;
   	padding: 25px 0;
@@ -254,13 +268,12 @@
 	border: 3px solid #903445;
 	border-right: none;
 	padding: 5px;
-	height: 24px;
-	border-radius: 5px 0 0 5px;
+	height: 25px;
+	border-radius: 54px 0px 0px 54px;
 	outline: none;
 	color: black;
 }
 a.search-btn {
-	appearance: button;
 	width: 40px;
 	height: 34px;
 	border: 3px solid #903445;
@@ -301,9 +314,133 @@ a.advanced-search-btn:hover, a.advanced-search-btnhover {
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
-
+.form-layout{
+	width: 500px;
+}
+.button-adv-subm{
+	background-color:#febac2;
+	color:#620e0a;
+	padding: 5px 5px;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 5px 5px #423133;
+	margin: auto;
+	border-radius: 5px 5px 5px 5px;
+	width: 100%;
+}
+.button-adv-subm:hover, .button-adv-subm.btnhover {
+	background-color:#febac2;
+	color:#ffffff;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 10px 10px #423133;
+	margin: auto;
+	border-radius: 5px 5px 5px 5px;
+  	transition: background-color 0.2s;
+}
+.adv-form-selector{
+	position: left;
+	width: 100%;
+	border: 3px solid #620e0a;
+	border-radius: 0px 0px 0px 10px;
+	color: #620e0a;
+	text-transform: uppercase;
+	font-weight: bold;
+	background-color: #febac2;
+}
+.form-row-label{
+	color: #620e0a;
+	width: 98.8%;
+	border-top: 3px solid #620e0a;
+	border-left: 3px solid #620e0a;
+	border-right: 3px solid #620e0a;
+	border-radius: 10px 10px 0px 0px;
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: bold;
+	background-color: #febac2;
+}
+.adv-search-term{
+	width: 100%;
+	border: 3px solid #620e0a;
+	padding: 5px;
+	height: 25px;
+	border-radius: 0px 0px 10px 10px;
+	outline: none;
+	color: black;	
+}
+.addh1{
+	color: #620e0a;
+	width: 98.8%;
+	border-top: 3px solid #620e0a;
+	border-left: 3px solid #620e0a;
+	border-right: 3px solid #620e0a;
+	border-radius: 10px 10px 0px 0px;
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: bold;
+	background-color: #febac2;
+}
+.addh2{
+	color: #620e0a;
+	border: 3px solid #620e0a;
+	border-radius: 0px 0px 10px 10px;
+	font-weight: bold;
+	background-color: #febac2;
+}
+.video{
+	color: #620e0a;
+	text-transform: uppercase;
+	font-weight: bold;
+	background-color: #febac2;
+}
+.video_box{
+	color: #620e0a;
+	border-radius: 0px 0px 0px 0px;
+	background-color: #ffffff;
+}
+.filter-tag-button{
+	background-color:#febac2;
+	color:#620e0a;
+	padding: 5px 5px;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	margin: auto;
+	border-radius: 5px 5px 5px 5px;
+	border: 3px solid #620e0a
+}
+.filter-tag.clear-all{
+	background-color:#febac2;
+	color:#620e0a;
+	padding: 5px 5px;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bolder;
+	text-transform: uppercase;
+	box-shadow: 5px 5px #423133;
+	margin: auto;
+	border-radius: 5px 5px 5px 5px;
+}
+.filter-tag.clear-all:hover, .filter-tag.clear-all.btnhover {
+	background-color:#febac2;
+	color:#ffffff;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 10px 10px #423133;
+	margin: auto;
+	border-radius: 5px 5px 5px 5px;
+  	transition: background-color 0.2s;
+}
 /*Search result title link will inherit from all css applied directly to title*/
-.title-more-options{
+.title-more-options{ 
 	all: inherit;
 }
 
