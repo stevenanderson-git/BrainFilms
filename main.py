@@ -35,7 +35,7 @@ def index():
     title = 'Brainfilms - Home'
     indexsearchbar = IndexSearchBar()
 
-    return render_template('index.html', title = title, indexsearchbar = indexsearchbar)
+    return render_template('index.html', title = title, indexsearchbar = indexsearchbar, loggedin = validate_login())
 
 # renamed from / to /login as it is no longer splash page
 @app.route('/login', methods=['GET', 'POST'])
@@ -59,6 +59,7 @@ def login():
             session['loggedin'] = True
             session['id'] = account['id']
             session['username'] = account['username']
+            session['account'] = account
 
             # Check if user is admin
             cursor.execute(f'SELECT * FROM Admin WHERE id = {account["id"]}')
@@ -70,12 +71,12 @@ def login():
                 session['is_admin'] = False
 
             # Go to Profile page
-            return profile(account)
+            return profile()
         else:
             # Account doesnt exist or username/password incorrect
             msg = 'Incorrect username/password!'
     # Show the login form with message (if any)
-    return render_template('login.html', title = title, msg=msg)
+    return render_template('login.html', title = title, msg=msg, loggedin = validate_login())
 
 # TODO: Logout not currently used
 @app.route('/logout')
@@ -85,6 +86,7 @@ def logout():
     session.pop('id', None)
     session.pop('username', None)
     session.pop('is_admin', None)
+    session.pop('account', None)
     # TODO: Redirect to homepage, not sure if this is correct syntax
     return redirect(url_for('index'))
 
@@ -126,15 +128,22 @@ def register():
         # Form is empty... (no POST data)
         msg = 'Please fill out the form!'
     # Show registration form with message (if any)
-    return render_template('register.html', title = title, msg=msg)
+    return render_template('register.html', title = title, msg=msg, loggedin = validate_login())
 
 # Profile Page - Implemented as part of Lab 2
 @app.route('/profile', methods = ['GET', 'POST'])
-def profile(account):
-    title = 'Profile'    
-    return render_template('profile.html', title = title, username = account['username'],
-     password = account['password'],
-     email=account['email'], creation_date=account['date'])
+def profile():
+    if session.get('account'):
+        account = session['account']
+        title = 'Profile'
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(f'SELECT * FROM User_Liked_Videos Inner Join Video on User_Liked_Videos.video_id = video.video_id WHERE username = "{account["username"]}"')
+        liked_videos = cursor.fetchall()
+        return render_template('profile.html', title = title, username = account['username'],
+         password = account['password'], liked_videos=liked_videos,
+         email=account['email'], creation_date=account['date'], is_admin = validate_admin(), loggedin = validate_login())
+    else:
+        return render_template('login.html', title = 'Profile Login', msg='Please login', loggedin = validate_login())
 
 
 @app.route('/populateprimaryselect', methods = ['POST'])
@@ -205,20 +214,21 @@ def addcategorytodb():
     
 
 
-@app.route('/admin/dashboard', methods = ['GET', 'POST'])
+@app.route('/admin_dashboard', methods = ['GET', 'POST'])
 def admin():
     # Form created for tepmlating
     add_category_form = AddCategoryForm()
     
     admin_page_var = 'admin.html'
-    if session.get('is_admin') and session['is_admin']:
-        return render_template(admin_page_var, username = session['username'], is_admin=True, add_category_form=add_category_form)
+    if validate_admin():
+        return render_template(admin_page_var, username = session['username'], loggedin = validate_login(),
+                               is_admin=True, add_category_form=add_category_form)
     else:
-        return render_template(admin_page_var, username=None, is_admin=False)
+        return render_template(admin_page_var, username=None, is_admin=False, loggedin = validate_login())
 
-@app.route('/admin/dashboard/add', methods = ['GET', 'POST'])
+@app.route('/admin_add', methods = ['GET', 'POST'])
 def add_admin():
-    if session.get('is_admin') and session['is_admin']:
+    if validate_admin():
         msg = ''
         if request.method == 'POST' and 'username' in request.form:
             username = request.form['username']
@@ -237,10 +247,26 @@ def add_admin():
                     msg = 'User successfully added'
             else:
                 msg = 'User not found'
-        return render_template('add_admin.html', msg=msg)
+        return render_template('add_admin.html', msg=msg, loggedin = validate_login())
     else:
-        return render_template('admin.html', username=None, is_admin=False)
+        return render_template('admin.html', username=None, is_admin=False, loggedin = validate_login())
 
+@app.route('/admin_video_approval', methods=['GET', 'POST'])
+def video_approval():
+    if validate_admin():
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        if request.method == 'POST' and 'approve_video' in request.form:
+            cursor.execute(f'DELETE FROM PENDING_VIDEOS WHERE VIDEO_ID = {request.form["approve_video"]}')
+            mysql.connection.commit()
+        if request.method == 'POST' and 'remove_video' in request.form:
+            removal = request.form['remove_video']
+            cursor.execute(f'DELETE FROM PENDING_VIDEOS WHERE VIDEO_ID = {removal}')
+            cursor.execute(f'DELETE FROM Video_Category WHERE VIDEO_ID = {removal}')
+            cursor.execute(f'DELETE FROM VIDEO WHERE VIDEO_ID = {removal}')
+            mysql.connection.commit()
+        cursor.execute('SELECT * FROM Pending_Videos Inner Join Video On Pending_videos.video_id = video.video_id')
+        pending_videos = cursor.fetchall()
+        return render_template('pending_videos.html', videos = pending_videos , loggedin = validate_login())
 
 
 
@@ -273,9 +299,13 @@ def add_new():
                 cursor.execute(addvideosql, (video_url, video_title, date_added,))
                 cursor.execute(addvideocategorysql, (category_id,))
                 mysql.connection.commit()
+                cursor.execute(f"Select video_id From Video Where video_url = '{video_url}'")
+                video = cursor.fetchone()
+                cursor.execute(f"INSERT INTO Pending_Videos (video_id) VALUES ({video['video_id']})")
+                mysql.connection.commit()
                 return f"New Video: {video_title} added under Category: {category_name}."
 
-    return render_template(page, title = title, addvideoform=addvideoform)
+    return render_template(page, title = title, addvideoform=addvideoform, loggedin = validate_login())
 
 # Helper for search_results() to query db with id of a category and a regexp searchterm
 def dbsearch(selectid, searchterm):
@@ -323,18 +353,73 @@ def search_results():
                 selectallsql = 'SELECT * FROM Video'
                 nullsearch.execute(selectallsql,)
                 results = nullsearch.fetchall()
-        
-        return render_template(page, title = title, results=results)
 
-    return render_template(page, title = title)
+        
+        return render_template(page, title = title, results=results, loggedin = validate_login())
+
+    return render_template(page, title = title, loggedin = validate_login())
 
 @app.route('/advanced_search', methods = ['GET','POST'])
 def advanced_search():
     title = 'Advanced Search'
     advancedsearchform = AdvancedSearchForm()
 
-    return render_template('advanced_search.html', title = title, advancedsearchform = advancedsearchform)
+    return render_template('advanced_search.html', title = title, advancedsearchform = advancedsearchform, loggedin = validate_login())
 
+@app.route('/video-<video_id>', methods = ['GET', 'POST'])
+def comments(video_id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(f'SELECT * FROM Video WHERE video_id = {video_id}')
+    video_found = cursor.fetchone()
+    results = None
+    if not video_found:
+        msg = 'Video not found'
+        return render_template('comments.html', msg = msg, loggedin = validate_login())
+    else:
+        if request.method == 'POST':
+            if 'comment' in request.form:
+                formatted_date = datetime.now().strftime(datestring)
+                cursor.execute(f'INSERT INTO Video_Comments (video_id, username, timestamp, comment) VALUES ({video_id}, "{session["username"]}", "{formatted_date}", "{request.form["comment"]}")')
+            if 'timestamp' in request.form:
+                cursor.execute(f'Delete from Video_Comments WHERE video_id = {video_id} AND username = "{request.form["username"]}" AND timestamp = "{request.form["timestamp"]}"')
+            if 'liked' in request.form:
+                cursor.execute(f'INSERT Into User_Liked_Videos (video_id, username) VALUES ({video_id}, "{session["username"]}")')
+            if 'unliked' in request.form:
+                cursor.execute(f'DELETE FROM User_Liked_Videos where video_id = {video_id}')
+            if 'rating' in request.form:
+                cursor.execute(f'INSERT INTO User_Rated_Videos (video_id, username, rating) VALUES ({video_id}, "{session["username"]}", {int(request.form["rating"])})')
+            mysql.connection.commit()
+        cursor.execute(f'SELECT * FROM Video_comments WHERE video_id = {video_id}')
+        results = cursor.fetchall()
+        user = None
+        rating = None
+        liked = False
+        if session.get('username') and session['username']:
+            user = session['username']
+            cursor.execute(f'SELECT * FROM User_liked_videos where video_id = {video_id}')
+            result = cursor.fetchone()
+            if result:
+                liked = True
+            cursor.execute(f'SELECT * FROM User_Rated_videos where video_id = {video_id}')
+            result = cursor.fetchone()
+            if result:
+                rating = result['rating']
+        return render_template('comments.html', results = results, video_id = video_id, msg = None,
+                               loggedin = validate_login(), user = user, video_title = video_found['video_title'],
+                               date_added = video_found['date_added'], is_admin = validate_admin(),
+                               rating=rating, liked=liked
+                               )
+
+
+def validate_login():
+    if session.get('loggedin') and session['loggedin']:
+        return True
+    return False
+
+def validate_admin():
+    if session.get('is_admin') and session['is_admin']:
+        return True
+    return False
 
 ####
 # Bottom method of code

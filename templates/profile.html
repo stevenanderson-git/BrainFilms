@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
     <body>
 		{% block content %}
+        {% if is_admin %}
+        <a href="{{url_for('admin')}}"><h1 style="font-size: 60px;">Admin Dashboard</h1></a>
+        {% endif %}
        <div class="profile">
             <h1>Profile</h1>
             <div class='profileinfo'>
@@ -29,5 +32,15 @@
 
             </div>
        </div>
+        {% if liked_videos %}
+            <h1>Your Favorites</h1>
+            {% for video in liked_videos %}
+                <a href="/video-{{video['video_id']}}">{{video['video_title']}}</a>
+                added on {{video['date_added']}}
+                <br>
+            {% endfor %}
+        {% else %}
+        <p>You have not added any favorites.</p>
+        {% endif %}
        {% endblock content %}
     </body>
