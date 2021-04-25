@@ -4,30 +4,6 @@
     {% block content %}
     {% if loggedin %}
         <div class = 'add-video'>
-            <div class=addh1>Add New Video</div>
-            <div class=addh2>
-            <form action = "{{url_for('add_new')}}" method = "post" autocomplete="off">
-                <label for='video_url' class='video'>
-                    Video URL: 
-                </label>
-                <input type="text" name='video_url' id="video_url" required placeholder="http://www..." class=video_box>
-
-                <label for='video_title' class='video'>
-                    Video Title:
-                </label>
-                <input type="text" name='video_title' id="video_title" required placeholder="Title goes Here" class=video_box>
-            </div>
-                <!--TODO: use jinja to make this block repeatable-->
-                <div class = "form-row-label" for="categories">
-                    Primary Category
-                </div>
-                <div class = "form-row-content">
-                    <div class = "selector-categories-wraper">
-                        <select class ="adv-form-selector categories" id = "category-selector" size = "6" onchange="filter_sub(this);">
-                            {%for cat in categories%}
-                                <option>{{cat.name}}</option>
-                            {% endfor %} 
-                        </select>
             <h1>Add New Video</h1>
             <form method="POST" id="addvideoform" name="addvideoform" autocomplete="off">
                 {{addvideoform.csrf_token}}
