@@ -446,7 +446,7 @@ def comments(video_id):
         liked = False
         if session.get('username') and session['username']:
             user = session['username']
-            cursor.execute(f'SELECT * FROM User_liked_videos where video_id = {video_id}')
+            cursor.execute((f'SELECT * FROM User_liked_videos where (video_id, username) = (%s, %s)'), ({video_id}, {session["username"]}))
             result = cursor.fetchone()
             if result:
                 liked = True
