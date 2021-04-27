@@ -450,7 +450,7 @@ def comments(video_id):
             result = cursor.fetchone()
             if result:
                 liked = True
-            cursor.execute(f'SELECT * FROM User_Rated_videos where video_id = {video_id}')
+            cursor.execute((f'SELECT * FROM User_Rated_videos where (video_id, username) = (%s, %s)'), ({video_id}, {session['username']}))
             result = cursor.fetchone()
             if result:
                 rating = result['rating']
